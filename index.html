@@ -191,6 +191,15 @@ label {
     margin-top: 6px;
 }
 
+.custom-product {
+    background: #fff7ed;
+    border: 2px solid #f59e0b;
+}
+
+.custom-product:hover {
+    border-color: #d97706;
+}
+
 .register-receipt {
     background: white;
     border: 1px solid #d5dbe5;
@@ -298,6 +307,50 @@ label {
     background: #2563eb;
     color: white;
     border-color: #2563eb;
+}
+
+/* NEW TAX BUTTONS */
+
+.tax-choice-box {
+    background: #f8fafc;
+    border: 1px solid #dbe1e8;
+    border-radius: 12px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.tax-choice-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.tax-choice-button {
+    background: white;
+    border: 2px solid #dbe1e8;
+}
+
+.tax-choice-button.selected-tax {
+    background: #f59e0b;
+    color: white;
+    border-color: #f59e0b;
+}
+
+.tax-choice-button.selected-no-tax {
+    background: #16a34a;
+    color: white;
+    border-color: #16a34a;
+}
+
+.no-tax-label {
+    display: inline-block;
+    background: #dcfce7;
+    color: #166534;
+    padding: 4px 9px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .scanner-container {
@@ -531,10 +584,6 @@ label {
     margin-left: 6px;
 }
 
-/* =========================================================
-   FIXED QR PRINTING CSS
-========================================================= */
-
 #printArea {
     display: none;
 }
@@ -544,39 +593,28 @@ label {
     height: 11in;
     background: white;
     padding: 0.5in;
-
     display: grid;
-
-    grid-template-columns:
-        repeat(5, 1.1875in);
-
-    grid-auto-rows:
-        1.1875in;
-
+    grid-template-columns: repeat(5, 1.1875in);
+    grid-auto-rows: 1.1875in;
     column-gap: 0.1875in;
     row-gap: 0.1875in;
-
     align-content: start;
 }
 
 .print-card {
     width: 1.1875in;
     height: 1.1875in;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     overflow: hidden;
 }
 
 .print-card canvas,
 .print-card img {
     display: block !important;
-
     width: 1.1875in !important;
     height: 1.1875in !important;
-
     max-width: none !important;
 }
 
@@ -598,11 +636,11 @@ label {
     .tip-buttons {
         grid-template-columns: repeat(2, 1fr);
     }
-}
 
-/* =========================================================
-   PRINT
-========================================================= */
+    .tax-choice-buttons {
+        grid-template-columns: 1fr;
+    }
+}
 
 @media print {
 
@@ -615,10 +653,8 @@ label {
     body {
         width: 8.5in;
         height: 11in;
-
         margin: 0 !important;
         padding: 0 !important;
-
         background: white !important;
     }
 
@@ -629,31 +665,21 @@ label {
 
     #printArea {
         display: block !important;
-
         width: 8.5in;
         height: 11in;
-
         margin: 0;
         padding: 0;
     }
 
     .print-sheet {
         display: grid !important;
-
         width: 8.5in;
         height: 11in;
-
         padding: 0.5in;
-
-        grid-template-columns:
-            repeat(5, 1.1875in);
-
-        grid-auto-rows:
-            1.1875in;
-
+        grid-template-columns: repeat(5, 1.1875in);
+        grid-auto-rows: 1.1875in;
         column-gap: 0.1875in;
         row-gap: 0.1875in;
-
         background: white !important;
     }
 
@@ -665,7 +691,6 @@ label {
     .print-card canvas,
     .print-card img {
         display: block !important;
-
         width: 1.1875in !important;
         height: 1.1875in !important;
     }
@@ -687,16 +712,25 @@ label {
 <script>
 
 /* =========================================================
-   DATA
+   SUPABASE
 ========================================================= */
 
-const SUPABASE_URL = "https://vzbniexghluuqwtgxwii.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AF_6QkPOP6OBPCANPhhTEw_h5-HpMGJ";
+const SUPABASE_URL =
+    "https://vzbniexghluuqwtgxwii.supabase.co";
 
-const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_AF_6QkPOP6OBPCANPhhTEw_h5-HpMGJ";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+/* =========================================================
+   DATA
+========================================================= */
 
 const defaultProducts = [
     {id: 1, name: "Apple", price: 1.50},
@@ -707,10 +741,38 @@ const defaultProducts = [
 ];
 
 const defaultCards = [
-    {id: 1, name: "Green Card", code: "CARD-GREEN-001", balance: 25, pinHash: null, taxed: true},
-    {id: 2, name: "Blue Card", code: "CARD-BLUE-001", balance: 40, pinHash: null, taxed: true},
-    {id: 3, name: "Purple Card", code: "CARD-PURPLE-001", balance: 15, pinHash: null, taxed: true},
-    {id: 4, name: "Light Blue Card", code: "CARD-CYAN-001", balance: 30, pinHash: null, taxed: true}
+    {
+        id: 1,
+        name: "Green Card",
+        code: "CARD-GREEN-001",
+        balance: 25,
+        pinHash: null,
+        taxed: true
+    },
+    {
+        id: 2,
+        name: "Blue Card",
+        code: "CARD-BLUE-001",
+        balance: 40,
+        pinHash: null,
+        taxed: true
+    },
+    {
+        id: 3,
+        name: "Purple Card",
+        code: "CARD-PURPLE-001",
+        balance: 15,
+        pinHash: null,
+        taxed: true
+    },
+    {
+        id: 4,
+        name: "Light Blue Card",
+        code: "CARD-CYAN-001",
+        balance: 30,
+        pinHash: null,
+        taxed: true
+    }
 ];
 
 let products = [];
@@ -718,29 +780,36 @@ let cards = [];
 let transactions = [];
 
 let cart = [];
+
 let currentCard = null;
+
 let selectedTransferCard = null;
 let transferChoice = null;
+
 let selectedTipPercent = 0;
 let customTip = 0;
+
+/*
+    NEW:
+    Tax is controlled per transaction.
+
+    true = normal 8% tax
+    false = no tax
+*/
+let transactionTaxEnabled = true;
+
+/*
+    Custom checkout items get IDs starting at -1,
+    -2, etc. so they don't conflict with products.
+*/
+let nextCustomItemId = -1;
+
 let selectedQRs = new Set();
+
 let qrScanner = null;
 let scannerLocked = false;
 
-// The screen currently being shown. This lets Realtime refresh
-// data screens without sending the user back to the main menu.
 let currentView = "menu";
-
-
-/* =========================================================
-   MIGRATE OLD CARDS
-========================================================= */
-
-cards.forEach(card => {
-
-    card.taxed = true;
-
-});
 
 
 /* =========================================================
@@ -757,17 +826,32 @@ async function loadData() {
             .maybeSingle();
 
     if (error) {
-        console.error("Supabase load error:", error);
+
+        console.error(
+            "Supabase load error:",
+            error
+        );
+
         alert(
             "Could not load data from Supabase. " +
             "Check your table and RLS policies."
         );
+
         return false;
     }
 
     if (!data) {
-        products = structuredClone(defaultProducts);
-        cards = structuredClone(defaultCards);
+
+        products =
+            structuredClone(
+                defaultProducts
+            );
+
+        cards =
+            structuredClone(
+                defaultCards
+            );
+
         transactions = [];
 
         return await save();
@@ -776,12 +860,16 @@ async function loadData() {
     products =
         Array.isArray(data.products)
         ? data.products
-        : structuredClone(defaultProducts);
+        : structuredClone(
+            defaultProducts
+        );
 
     cards =
         Array.isArray(data.cards)
         ? data.cards
-        : structuredClone(defaultCards);
+        : structuredClone(
+            defaultCards
+        );
 
     transactions =
         Array.isArray(data.transactions)
@@ -789,7 +877,14 @@ async function loadData() {
         : [];
 
     cards.forEach(card => {
-        card.taxed = true;
+
+        if (
+            typeof card.taxed !==
+            "boolean"
+        ) {
+            card.taxed = true;
+        }
+
     });
 
     return true;
@@ -806,7 +901,8 @@ async function save() {
                     products,
                     cards,
                     transactions,
-                    updated_at: new Date().toISOString()
+                    updated_at:
+                        new Date().toISOString()
                 },
                 {
                     onConflict: "id"
@@ -814,8 +910,17 @@ async function save() {
             );
 
     if (error) {
-        console.error("Supabase save error:", error);
-        alert("Could not save to Supabase: " + error.message);
+
+        console.error(
+            "Supabase save error:",
+            error
+        );
+
+        alert(
+            "Could not save to Supabase: " +
+            error.message
+        );
+
         return false;
     }
 
@@ -824,61 +929,77 @@ async function save() {
 
 
 /* =========================================================
-   REALTIME UPDATES
+   REALTIME
 ========================================================= */
 
 function applyRemoteState(data) {
 
-    products = Array.isArray(data.products)
+    products =
+        Array.isArray(data.products)
         ? data.products
         : [];
 
-    cards = Array.isArray(data.cards)
+    cards =
+        Array.isArray(data.cards)
         ? data.cards
         : [];
 
-    transactions = Array.isArray(data.transactions)
+    transactions =
+        Array.isArray(data.transactions)
         ? data.transactions
         : [];
 
     cards.forEach(card => {
-        card.taxed = true;
+
+        if (
+            typeof card.taxed !==
+            "boolean"
+        ) {
+            card.taxed = true;
+        }
+
     });
 
-    // Keep the currently selected cards connected to the newest data.
     if (currentCard) {
-        currentCard = cards.find(
-            card => card.id === currentCard.id
-        ) || null;
+
+        currentCard =
+            cards.find(
+                card =>
+                    card.id ===
+                    currentCard.id
+            ) || null;
     }
 
-    if (selectedTransferCard !== null) {
-        const stillExists = cards.some(
-            card => card.id === selectedTransferCard
-        );
+    if (
+        selectedTransferCard !==
+        null
+    ) {
+
+        const stillExists =
+            cards.some(
+                card =>
+                    card.id ===
+                    selectedTransferCard
+            );
 
         if (!stillExists) {
-            selectedTransferCard = null;
+
+            selectedTransferCard =
+                null;
         }
     }
 }
 
 function refreshCurrentView() {
 
-    // Only refresh screens that are displaying saved data. Form, PIN,
-    // scanner, and checkout screens are intentionally left alone so a
-    // person does not lose what they are currently entering.
     switch (currentView) {
+
         case "menu":
             showMenu();
             break;
 
         case "cardMenu":
             cardMenu();
-            break;
-
-        case "editCard":
-            // Leave the edit form alone so Realtime does not interrupt it.
             break;
 
         case "addMoney":
@@ -904,35 +1025,52 @@ function refreshCurrentView() {
         case "balances":
             balanceScreen();
             break;
+
+        case "checkout":
+            /*
+                DO NOT refresh checkout.
+                This prevents Realtime from destroying
+                an item/custom-price entry currently
+                being entered.
+            */
+            break;
     }
 }
 
 function startRealtimeUpdates() {
 
     supabaseClient
-        .channel("cash-register-state-changes")
+        .channel(
+            "cash-register-state-changes"
+        )
         .on(
             "postgres_changes",
             {
                 event: "*",
                 schema: "public",
-                table: "cash_register_state",
-                filter: "id=eq.1"
+                table:
+                    "cash_register_state",
+                filter:
+                    "id=eq.1"
             },
             payload => {
 
-                if (!payload.new) {
+                if (!payload.new)
                     return;
-                }
 
-                console.log("Received Supabase update");
+                applyRemoteState(
+                    payload.new
+                );
 
-                applyRemoteState(payload.new);
                 refreshCurrentView();
             }
         )
         .subscribe(status => {
-            console.log("Supabase Realtime:", status);
+
+            console.log(
+                "Supabase Realtime:",
+                status
+            );
         });
 }
 
@@ -966,23 +1104,71 @@ function normalizeQR(value) {
         .replace(/[^A-Z0-9]/g, "");
 }
 
+
+/* =========================================================
+   CART HELPERS
+========================================================= */
+
+/*
+    Normal products live in products[].
+
+    Custom items live directly inside cart:
+    {
+        productId: negative number,
+        custom: true,
+        name: "...",
+        price: 5,
+        quantity: 1
+    }
+*/
+
+function getCartItemInfo(item) {
+
+    if (item.custom) {
+
+        return {
+            name:
+                item.name ||
+                "Custom Item",
+
+            price:
+                Number(item.price) || 0
+        };
+    }
+
+    const product =
+        products.find(
+            p =>
+                p.id ===
+                item.productId
+        );
+
+    if (!product) {
+
+        return {
+            name: "Unknown Item",
+            price: 0
+        };
+    }
+
+    return {
+        name: product.name,
+        price: Number(product.price) || 0
+    };
+}
+
 function getSubtotal() {
 
     return cart.reduce(
         (total, item) => {
 
-            const product =
-                products.find(
-                    p =>
-                        p.id ===
-                        item.productId
+            const info =
+                getCartItemInfo(
+                    item
                 );
 
-            if (!product)
-                return total;
-
             return total +
-                product.price *
+                info.price *
                 item.quantity;
 
         },
@@ -995,7 +1181,10 @@ function getTip() {
     const subtotal =
         getSubtotal();
 
-    if (selectedTipPercent > 0) {
+    if (
+        selectedTipPercent >
+        0
+    ) {
 
         return subtotal *
             selectedTipPercent /
@@ -1007,47 +1196,45 @@ function getTip() {
 
 
 /* =========================================================
-   TAX
+   NEW TAX HELPERS
 ========================================================= */
 
-function calculateTaxForTransaction(
-    baseAmount,
-    buyerCard,
-    recipientCard
-) {
+function getTaxRate() {
 
-    const buyerTaxRate = 0.08;
-    const recipientTaxRate = 0;
+    return transactionTaxEnabled
+        ? 0.08
+        : 0;
+}
 
-    const buyerTax =
-        baseAmount * buyerTaxRate;
+function getTaxAmount() {
 
-    const recipientTax = 0;
-
-    const buyerPays =
-        baseAmount + buyerTax;
-
-    const recipientGets =
-        baseAmount;
-
-    return {
-        baseAmount,
-        buyerTaxRate,
-        recipientTaxRate,
-        buyerTax,
-        recipientTax,
-        buyerPays,
-        recipientGets
-    };
+    return (
+        getSubtotal() +
+        getTip()
+    ) * getTaxRate();
 }
 
 function getCheckoutTotal() {
 
-    const normalTotal =
+    return (
         getSubtotal() +
-        getTip();
+        getTip() +
+        getTaxAmount()
+    );
+}
 
-    return normalTotal * 1.08;
+function setTransactionTax(enabled) {
+
+    transactionTaxEnabled =
+        enabled;
+
+    /*
+        Redraw the current checkout screen.
+        This is safe because all checkout state
+        is stored in variables/cart.
+    */
+
+    productSelection();
 }
 
 
@@ -1086,7 +1273,10 @@ async function hashPIN(pin) {
         .join("");
 }
 
-async function checkPIN(card, pin) {
+async function checkPIN(
+    card,
+    pin
+) {
 
     if (
         !card ||
@@ -1114,6 +1304,9 @@ function validPIN(pin) {
 
 function showMenu() {
 
+    currentView =
+        "menu";
+
     stopQRScanner();
 
     document.getElementById(
@@ -1130,8 +1323,13 @@ function showMenu() {
 
                 <button
                     class="primary"
-                    style="height:140px;font-size:20px"
-                    onclick="checkoutStart()">
+                    style="
+                        height:140px;
+                        font-size:20px
+                    "
+                    onclick="
+                        checkoutStart()
+                    ">
 
                     🛒<br><br>
                     CHECKOUT
@@ -1140,8 +1338,13 @@ function showMenu() {
 
                 <button
                     class="green"
-                    style="height:140px;font-size:20px"
-                    onclick="cardMenu()">
+                    style="
+                        height:140px;
+                        font-size:20px
+                    "
+                    onclick="
+                        cardMenu()
+                    ">
 
                     💳<br><br>
                     ADD / EDIT CARDS
@@ -1150,8 +1353,13 @@ function showMenu() {
 
                 <button
                     class="orange"
-                    style="height:140px;font-size:20px"
-                    onclick="productMenu()">
+                    style="
+                        height:140px;
+                        font-size:20px
+                    "
+                    onclick="
+                        productMenu()
+                    ">
 
                     📦<br><br>
                     ADD / EDIT PRODUCTS
@@ -1160,8 +1368,13 @@ function showMenu() {
 
                 <button
                     class="gray"
-                    style="height:140px;font-size:20px"
-                    onclick="historyScreen()">
+                    style="
+                        height:140px;
+                        font-size:20px
+                    "
+                    onclick="
+                        historyScreen()
+                    ">
 
                     📋<br><br>
                     TRANSACTION HISTORY
@@ -1176,33 +1389,53 @@ function showMenu() {
 
 
 /* =========================================================
-   CHECKOUT
+   CHECKOUT START
 ========================================================= */
 
 function checkoutStart() {
 
-    // Realtime updates must not redraw the page while a sale is in progress.
-    // Keeping the checkout view active prevents an incoming database update
-    // from sending the user back to the menu during payment or transfer.
-    currentView = "checkout";
+    currentView =
+        "checkout";
 
     cart = [];
-    currentCard = null;
 
-    selectedTransferCard = null;
-    transferChoice = null;
+    currentCard =
+        null;
 
-    selectedTipPercent = 0;
-    customTip = 0;
+    selectedTransferCard =
+        null;
 
-    scannerLocked = false;
+    transferChoice =
+        null;
+
+    selectedTipPercent =
+        0;
+
+    customTip =
+        0;
+
+    /*
+        Every new transaction starts with
+        normal 8% tax.
+    */
+    transactionTaxEnabled =
+        true;
+
+    scannerLocked =
+        false;
 
     productSelection();
 }
 
+
+/* =========================================================
+   PRODUCT SELECTION
+========================================================= */
+
 function productSelection() {
 
-    currentView = "checkout";
+    currentView =
+        "checkout";
 
     document.getElementById(
         "app"
@@ -1218,47 +1451,88 @@ function productSelection() {
 
             </button>
 
-            <h2>🛒 Checkout</h2>
+            <h2>
+                🛒 Checkout
+            </h2>
 
             <div class="register-layout">
 
                 <div>
 
-                    <h3>Products</h3>
+                    <h3>
+                        Products
+                    </h3>
 
                     <div class="grid">
 
-                        ${products.map(
-                            product => `
+                        ${
+                            products.map(
+                                product => `
 
-                            <button
-                                class="product"
-                                onclick="
-                                    addItem(
-                                        ${product.id}
-                                    )
+                                <button
+                                    class="product"
+                                    onclick="
+                                        addItem(
+                                            ${product.id}
+                                        )
+                                    ">
+
+                                    <div class="product-name">
+                                        ${escapeHTML(
+                                            product.name
+                                        )}
+                                    </div>
+
+                                    <div class="product-price">
+                                        ${money(
+                                            product.price
+                                        )}
+                                    </div>
+
+                                </button>
+
+                            `
+                            ).join("")
+                        }
+
+                        <!-- NEW CUSTOM PRICE BUTTON -->
+
+                        <button
+                            class="
+                                product
+                                custom-product
+                            "
+                            onclick="
+                                customPriceScreen()
+                            ">
+
+                            <div
+                                class="product-name"
+                                style="
+                                    color:#b45309;
+                                    font-size:18px;
                                 ">
 
-                                <div class="product-name">
-                                    ${escapeHTML(
-                                        product.name
-                                    )}
-                                </div>
+                                ✏️ Custom Price
 
-                                <div class="product-price">
-                                    ${money(
-                                        product.price
-                                    )}
-                                </div>
+                            </div>
 
-                            </button>
+                            <div
+                                class="product-price"
+                                style="
+                                    color:#d97706;
+                                ">
 
-                        `
-                        ).join("")}
+                                Enter your own price
+
+                            </div>
+
+                        </button>
 
                     </div>
 
                 </div>
+
 
                 <div class="register-receipt">
 
@@ -1269,21 +1543,27 @@ function productSelection() {
                         </strong>
 
                         <span>
+
                             ${
                                 cart.length === 0
                                 ? "No items"
                                 :
                                 cart.reduce(
-                                    (sum, item) =>
+                                    (
+                                        sum,
+                                        item
+                                    ) =>
                                         sum +
                                         item.quantity,
                                     0
                                 ) +
                                 " items"
                             }
+
                         </span>
 
                     </div>
+
 
                     <div class="receipt-items">
 
@@ -1292,90 +1572,140 @@ function productSelection() {
 
                             ?
 
-                            `<div class="empty">
-                                Tap a product to add it.
-                            </div>`
+                            `
+                            <div class="empty">
+
+                                Tap a product or
+                                Custom Price to add it.
+
+                            </div>
+                            `
 
                             :
 
-                            cart.map(item => {
+                            cart.map(
+                                item => {
 
-                                const product =
-                                    products.find(
-                                        p =>
-                                            p.id ===
-                                            item.productId
-                                    );
+                                    const info =
+                                        getCartItemInfo(
+                                            item
+                                        );
 
-                                return `
+                                    return `
 
-                                    <div class="receipt-item">
+                                        <div
+                                            class="receipt-item"
+                                        >
 
-                                        <div class="receipt-item-info">
+                                            <div
+                                                class="
+                                                    receipt-item-info
+                                                "
+                                            >
+
+                                                <strong>
+                                                    ${escapeHTML(
+                                                        info.name
+                                                    )}
+                                                </strong>
+
+                                                <small>
+
+                                                    ${
+                                                        item.custom
+                                                        ? "Custom price"
+                                                        : "Product"
+                                                    }
+
+                                                    —
+                                                    ${money(
+                                                        info.price
+                                                    )}
+                                                    each
+
+                                                </small>
+
+                                            </div>
+
+
+                                            <div
+                                                class="
+                                                    quantity-controls
+                                                "
+                                            >
+
+                                                <button
+                                                    class="
+                                                        gray
+                                                        qty-button
+                                                    "
+                                                    onclick="
+                                                        changeCartItem(
+                                                            ${
+                                                                item.productId
+                                                            },
+                                                            ${
+                                                                item.custom
+                                                                ? "true"
+                                                                : "false"
+                                                            },
+                                                            -1
+                                                        )
+                                                    ">
+
+                                                    −
+
+                                                </button>
+
+                                                <strong>
+                                                    ${item.quantity}
+                                                </strong>
+
+                                                <button
+                                                    class="
+                                                        gray
+                                                        qty-button
+                                                    "
+                                                    onclick="
+                                                        changeCartItem(
+                                                            ${
+                                                                item.productId
+                                                            },
+                                                            ${
+                                                                item.custom
+                                                                ? "true"
+                                                                : "false"
+                                                            },
+                                                            1
+                                                        )
+                                                    ">
+
+                                                    +
+
+                                                </button>
+
+                                            </div>
+
 
                                             <strong>
-                                                ${escapeHTML(
-                                                    product.name
-                                                )}
-                                            </strong>
 
-                                            <small>
                                                 ${money(
-                                                    product.price
+                                                    info.price *
+                                                    item.quantity
                                                 )}
-                                                each
-                                            </small>
 
-                                        </div>
-
-                                        <div class="quantity-controls">
-
-                                            <button
-                                                class="gray qty-button"
-                                                onclick="
-                                                    changeItem(
-                                                        ${product.id},
-                                                        -1
-                                                    )
-                                                ">
-
-                                                −
-
-                                            </button>
-
-                                            <strong>
-                                                ${item.quantity}
                                             </strong>
 
-                                            <button
-                                                class="gray qty-button"
-                                                onclick="
-                                                    changeItem(
-                                                        ${product.id},
-                                                        1
-                                                    )
-                                                ">
-
-                                                +
-
-                                            </button>
-
                                         </div>
 
-                                        <strong>
-                                            ${money(
-                                                product.price *
-                                                item.quantity
-                                            )}
-                                        </strong>
+                                    `;
 
-                                    </div>
-                                `;
-
-                            }).join("")
+                                }
+                            ).join("")
                         }
 
                     </div>
+
 
                     <div class="summary-box">
 
@@ -1393,6 +1723,7 @@ function productSelection() {
 
                         </div>
 
+
                         <div class="summary-row">
 
                             <span>
@@ -1407,29 +1738,53 @@ function productSelection() {
 
                         </div>
 
+
                         <div class="summary-row">
 
                             <span>
-                                Estimated tax (8%)
+
+                                Tax
+
+                                ${
+                                    transactionTaxEnabled
+
+                                    ?
+
+                                    `
+                                    <span class="tax-badge">
+                                        8%
+                                    </span>
+                                    `
+
+                                    :
+
+                                    `
+                                    <span class="no-tax-badge">
+                                        NO TAX
+                                    </span>
+                                    `
+                                }
+
                             </span>
 
                             <strong>
                                 ${money(
-                                    getSubtotal() * 0.08
+                                    getTaxAmount()
                                 )}
                             </strong>
 
                         </div>
 
+
                         <div class="summary-total">
 
                             <span>
-                                TOTAL WITH TAX
+                                TOTAL
                             </span>
 
                             <span>
                                 ${money(
-                                    getSubtotal() * 1.08
+                                    getCheckoutTotal()
                                 )}
                             </span>
 
@@ -1437,9 +1792,72 @@ function productSelection() {
 
                     </div>
 
+
+                    <!-- NEW NO TAX BUTTON -->
+
+                    <div
+                        class="tax-choice-box"
+                    >
+
+                        <strong>
+                            Tax for this transaction
+                        </strong>
+
+                        <div
+                            class="
+                                tax-choice-buttons
+                            "
+                        >
+
+                            <button
+                                class="
+                                    tax-choice-button
+                                    ${
+                                        transactionTaxEnabled
+                                        ? "selected-tax"
+                                        : ""
+                                    }
+                                "
+                                onclick="
+                                    setTransactionTax(
+                                        true
+                                    )
+                                ">
+
+                                🧾 8% Tax
+
+                            </button>
+
+
+                            <button
+                                class="
+                                    tax-choice-button
+                                    ${
+                                        !transactionTaxEnabled
+                                        ? "selected-no-tax"
+                                        : ""
+                                    }
+                                "
+                                onclick="
+                                    setTransactionTax(
+                                        false
+                                    )
+                                ">
+
+                                🚫 No Tax
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
                     <button
                         class="red"
-                        onclick="clearSale()"
+                        onclick="
+                            clearSale()
+                        "
                         ${
                             cart.length === 0
                             ? "disabled"
@@ -1452,9 +1870,12 @@ function productSelection() {
 
                     <br><br>
 
+
                     <button
                         class="green"
-                        onclick="goToTip()"
+                        onclick="
+                            goToTip()
+                        "
                         ${
                             cart.length === 0
                             ? "disabled"
@@ -1475,11 +1896,17 @@ function productSelection() {
     `;
 }
 
+
+/* =========================================================
+   NORMAL PRODUCT
+========================================================= */
+
 function addItem(productId) {
 
     const existing =
         cart.find(
             item =>
+                !item.custom &&
                 item.productId ===
                 productId
         );
@@ -1491,56 +1918,235 @@ function addItem(productId) {
     } else {
 
         cart.push({
+
             productId,
-            quantity: 1
+
+            quantity: 1,
+
+            custom: false
         });
     }
 
     productSelection();
 }
 
-function changeItem(
+
+/* =========================================================
+   NEW CUSTOM PRICE
+========================================================= */
+
+function customPriceScreen() {
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="
+                    productSelection()
+                ">
+
+                ← Back to Checkout
+
+            </button>
+
+            <h2>
+                ✏️ Custom Price
+            </h2>
+
+            <div class="card-box">
+
+                <strong>
+                    Add anything at any price.
+                </strong>
+
+                <br><br>
+
+                Enter a name and exact price.
+                It will be added to this sale.
+
+            </div>
+
+
+            <label>
+                Item Name
+            </label>
+
+            <input
+                id="customItemName"
+                placeholder="Special Item">
+
+
+            <label>
+                Exact Price
+            </label>
+
+            <input
+                id="customItemPrice"
+                type="number"
+                min="0.01"
+                step="0.01"
+                placeholder="5.00"
+                inputmode="decimal">
+
+
+            <button
+                class="green full"
+                onclick="
+                    addCustomPrice()
+                ">
+
+                ➕ Add Custom Item
+
+            </button>
+
+            <br><br>
+
+
+            <button
+                class="gray full"
+                onclick="
+                    productSelection()
+                ">
+
+                Cancel
+
+            </button>
+
+        </div>
+    `;
+}
+
+function addCustomPrice() {
+
+    const name =
+        document.getElementById(
+            "customItemName"
+        ).value.trim();
+
+    const price =
+        Number(
+            document.getElementById(
+                "customItemPrice"
+            ).value
+        );
+
+    if (!name) {
+
+        alert(
+            "Enter an item name."
+        );
+
+        return;
+    }
+
+    if (
+        !Number.isFinite(price) ||
+        price <= 0
+    ) {
+
+        alert(
+            "Enter a valid price greater than $0."
+        );
+
+        return;
+    }
+
+    const customId =
+        nextCustomItemId--;
+
+    cart.push({
+
+        productId:
+            customId,
+
+        quantity: 1,
+
+        custom: true,
+
+        name,
+
+        price
+    });
+
+    productSelection();
+}
+
+
+/* =========================================================
+   CART QUANTITY
+========================================================= */
+
+function changeCartItem(
     productId,
+    isCustom,
     amount
 ) {
+
+    const custom =
+        isCustom === true ||
+        isCustom === "true";
 
     const item =
         cart.find(
             item =>
                 item.productId ===
-                productId
+                    productId &&
+                Boolean(item.custom) ===
+                    custom
         );
 
-    if (!item) return;
+    if (!item)
+        return;
 
     item.quantity += amount;
 
-    if (item.quantity <= 0) {
+    if (
+        item.quantity <= 0
+    ) {
 
         cart =
             cart.filter(
-                item =>
-                    item.productId !==
-                    productId
+                other =>
+                    !(
+                        other === item
+                    )
             );
     }
 
     productSelection();
 }
 
+
+/* =========================================================
+   CLEAR SALE
+========================================================= */
+
 function clearSale() {
 
-    if (cart.length === 0)
+    if (
+        cart.length === 0
+    )
         return;
 
-    if (!confirm(
-        "Clear all items from this sale?"
-    )) return;
+    if (
+        !confirm(
+            "Clear all items from this sale?"
+        )
+    )
+        return;
 
     cart = [];
 
     selectedTipPercent = 0;
+
     customTip = 0;
+
+    transactionTaxEnabled =
+        true;
 
     productSelection();
 }
@@ -1552,7 +2158,9 @@ function clearSale() {
 
 function goToTip() {
 
-    if (cart.length === 0) {
+    if (
+        cart.length === 0
+    ) {
 
         alert(
             "Add at least one item first."
@@ -1577,7 +2185,9 @@ function tipScreen() {
 
             <button
                 class="gray back"
-                onclick="productSelection()">
+                onclick="
+                    productSelection()
+                ">
 
                 ← Back to Register
 
@@ -1587,6 +2197,7 @@ function tipScreen() {
                 Step 1: Choose Tip
             </h2>
 
+
             <div class="card-box">
 
                 <strong>
@@ -1594,16 +2205,45 @@ function tipScreen() {
                 </strong>
 
                 <div class="balance">
-                    ${money(subtotal)}
+                    ${money(
+                        subtotal
+                    )}
                 </div>
+
+                <br>
+
+                ${
+                    transactionTaxEnabled
+
+                    ?
+
+                    `
+                    <span class="tax-badge">
+                        8% TAX
+                    </span>
+                    `
+
+                    :
+
+                    `
+                    <span class="no-tax-badge">
+                        NO TAX
+                    </span>
+                    `
+                }
 
             </div>
 
+
             <div class="tip-box">
 
-                <h3>Tip</h3>
+                <h3>
+                    Tip
+                </h3>
 
-                <div class="tip-buttons">
+                <div
+                    class="tip-buttons"
+                >
 
                     <button
                         class="
@@ -1615,11 +2255,14 @@ function tipScreen() {
                                 : ""
                             }
                         "
-                        onclick="chooseTip(0)">
+                        onclick="
+                            chooseTip(0)
+                        ">
 
                         No Tip
 
                     </button>
+
 
                     <button
                         class="
@@ -1630,11 +2273,14 @@ function tipScreen() {
                                 : ""
                             }
                         "
-                        onclick="chooseTip(10)">
+                        onclick="
+                            chooseTip(10)
+                        ">
 
                         10%
 
                     </button>
+
 
                     <button
                         class="
@@ -1645,11 +2291,14 @@ function tipScreen() {
                                 : ""
                             }
                         "
-                        onclick="chooseTip(15)">
+                        onclick="
+                            chooseTip(15)
+                        ">
 
                         15%
 
                     </button>
+
 
                     <button
                         class="
@@ -1660,7 +2309,9 @@ function tipScreen() {
                                 : ""
                             }
                         "
-                        onclick="chooseTip(20)">
+                        onclick="
+                            chooseTip(20)
+                        ">
 
                         20%
 
@@ -1668,7 +2319,9 @@ function tipScreen() {
 
                 </div>
 
+
                 <br>
+
 
                 <label>
                     Custom Tip
@@ -1679,11 +2332,16 @@ function tipScreen() {
                     type="number"
                     min="0"
                     step=".01"
-                    value="${customTip || ""}"
+                    value="${
+                        customTip || ""
+                    }"
                     placeholder="0.00"
-                    oninput="updateCustomTip()">
+                    oninput="
+                        updateCustomTip()
+                    ">
 
             </div>
+
 
             <div class="summary-box">
 
@@ -1694,10 +2352,13 @@ function tipScreen() {
                     </span>
 
                     <strong>
-                        ${money(subtotal)}
+                        ${money(
+                            subtotal
+                        )}
                     </strong>
 
                 </div>
+
 
                 <div class="summary-row">
 
@@ -1705,11 +2366,35 @@ function tipScreen() {
                         Tip
                     </span>
 
-                    <strong id="tipAmount">
-                        ${money(getTip())}
+                    <strong
+                        id="tipAmount">
+
+                        ${money(
+                            getTip()
+                        )}
+
                     </strong>
 
                 </div>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Tax
+                    </span>
+
+                    <strong
+                        id="taxAmount">
+
+                        ${money(
+                            getTaxAmount()
+                        )}
+
+                    </strong>
+
+                </div>
+
 
                 <div class="summary-total">
 
@@ -1717,20 +2402,25 @@ function tipScreen() {
                         TOTAL
                     </span>
 
-                    <span id="totalAmount">
+                    <span
+                        id="totalAmount">
+
                         ${money(
-                            getSubtotal() +
-                            getTip()
+                            getCheckoutTotal()
                         )}
+
                     </span>
 
                 </div>
 
             </div>
 
+
             <button
                 class="green full"
-                onclick="continueToCardScan()">
+                onclick="
+                    continueToCardScan()
+                ">
 
                 Continue to Card Scan →
 
@@ -1745,7 +2435,8 @@ function chooseTip(percent) {
     selectedTipPercent =
         percent;
 
-    customTip = 0;
+    customTip =
+        0;
 
     tipScreen();
 }
@@ -1760,20 +2451,41 @@ function updateCustomTip() {
     customTip =
         Number(input.value) || 0;
 
-    selectedTipPercent = 0;
+    selectedTipPercent =
+        0;
 
-    document.getElementById(
-        "tipAmount"
-    ).textContent =
-        money(customTip);
-
-    document.getElementById(
-        "totalAmount"
-    ).textContent =
-        money(
-            getSubtotal() +
-            customTip
+    const tipElement =
+        document.getElementById(
+            "tipAmount"
         );
+
+    const taxElement =
+        document.getElementById(
+            "taxAmount"
+        );
+
+    const totalElement =
+        document.getElementById(
+            "totalAmount"
+        );
+
+    if (tipElement) {
+
+        tipElement.textContent =
+            money(getTip());
+    }
+
+    if (taxElement) {
+
+        taxElement.textContent =
+            money(getTaxAmount());
+    }
+
+    if (totalElement) {
+
+        totalElement.textContent =
+            money(getCheckoutTotal());
+    }
 }
 
 function continueToCardScan() {
@@ -1790,7 +2502,8 @@ function showCardScanner() {
 
     stopQRScanner();
 
-    scannerLocked = false;
+    scannerLocked =
+        false;
 
     document.getElementById(
         "app"
@@ -1800,34 +2513,46 @@ function showCardScanner() {
 
             <button
                 class="gray back"
-                onclick="tipScreen()">
+                onclick="
+                    tipScreen()
+                ">
 
                 ← Back to Tip
 
             </button>
 
+
             <h2>
                 Step 2: Scan Customer Card
             </h2>
 
+
             <div class="card-box">
 
-                Normal total:
+                Current total:
 
                 <strong>
                     ${money(
-                        getSubtotal() +
-                        getTip()
+                        getCheckoutTotal()
                     )}
                 </strong>
 
                 <br><br>
 
-                The final amount will be
-                calculated after the card
-                is scanned.
+                ${
+                    transactionTaxEnabled
+
+                    ?
+
+                    "8% tax is included."
+
+                    :
+
+                    "🚫 No tax is being charged."
+                }
 
             </div>
+
 
             <div class="scanner-container">
 
@@ -1843,15 +2568,20 @@ function showCardScanner() {
 
             </div>
 
+
             <button
                 class="primary full"
-                onclick="startQRScanner()">
+                onclick="
+                    startQRScanner()
+                ">
 
                 📷 Start / Restart Scanner
 
             </button>
 
+
             <br><br>
+
 
             <div class="manual-section">
 
@@ -1861,11 +2591,15 @@ function showCardScanner() {
 
                 <input
                     id="manualCode"
-                    placeholder="CARD-PURPLE-001">
+                    placeholder="
+                        CARD-PURPLE-001
+                    ">
 
                 <button
                     class="gray full"
-                    onclick="manualScan()">
+                    onclick="
+                        manualScan()
+                    ">
 
                     Use Card Code
 
@@ -1873,11 +2607,15 @@ function showCardScanner() {
 
             </div>
 
+
             <br>
+
 
             <button
                 class="gray full"
-                onclick="scanImageInstead()">
+                onclick="
+                    scanImageInstead()
+                ">
 
                 🖼️ Scan QR From Picture
 
@@ -1891,7 +2629,9 @@ function showCardScanner() {
 
 async function startQRScanner() {
 
-    if (scannerLocked)
+    if (
+        scannerLocked
+    )
         return;
 
     stopQRScanner();
@@ -1901,7 +2641,8 @@ async function startQRScanner() {
             "qr-reader"
         );
 
-    if (!reader) return;
+    if (!reader)
+        return;
 
     const status =
         document.getElementById(
@@ -1942,9 +2683,9 @@ async function startQRScanner() {
             cameras.find(
                 camera =>
                     /back|rear|environment/i
-                    .test(
-                        camera.label
-                    )
+                        .test(
+                            camera.label
+                        )
             );
 
         if (backCamera) {
@@ -1974,9 +2715,14 @@ async function startQRScanner() {
 
                         return {
                             width:
-                                Math.floor(size),
+                                Math.floor(
+                                    size
+                                ),
+
                             height:
-                                Math.floor(size)
+                                Math.floor(
+                                    size
+                                )
                         };
                     },
 
@@ -2023,18 +2769,21 @@ function stopQRScanner() {
                     qrScanner.clear();
                 } catch(e) {}
 
-                qrScanner = null;
+                qrScanner =
+                    null;
 
             })
             .catch(() => {
 
-                qrScanner = null;
+                qrScanner =
+                    null;
 
             });
 
     } catch(e) {
 
-        qrScanner = null;
+        qrScanner =
+            null;
     }
 }
 
@@ -2042,10 +2791,13 @@ function handleScannedCode(
     decodedText
 ) {
 
-    if (scannerLocked)
+    if (
+        scannerLocked
+    )
         return;
 
-    scannerLocked = true;
+    scannerLocked =
+        true;
 
     stopQRScanner();
 
@@ -2068,7 +2820,8 @@ function manualScan() {
         return;
     }
 
-    scannerLocked = true;
+    scannerLocked =
+        true;
 
     stopQRScanner();
 
@@ -2082,13 +2835,18 @@ async function scanImageInstead() {
             "input"
         );
 
-    input.type = "file";
-    input.accept = "image/*";
+    input.type =
+        "file";
+
+    input.accept =
+        "image/*";
 
     input.onchange =
         async function() {
 
-            if (!input.files.length)
+            if (
+                !input.files.length
+            )
                 return;
 
             try {
@@ -2126,11 +2884,14 @@ async function scanImageInstead() {
    FIND CARD
 ========================================================= */
 
-function findCard(decodedText) {
+function findCard(
+    decodedText
+) {
 
     const raw =
-        String(decodedText || "")
-        .trim();
+        String(
+            decodedText || ""
+        ).trim();
 
     const normalized =
         normalizeQR(raw);
@@ -2140,7 +2901,8 @@ function findCard(decodedText) {
             card =>
                 normalizeQR(
                     card.code
-                ) === normalized
+                ) ===
+                normalized
         );
 
     if (!card) {
@@ -2150,7 +2912,8 @@ function findCard(decodedText) {
                 card =>
                     normalizeQR(
                         card.name
-                    ) === normalized
+                    ) ===
+                    normalized
             );
     }
 
@@ -2185,7 +2948,9 @@ function findCard(decodedText) {
                     continue;
 
                 const valueNormalized =
-                    normalizeQR(value);
+                    normalizeQR(
+                        value
+                    );
 
                 card =
                     cards.find(
@@ -2205,7 +2970,8 @@ function findCard(decodedText) {
 
     if (!card) {
 
-        scannerLocked = false;
+        scannerLocked =
+            false;
 
         document.getElementById(
             "app"
@@ -2217,10 +2983,14 @@ function findCard(decodedText) {
                     ❌ Card Not Found
                 </h2>
 
-                <p style="text-align:center">
+                <p
+                    style="
+                        text-align:center
+                    "
+                >
 
-                    The QR code was read, but it
-                    doesn't match a card.
+                    The QR code was read,
+                    but it doesn't match a card.
 
                 </p>
 
@@ -2233,14 +3003,18 @@ function findCard(decodedText) {
                     <br><br>
 
                     <code>
-                        ${escapeHTML(raw)}
+                        ${escapeHTML(
+                            raw
+                        )}
                     </code>
 
                 </div>
 
                 <button
                     class="primary full"
-                    onclick="showCardScanner()">
+                    onclick="
+                        showCardScanner()
+                    ">
 
                     ← Scan Again
 
@@ -2252,9 +3026,12 @@ function findCard(decodedText) {
         return;
     }
 
-    currentCard = card;
+    currentCard =
+        card;
 
-    if (!currentCard.pinHash) {
+    if (
+        !currentCard.pinHash
+    ) {
 
         setupExistingCardPIN(
             currentCard
@@ -2271,7 +3048,9 @@ function findCard(decodedText) {
    EXISTING CARD PIN
 ========================================================= */
 
-function setupExistingCardPIN(card) {
+function setupExistingCardPIN(
+    card
+) {
 
     document.getElementById(
         "app"
@@ -2285,18 +3064,21 @@ function setupExistingCardPIN(card) {
 
             <div class="warning">
 
-                This card was created before PINs
-                were added.
+                This card was created before
+                PINs were added.
 
                 <br><br>
 
                 Create a 4-digit PIN for:
 
                 <strong>
-                    ${escapeHTML(card.name)}
+                    ${escapeHTML(
+                        card.name
+                    )}
                 </strong>
 
             </div>
+
 
             <label>
                 New 4-Digit PIN
@@ -2310,6 +3092,7 @@ function setupExistingCardPIN(card) {
                 placeholder="••••"
                 autocomplete="new-password">
 
+
             <label>
                 Confirm PIN
             </label>
@@ -2321,6 +3104,7 @@ function setupExistingCardPIN(card) {
                 maxlength="4"
                 placeholder="••••"
                 autocomplete="new-password">
+
 
             <button
                 class="green full"
@@ -2334,11 +3118,15 @@ function setupExistingCardPIN(card) {
 
             </button>
 
+
             <br><br>
+
 
             <button
                 class="gray full"
-                onclick="showCardScanner()">
+                onclick="
+                    showCardScanner()
+                ">
 
                 Cancel
 
@@ -2348,7 +3136,9 @@ function setupExistingCardPIN(card) {
     `;
 }
 
-async function saveExistingCardPIN(id) {
+async function saveExistingCardPIN(
+    id
+) {
 
     const card =
         cards.find(
@@ -2375,7 +3165,9 @@ async function saveExistingCardPIN(id) {
         return;
     }
 
-    if (pin !== confirmPIN) {
+    if (
+        pin !== confirmPIN
+    ) {
 
         alert(
             "The PINs don't match."
@@ -2387,7 +3179,7 @@ async function saveExistingCardPIN(id) {
     card.pinHash =
         await hashPIN(pin);
 
-    save();
+    await save();
 
     alert(
         "PIN created successfully."
@@ -2407,12 +3199,11 @@ function cardPINScreen() {
         getSubtotal() +
         getTip();
 
+    const tax =
+        getTaxAmount();
+
     const finalTotal =
         getCheckoutTotal();
-
-    const buyerTax =
-        finalTotal -
-        normalTotal;
 
     document.getElementById(
         "app"
@@ -2422,15 +3213,19 @@ function cardPINScreen() {
 
             <button
                 class="gray back"
-                onclick="showCardScanner()">
+                onclick="
+                    showCardScanner()
+                ">
 
                 ← Scan Again
 
             </button>
 
+
             <h2>
                 Step 3: Enter Card PIN
             </h2>
+
 
             <div class="card-box">
 
@@ -2442,9 +3237,25 @@ function cardPINScreen() {
 
                 <br>
 
-                <span class="tax-badge">
-                    8% TAX APPLIES
-                </span>
+                ${
+                    transactionTaxEnabled
+
+                    ?
+
+                    `
+                    <span class="tax-badge">
+                        8% TAX APPLIES
+                    </span>
+                    `
+
+                    :
+
+                    `
+                    <span class="no-tax-badge">
+                        NO TAX
+                    </span>
+                    `
+                }
 
                 <br><br>
 
@@ -2454,27 +3265,35 @@ function cardPINScreen() {
                     style="
                         font-size:22px;
                         font-weight:600;
-                    ">
+                    "
+                >
                     ${money(
                         currentCard.balance
                     )}
                 </div>
+
 
                 <br>
 
                 Normal amount:
 
                 <strong>
-                    ${money(normalTotal)}
+                    ${money(
+                        normalTotal
+                    )}
                 </strong>
+
 
                 <br><br>
 
-                Buyer tax (8%):
+                Tax:
 
                 <strong>
-                    ${money(buyerTax)}
+                    ${money(
+                        tax
+                    )}
                 </strong>
+
 
                 <br><br>
 
@@ -2485,11 +3304,17 @@ function cardPINScreen() {
                         font-size:46px;
                         font-weight:800;
                         margin-top:8px;
-                    ">
-                    ${money(finalTotal)}
+                    "
+                >
+
+                    ${money(
+                        finalTotal
+                    )}
+
                 </div>
 
             </div>
+
 
             <label>
                 Card PIN
@@ -2503,9 +3328,12 @@ function cardPINScreen() {
                 placeholder="••••"
                 autocomplete="off">
 
+
             <button
                 class="green full"
-                onclick="verifyChargePIN()">
+                onclick="
+                    verifyChargePIN()
+                ">
 
                 🔓 Verify PIN
 
@@ -2564,12 +3392,11 @@ function paymentReview() {
         getSubtotal() +
         getTip();
 
+    const tax =
+        getTaxAmount();
+
     const total =
         getCheckoutTotal();
-
-    const buyerTax =
-        total -
-        normalTotal;
 
     document.getElementById(
         "app"
@@ -2580,6 +3407,7 @@ function paymentReview() {
             <h2>
                 Step 4: Review Payment
             </h2>
+
 
             <div class="card-box">
 
@@ -2595,11 +3423,29 @@ function paymentReview() {
                     )}
                 </div>
 
-                <span class="tax-badge">
-                    8% TAX APPLIES
-                </span>
+                ${
+                    transactionTaxEnabled
+
+                    ?
+
+                    `
+                    <span class="tax-badge">
+                        8% TAX APPLIES
+                    </span>
+                    `
+
+                    :
+
+                    `
+                    <span class="no-tax-badge">
+                        NO TAX
+                    </span>
+                    `
+
+                }
 
             </div>
+
 
             <div class="summary-box">
 
@@ -2610,22 +3456,28 @@ function paymentReview() {
                     </span>
 
                     <strong>
-                        ${money(normalTotal)}
+                        ${money(
+                            normalTotal
+                        )}
                     </strong>
 
                 </div>
+
 
                 <div class="summary-row">
 
                     <span>
-                        Buyer tax (8%)
+                        Tax
                     </span>
 
                     <strong>
-                        ${money(buyerTax)}
+                        ${money(
+                            tax
+                        )}
                     </strong>
 
                 </div>
+
 
                 <div class="summary-total">
 
@@ -2634,29 +3486,39 @@ function paymentReview() {
                     </span>
 
                     <span>
-                        ${money(total)}
+                        ${money(
+                            total
+                        )}
                     </span>
 
                 </div>
 
             </div>
 
+
             ${
-                currentCard.balance >= total
+                currentCard.balance >=
+                total
 
                 ?
 
-                `<button
+                `
+                <button
                     class="green full"
-                    onclick="completePayment()">
+                    onclick="
+                        completePayment()
+                    ">
 
-                    💳 CHARGE ${money(total)}
+                    💳 CHARGE
+                    ${money(total)}
 
-                </button>`
+                </button>
+                `
 
                 :
 
-                `<div class="warning">
+                `
+                <div class="warning">
 
                     ❌ Not enough balance.
 
@@ -2669,14 +3531,19 @@ function paymentReview() {
                     )}
                     more.
 
-                </div>`
+                </div>
+                `
             }
+
 
             <br>
 
+
             <button
                 class="gray full"
-                onclick="cardPINScreen()">
+                onclick="
+                    cardPINScreen()
+                ">
 
                 ← Back to PIN
 
@@ -2708,8 +3575,11 @@ function completePayment() {
 
     save();
 
-    transferChoice = null;
-    selectedTransferCard = null;
+    transferChoice =
+        null;
+
+    selectedTransferCard =
+        null;
 
     transferScreen();
 }
@@ -2719,11 +3589,65 @@ function completePayment() {
    TRANSFER
 ========================================================= */
 
+function calculateTaxForTransaction(
+    baseAmount,
+    buyerCard,
+    recipientCard
+) {
+
+    /*
+        The transaction's No Tax / Tax choice
+        is respected here too.
+    */
+
+    const buyerTaxRate =
+        transactionTaxEnabled
+        ? 0.08
+        : 0;
+
+    const recipientTaxRate =
+        0;
+
+    const buyerTax =
+        baseAmount *
+        buyerTaxRate;
+
+    const recipientTax =
+        0;
+
+    const buyerPays =
+        baseAmount +
+        buyerTax;
+
+    const recipientGets =
+        baseAmount;
+
+    return {
+
+        baseAmount,
+
+        buyerTaxRate,
+
+        recipientTaxRate,
+
+        buyerTax,
+
+        recipientTax,
+
+        buyerPays,
+
+        recipientGets
+    };
+}
+
 function transferScreen() {
 
     const normalTotal =
         getSubtotal() +
         getTip();
+
+    const tax =
+        getTaxAmount();
 
     document.getElementById(
         "app"
@@ -2735,14 +3659,17 @@ function transferScreen() {
                 Step 5: Where Should the Money Go?
             </h2>
 
+
             <div class="card-box">
 
                 Payment charged to buyer:
 
                 <div class="balance">
+
                     ${money(
                         getCheckoutTotal()
                     )}
+
                 </div>
 
                 <br>
@@ -2750,10 +3677,45 @@ function transferScreen() {
                 Normal transaction amount:
 
                 <strong>
-                    ${money(normalTotal)}
+                    ${money(
+                        normalTotal
+                    )}
                 </strong>
 
+                <br><br>
+
+                Tax:
+
+                <strong>
+                    ${money(
+                        tax
+                    )}
+                </strong>
+
+                <br><br>
+
+                ${
+                    transactionTaxEnabled
+
+                    ?
+
+                    `
+                    <span class="tax-badge">
+                        8% TAX
+                    </span>
+                    `
+
+                    :
+
+                    `
+                    <span class="no-tax-badge">
+                        NO TAX
+                    </span>
+                    `
+                }
+
             </div>
+
 
             <div
                 class="
@@ -2767,7 +3729,8 @@ function transferScreen() {
                 "
                 onclick="
                     chooseTransferNone()
-                ">
+                "
+            >
 
                 <strong>
                     ➖ Transfer to no one
@@ -2780,9 +3743,11 @@ function transferScreen() {
 
             </div>
 
+
             <h3>
                 Transfer to another card
             </h3>
+
 
             ${
                 cards
@@ -2791,91 +3756,121 @@ function transferScreen() {
                         card.id !==
                         currentCard.id
                 )
-                .map(card => {
+                .map(
+                    card => {
 
-                    const tax =
-                        calculateTaxForTransaction(
-                            normalTotal,
-                            currentCard,
-                            card
-                        );
+                        const tax =
+                            calculateTaxForTransaction(
+                                normalTotal,
+                                currentCard,
+                                card
+                            );
 
-                    return `
+                        return `
 
-                    <div
-                        class="transfer-card"
-                        onclick="
-                            transferPINScreen(
-                                ${card.id}
-                            )
-                        ">
+                        <div
+                            class="transfer-card"
+                            onclick="
+                                transferPINScreen(
+                                    ${card.id}
+                                )
+                            "
+                        >
 
-                        <strong>
-                            ${escapeHTML(
-                                card.name
-                            )}
-                        </strong>
+                            <strong>
+                                ${escapeHTML(
+                                    card.name
+                                )}
+                            </strong>
 
-                        ${
-                            card.taxed
-                            ?
-                            `<span class="tax-badge">
-                                TAXED
-                            </span>`
-                            :
-                            `<span class="no-tax-badge">
-                                NOT TAXED
-                            </span>`
-                        }
 
-                        <div class="transfer-balance">
+                            ${
+                                card.taxed
 
-                            Current balance:
-                            ${money(
-                                card.balance
-                            )}
+                                ?
+
+                                `
+                                <span
+                                    class="
+                                        tax-badge
+                                    "
+                                >
+                                    TAXED
+                                </span>
+                                `
+
+                                :
+
+                                `
+                                <span
+                                    class="
+                                        no-tax-badge
+                                    "
+                                >
+                                    NOT TAXED
+                                </span>
+                                `
+                            }
+
+
+                            <div
+                                class="
+                                    transfer-balance
+                                "
+                            >
+
+                                Current balance:
+                                ${money(
+                                    card.balance
+                                )}
+
+                            </div>
+
+
+                            <br>
+
+                            Buyer pays:
+
+                            <strong>
+                                ${money(
+                                    tax.buyerPays
+                                )}
+                            </strong>
+
+
+                            <br>
+
+                            Recipient receives:
+
+                            <strong>
+                                ${money(
+                                    tax.recipientGets
+                                )}
+                            </strong>
 
                         </div>
 
-                        <br>
-
-                        Buyer pays:
-
-                        <strong>
-                            ${money(
-                                tax.buyerPays
-                            )}
-                        </strong>
-
-                        <br>
-
-                        Recipient receives:
-
-                        <strong>
-                            ${money(
-                                tax.recipientGets
-                            )}
-                        </strong>
-
-
-
-                    </div>
-                    `;
-
-                }).join("")
+                        `;
+                    }
+                ).join("")
             }
+
 
             <br>
 
+
             <button
                 class="green full"
-                onclick="finishTransfer()"
+                onclick="
+                    finishTransfer()
+                "
                 ${
                     transferChoice ===
                     "none"
                     ? ""
                     : "disabled"
-                }>
+                }
+            >
 
                 Finish Sale
 
@@ -2901,26 +3896,47 @@ function chooseTransferNone() {
    TRANSFER PIN
 ========================================================= */
 
-function transferPINScreen(cardId) {
+function transferPINScreen(
+    cardId
+) {
 
     const recipient =
         cards.find(
             card =>
-                card.id === cardId
+                card.id ===
+                cardId
         );
 
     if (!recipient) {
-        alert("Recipient card not found.");
+
+        alert(
+            "Recipient card not found."
+        );
+
         return;
     }
 
-    selectedTransferCard = cardId;
-    transferChoice = "card";
+    selectedTransferCard =
+        cardId;
 
-    finishTransfer();
-}
+    transferChoice =
+        "card";
 
-function setupTransferCardPIN(card) {
+    /*
+        If there is no PIN yet, create one.
+        Otherwise verify it.
+    */
+
+    if (
+        !recipient.pinHash
+    ) {
+
+        setupTransferCardPIN(
+            recipient
+        );
+
+        return;
+    }
 
     document.getElementById(
         "app"
@@ -2930,15 +3946,93 @@ function setupTransferCardPIN(card) {
 
             <button
                 class="gray back"
-                onclick="transferScreen()">
+                onclick="
+                    transferScreen()
+                ">
 
                 ← Back
 
             </button>
 
+
+            <h2>
+                🔐 Recipient PIN
+            </h2>
+
+
+            <div class="card-box">
+
+                Transfer to:
+
+                <h3>
+                    ${escapeHTML(
+                        recipient.name
+                    )}
+                </h3>
+
+                Recipient will receive:
+
+                <strong>
+                    ${money(
+                        getSubtotal() +
+                        getTip()
+                    )}
+                </strong>
+
+            </div>
+
+
+            <label>
+                Recipient Card PIN
+            </label>
+
+            <input
+                id="transferPIN"
+                type="password"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="••••">
+
+
+            <button
+                class="green full"
+                onclick="
+                    verifyTransferPIN()
+                ">
+
+                🔓 Verify Recipient PIN
+
+            </button>
+
+        </div>
+    `;
+}
+
+function setupTransferCardPIN(
+    card
+) {
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="
+                    transferScreen()
+                ">
+
+                ← Back
+
+            </button>
+
+
             <h2>
                 🔐 Create Recipient PIN
             </h2>
+
 
             <div class="warning">
 
@@ -2951,11 +4045,16 @@ function setupTransferCardPIN(card) {
 
             </div>
 
+
             <strong>
-                ${escapeHTML(card.name)}
+                ${escapeHTML(
+                    card.name
+                )}
             </strong>
 
+
             <br><br>
+
 
             <label>
                 New 4-Digit PIN
@@ -2968,6 +4067,7 @@ function setupTransferCardPIN(card) {
                 maxlength="4"
                 placeholder="••••">
 
+
             <label>
                 Confirm PIN
             </label>
@@ -2978,6 +4078,7 @@ function setupTransferCardPIN(card) {
                 inputmode="numeric"
                 maxlength="4"
                 placeholder="••••">
+
 
             <button
                 class="green full"
@@ -2995,7 +4096,9 @@ function setupTransferCardPIN(card) {
     `;
 }
 
-async function saveTransferCardPIN(id) {
+async function saveTransferCardPIN(
+    id
+) {
 
     const card =
         cards.find(
@@ -3022,7 +4125,9 @@ async function saveTransferCardPIN(id) {
         return;
     }
 
-    if (pin !== confirm) {
+    if (
+        pin !== confirm
+    ) {
 
         alert(
             "The PINs don't match."
@@ -3034,7 +4139,7 @@ async function saveTransferCardPIN(id) {
     card.pinHash =
         await hashPIN(pin);
 
-    save();
+    await save();
 
     alert(
         "Recipient PIN created."
@@ -3105,27 +4210,35 @@ function finishTransfer() {
         getSubtotal() +
         getTip();
 
-    let recipient = null;
+    let recipient =
+        null;
 
     let taxInfo = {
 
         baseAmount:
             normalTotal,
 
-        buyerTaxRate: 0,
+        buyerTaxRate:
+            transactionTaxEnabled
+            ? 0.08
+            : 0,
 
-        recipientTaxRate: 0,
+        recipientTaxRate:
+            0,
 
-        buyerTax: 0,
+        buyerTax:
+            getTaxAmount(),
 
-        recipientTax: 0,
+        recipientTax:
+            0,
 
         buyerPays:
-            normalTotal,
+            getCheckoutTotal(),
 
         recipientGets:
             normalTotal
     };
+
 
     if (
         selectedTransferCard !==
@@ -3159,14 +4272,17 @@ function finishTransfer() {
             taxInfo.recipientGets;
     }
 
+
     const amountCharged =
         recipient
         ? taxInfo.buyerPays
         : getCheckoutTotal();
 
+
     transactions.unshift({
 
-        id: Date.now(),
+        id:
+            Date.now(),
 
         customerCard:
             currentCard.name,
@@ -3186,13 +4302,18 @@ function finishTransfer() {
         normalAmount:
             normalTotal,
 
+        taxEnabled:
+            transactionTaxEnabled,
+
+        taxRate:
+            transactionTaxEnabled
+            ? 0.08
+            : 0,
+
         buyerTax:
             recipient
             ? taxInfo.buyerTax
-            :
-            (
-                normalTotal * 0.08
-            ),
+            : getTaxAmount(),
 
         recipientTax:
             recipient
@@ -3213,30 +4334,44 @@ function finishTransfer() {
             new Date().toLocaleString(),
 
         items:
-            cart.map(item => {
+            cart.map(
+                item => {
 
-                const product =
-                    products.find(
-                        p =>
-                            p.id ===
-                            item.productId
-                    );
+                    const info =
+                        getCartItemInfo(
+                            item
+                        );
 
-                return {
+                    return {
 
-                    name:
-                        product.name,
+                        name:
+                            info.name,
 
-                    quantity:
-                        item.quantity
-                };
-            })
+                        quantity:
+                            item.quantity,
+
+                        price:
+                            info.price,
+
+                        custom:
+                            Boolean(
+                                item.custom
+                            )
+                    };
+                }
+            )
     });
+
 
     save();
 
-    transferChoice = null;
-    selectedTransferCard = null;
+
+    transferChoice =
+        null;
+
+    selectedTransferCard =
+        null;
+
 
     finishScreen(
         amountCharged,
@@ -3268,9 +4403,11 @@ function finishScreen(
                     ✓ SALE COMPLETE
                 </h2>
 
+
                 <h3>
                     Payment Approved
                 </h3>
+
 
                 <p>
                     Customer card:
@@ -3282,27 +4419,59 @@ function finishScreen(
                     )}
                 </strong>
 
+
+                <p>
+                    Tax:
+                </p>
+
+                <strong>
+
+                    ${
+                        transactionTaxEnabled
+
+                        ?
+
+                        money(
+                            getTaxAmount()
+                        )
+
+                        :
+
+                        "NO TAX"
+                    }
+
+                </strong>
+
+
                 <p>
                     Charged:
                 </p>
+
 
                 <div
                     style="
                         font-size:32px;
                         font-weight:bold;
-                    ">
+                    "
+                >
 
-                    ${money(total)}
+                    ${money(
+                        total
+                    )}
 
                 </div>
 
+
                 <hr>
+
 
                 <p>
                     Money transferred to:
                 </p>
 
+
                 <strong>
+
                     ${
                         recipient
                         ? escapeHTML(
@@ -3310,11 +4479,15 @@ function finishScreen(
                         )
                         : "No one"
                     }
+
                 </strong>
+
 
                 ${
                     recipient
+
                     ?
+
                     `
                     <p>
                         Recipient received:
@@ -3326,27 +4499,37 @@ function finishScreen(
                         )}
                     </strong>
                     `
+
                     :
+
                     ""
                 }
 
             </div>
 
+
             <br>
+
 
             <button
                 class="green full"
-                onclick="checkoutStart()">
+                onclick="
+                    checkoutStart()
+                ">
 
                 🛒 NEW SALE
 
             </button>
 
+
             <br><br>
+
 
             <button
                 class="gray full"
-                onclick="showMenu()">
+                onclick="
+                    showMenu()
+                ">
 
                 MAIN MENU
 
@@ -3361,15 +4544,20 @@ function finishScreen(
    MASTER PASSWORD
 ========================================================= */
 
-const MASTER_PASSWORD = "fakecard123";
+const MASTER_PASSWORD =
+    "fakecard123";
 
 function requireMasterPassword() {
-    
-    const password = prompt( 
-        "Enter The Masterpassword."
-    );
-    
-    if (password !== MASTER_PASSWORD) {
+
+    const password =
+        prompt(
+            "Enter The Masterpassword."
+        );
+
+    if (
+        password !==
+        MASTER_PASSWORD
+    ) {
 
         alert(
             "Incorrect master password."
@@ -3381,13 +4569,15 @@ function requireMasterPassword() {
     return true;
 }
 
+
 /* =========================================================
    CARD MANAGEMENT
 ========================================================= */
 
 function cardMenu() {
 
-    currentView = "cardMenu";
+    currentView =
+        "cardMenu";
 
     document.getElementById(
         "app"
@@ -3397,15 +4587,19 @@ function cardMenu() {
 
             <button
                 class="gray back"
-                onclick="showMenu()">
+                onclick="
+                    showMenu()
+                ">
 
                 ← Main Menu
 
             </button>
 
+
             <h2>
                 💳 Card Management
             </h2>
+
 
             <div class="option">
 
@@ -3425,6 +4619,7 @@ function cardMenu() {
 
             </div>
 
+
             <div class="option">
 
                 <h3>
@@ -3442,6 +4637,7 @@ function cardMenu() {
                 </button>
 
             </div>
+
 
             <div class="option">
 
@@ -3461,6 +4657,7 @@ function cardMenu() {
 
             </div>
 
+
             <div class="option">
 
                 <h3>
@@ -3469,13 +4666,16 @@ function cardMenu() {
 
                 <button
                     class="primary full"
-                    onclick="balanceScreen()">
+                    onclick="
+                        balanceScreen()
+                    ">
 
                     View Balances
 
                 </button>
 
             </div>
+
 
             <div class="option">
 
@@ -3485,7 +4685,9 @@ function cardMenu() {
 
                 <button
                     class="gray full"
-                    onclick="qrScreen()">
+                    onclick="
+                        qrScreen()
+                    ">
 
                     Generate / Print QR Codes
 
@@ -3499,71 +4701,13 @@ function cardMenu() {
 
 
 /* =========================================================
-   BALANCE VIEWER
+   BALANCE
 ========================================================= */
 
 function balanceScreen() {
 
-    currentView = "balances";
-
-    document.getElementById("app").innerHTML = `
-
-        <div class="screen">
-
-            <button
-                class="gray back"
-                onclick="cardMenu()">
-
-                ← Card Menu
-
-            </button>
-
-            <h2>👀 Card Balances</h2>
-
-            ${
-                cards.length === 0
-                ?
-                `<div class="empty">No cards yet.</div>`
-                :
-                cards.map(card => `
-
-                    <div class="card-box">
-
-                        <strong>
-                            ${escapeHTML(card.name)}
-                        </strong>
-
-                        <br>
-
-                        <small>
-                            ${escapeHTML(card.code)}
-                        </small>
-
-                        <br><br>
-
-                        <div class="balance">
-                            ${money(card.balance)}
-                        </div>
-
-                    </div>
-
-                `).join("")
-            }
-
-        </div>
-    `;
-}
-
-/* =========================================================
-   CREATE CARD
-========================================================= */
-
-function createCardScreen() {
-
-    if (!requireMasterPassword()) {
-        return;
-    }
-
+    currentView =
+        "balances";
 
     document.getElementById(
         "app"
@@ -3573,15 +4717,106 @@ function createCardScreen() {
 
             <button
                 class="gray back"
-                onclick="cardMenu()">
+                onclick="
+                    cardMenu()
+                ">
 
                 ← Card Menu
 
             </button>
 
+
+            <h2>
+                👀 Card Balances
+            </h2>
+
+
+            ${
+                cards.length === 0
+
+                ?
+
+                `
+                <div class="empty">
+                    No cards yet.
+                </div>
+                `
+
+                :
+
+                cards.map(
+                    card => `
+
+                    <div
+                        class="card-box"
+                    >
+
+                        <strong>
+                            ${escapeHTML(
+                                card.name
+                            )}
+                        </strong>
+
+                        <br>
+
+                        <small>
+                            ${escapeHTML(
+                                card.code
+                            )}
+                        </small>
+
+                        <br><br>
+
+                        <div class="balance">
+                            ${money(
+                                card.balance
+                            )}
+                        </div>
+
+                    </div>
+
+                    `
+                ).join("")
+            }
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   CREATE CARD
+========================================================= */
+
+function createCardScreen() {
+
+    if (
+        !requireMasterPassword()
+    ) {
+        return;
+    }
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="
+                    cardMenu()
+                ">
+
+                ← Card Menu
+
+            </button>
+
+
             <h2>
                 Create Fake Card
             </h2>
+
 
             <label>
                 Card Name
@@ -3589,7 +4824,10 @@ function createCardScreen() {
 
             <input
                 id="cardName"
-                placeholder="Purple Card">
+                placeholder="
+                    Purple Card
+                ">
+
 
             <label>
                 Card Code
@@ -3597,7 +4835,10 @@ function createCardScreen() {
 
             <input
                 id="cardCode"
-                placeholder="CARD-PURPLE-001">
+                placeholder="
+                    CARD-PURPLE-001
+                ">
+
 
             <label>
                 Starting Balance
@@ -3610,6 +4851,7 @@ function createCardScreen() {
                 step=".01"
                 placeholder="25">
 
+
             <label>
                 4-Digit PIN
             </label>
@@ -3621,9 +4863,12 @@ function createCardScreen() {
                 maxlength="4"
                 placeholder="••••">
 
+
             <button
                 class="green full"
-                onclick="createCard()">
+                onclick="
+                    createCard()
+                ">
 
                 Create Card
 
@@ -3657,8 +4902,6 @@ async function createCard() {
             "cardPIN"
         ).value;
 
-    const taxed = true;
-
     if (
         !name ||
         !code ||
@@ -3672,7 +4915,9 @@ async function createCard() {
         return;
     }
 
-    if (!validPIN(pin)) {
+    if (
+        !validPIN(pin)
+    ) {
 
         alert(
             "PIN must be exactly 4 digits."
@@ -3701,7 +4946,8 @@ async function createCard() {
 
     cards.push({
 
-        id: Date.now(),
+        id:
+            Date.now(),
 
         name,
 
@@ -3711,10 +4957,10 @@ async function createCard() {
 
         pinHash,
 
-        taxed
+        taxed: true
     });
 
-    save();
+    await save();
 
     alert(
         "Fake card created!"
@@ -3730,12 +4976,14 @@ async function createCard() {
 
 function editCardScreen() {
 
-    if (!requireMasterPassword()) {
+    if (
+        !requireMasterPassword()
+    ) {
         return;
     }
 
-
-    currentView = "editCard";
+    currentView =
+        "editCard";
 
     document.getElementById(
         "app"
@@ -3745,19 +4993,26 @@ function editCardScreen() {
 
             <button
                 class="gray back"
-                onclick="cardMenu()">
+                onclick="
+                    cardMenu()
+                ">
 
                 ← Card Menu
 
             </button>
 
+
             <h2>
                 Edit Card
             </h2>
 
+
             <select
                 id="editCardSelect"
-                onchange="loadEditCard()">
+                onchange="
+                    loadEditCard()
+                "
+            >
 
                 <option value="">
                     Choose a card
@@ -3767,17 +5022,22 @@ function editCardScreen() {
                     cards.map(
                         card => `
 
-                        <option value="${card.id}">
+                        <option
+                            value="${card.id}"
+                        >
+
                             ${escapeHTML(
                                 card.name
                             )}
+
                         </option>
 
-                    `
+                        `
                     ).join("")
                 }
 
             </select>
+
 
             <div id="editFields"></div>
 
@@ -3817,6 +5077,7 @@ function loadEditCard() {
                 card.name
             )}">
 
+
         <label>
             Card Code
         </label>
@@ -3826,6 +5087,7 @@ function loadEditCard() {
             value="${escapeHTML(
                 card.code
             )}">
+
 
         <label>
             Balance
@@ -3837,12 +5099,17 @@ function loadEditCard() {
             step=".01"
             value="${card.balance}">
 
+
         <div class="tax-toggle">
 
             <input
                 id="editTaxed"
                 type="checkbox"
-                ${card.taxed ? "checked" : ""}>
+                ${
+                    card.taxed
+                    ? "checked"
+                    : ""
+                }>
 
             <div>
 
@@ -3853,6 +5120,7 @@ function loadEditCard() {
             </div>
 
         </div>
+
 
         <button
             class="primary full"
@@ -3866,7 +5134,9 @@ function loadEditCard() {
 
         </button>
 
+
         <br><br>
+
 
         <button
             class="orange full"
@@ -3880,7 +5150,9 @@ function loadEditCard() {
 
         </button>
 
+
         <br><br>
+
 
         <button
             class="red full"
@@ -3993,15 +5265,19 @@ function changeCardPIN(id) {
 
             <button
                 class="gray back"
-                onclick="editCardScreen()">
+                onclick="
+                    editCardScreen()
+                ">
 
                 ← Back
 
             </button>
 
+
             <h2>
                 🔐 Change PIN
             </h2>
+
 
             <strong>
                 ${escapeHTML(
@@ -4009,7 +5285,9 @@ function changeCardPIN(id) {
                 )}
             </strong>
 
+
             <br><br>
+
 
             <label>
                 Current PIN
@@ -4022,6 +5300,7 @@ function changeCardPIN(id) {
                 maxlength="4"
                 placeholder="••••">
 
+
             <label>
                 New PIN
             </label>
@@ -4033,6 +5312,7 @@ function changeCardPIN(id) {
                 maxlength="4"
                 placeholder="••••">
 
+
             <label>
                 Confirm New PIN
             </label>
@@ -4043,6 +5323,7 @@ function changeCardPIN(id) {
                 inputmode="numeric"
                 maxlength="4"
                 placeholder="••••">
+
 
             <button
                 class="green full"
@@ -4110,7 +5391,9 @@ async function saveChangedPIN(id) {
         return;
     }
 
-    if (newPIN !== confirmPIN) {
+    if (
+        newPIN !== confirmPIN
+    ) {
 
         alert(
             "New PINs don't match."
@@ -4133,9 +5416,11 @@ async function saveChangedPIN(id) {
 
 function deleteCard(id) {
 
-    if (!confirm(
-        "Delete this fake card?"
-    ))
+    if (
+        !confirm(
+            "Delete this fake card?"
+        )
+    )
         return;
 
     cards =
@@ -4156,11 +5441,14 @@ function deleteCard(id) {
 
 function addMoneyScreen() {
 
-     if (!requireMasterPassword()) {
+    if (
+        !requireMasterPassword()
+    ) {
         return;
     }
 
-    currentView = "addMoney";
+    currentView =
+        "addMoney";
 
     document.getElementById(
         "app"
@@ -4170,15 +5458,19 @@ function addMoneyScreen() {
 
             <button
                 class="gray back"
-                onclick="cardMenu()">
+                onclick="
+                    cardMenu()
+                ">
 
                 ← Card Menu
 
             </button>
 
+
             <h2>
                 💰 Add Fake Money
             </h2>
+
 
             <select id="moneyCard">
 
@@ -4190,7 +5482,10 @@ function addMoneyScreen() {
                     cards.map(
                         card => `
 
-                        <option value="${card.id}">
+                        <option
+                            value="${card.id}"
+                        >
+
                             ${escapeHTML(
                                 card.name
                             )}
@@ -4198,13 +5493,15 @@ function addMoneyScreen() {
                             ${money(
                                 card.balance
                             )}
+
                         </option>
 
-                    `
+                        `
                     ).join("")
                 }
 
             </select>
+
 
             <label>
                 Amount to Add
@@ -4217,9 +5514,12 @@ function addMoneyScreen() {
                 step=".01"
                 placeholder="10">
 
+
             <button
                 class="green full"
-                onclick="addMoney()">
+                onclick="
+                    addMoney()
+                ">
 
                 Add Money
 
@@ -4263,7 +5563,8 @@ function addMoney() {
         return;
     }
 
-    card.balance += amount;
+    card.balance +=
+        amount;
 
     save();
 
@@ -4282,7 +5583,8 @@ function addMoney() {
 
 function qrScreen() {
 
-    currentView = "qr";
+    currentView =
+        "qr";
 
     selectedQRs =
         new Set();
@@ -4295,17 +5597,25 @@ function qrScreen() {
 
             <button
                 class="gray back"
-                onclick="cardMenu()">
+                onclick="
+                    cardMenu()
+                ">
 
                 ← Card Menu
 
             </button>
 
+
             <h2>
                 🔲 Select QR Codes to Print
             </h2>
 
-            <p style="text-align:center">
+
+            <p
+                style="
+                    text-align:center
+                "
+            >
 
                 Letter paper:
                 <strong>
@@ -4321,19 +5631,29 @@ function qrScreen() {
 
             </p>
 
-            <div class="qr-selection-controls">
+
+            <div
+                class="
+                    qr-selection-controls
+                "
+            >
 
                 <button
                     class="primary"
-                    onclick="selectAllQRs()">
+                    onclick="
+                        selectAllQRs()
+                    ">
 
                     Select All
 
                 </button>
 
+
                 <button
                     class="gray"
-                    onclick="deselectAllQRs()">
+                    onclick="
+                        deselectAllQRs()
+                    ">
 
                     Deselect All
 
@@ -4341,13 +5661,16 @@ function qrScreen() {
 
             </div>
 
+
             <div
                 class="selected-count"
-                id="selectedCount">
+                id="selectedCount"
+            >
 
                 0 cards selected
 
             </div>
+
 
             <div id="qrSelectionList">
 
@@ -4359,7 +5682,8 @@ function qrScreen() {
                             class="qr-select-card"
                             id="
                                 qr-select-${card.id}
-                            ">
+                            "
+                        >
 
                             <input
                                 type="checkbox"
@@ -4370,14 +5694,19 @@ function qrScreen() {
                                     )
                                 ">
 
+
                             <div
                                 class="qr-preview"
                                 id="
                                     qr-preview-${card.id}
-                                ">
+                                "
+                            >
                             </div>
 
-                            <div class="qr-info">
+
+                            <div
+                                class="qr-info"
+                            >
 
                                 <strong>
                                     ${escapeHTML(
@@ -4404,13 +5733,15 @@ function qrScreen() {
 
                         </label>
 
-                    `
+                        `
                     ).join("")
                 }
 
             </div>
 
+
             <br>
+
 
             <button
                 class="primary full"
@@ -4425,28 +5756,31 @@ function qrScreen() {
         </div>
     `;
 
-    cards.forEach(card => {
 
-        new QRCode(
+    cards.forEach(
+        card => {
 
-            document.getElementById(
-                "qr-preview-" +
-                card.id
-            ),
+            new QRCode(
 
-            {
-                text:
-                    card.code,
+                document.getElementById(
+                    "qr-preview-" +
+                    card.id
+                ),
 
-                width: 90,
+                {
+                    text:
+                        card.code,
 
-                height: 90,
+                    width: 90,
 
-                correctLevel:
-                    QRCode.CorrectLevel.H
-            }
-        );
-    });
+                    height: 90,
+
+                    correctLevel:
+                        QRCode.CorrectLevel.H
+                }
+            );
+        }
+    );
 
     updateSelectedCount();
 }
@@ -4458,16 +5792,24 @@ function toggleQR(id) {
             `input[type="checkbox"][value="${id}"]`
         );
 
-    if (checkbox.checked) {
+    if (
+        checkbox.checked
+    ) {
 
-        selectedQRs.add(id);
+        selectedQRs.add(
+            id
+        );
 
     } else {
 
-        selectedQRs.delete(id);
+        selectedQRs.delete(
+            id
+        );
     }
 
-    updateQRVisual(id);
+    updateQRVisual(
+        id
+    );
 
     updateSelectedCount();
 }
@@ -4570,7 +5912,7 @@ function updateSelectedCount() {
 
 
 /* =========================================================
-   FIXED QR PRINT FUNCTION
+   PRINT QR
 ========================================================= */
 
 function printSelectedQRs() {
@@ -4599,16 +5941,8 @@ function printSelectedQRs() {
                 )
         );
 
-    /*
-        Clear previous print content.
-    */
-
-    printArea.innerHTML = "";
-
-    /*
-        Create the exact Letter-size
-        print sheet.
-    */
+    printArea.innerHTML =
+        "";
 
     const sheet =
         document.createElement(
@@ -4621,11 +5955,6 @@ function printSelectedQRs() {
     printArea.appendChild(
         sheet
     );
-
-    /*
-        Create one container for
-        every selected QR code.
-    */
 
     selectedCards.forEach(
         card => {
@@ -4647,10 +5976,6 @@ function printSelectedQRs() {
             );
         }
     );
-
-    /*
-        Generate the QR codes.
-    */
 
     selectedCards.forEach(
         card => {
@@ -4678,11 +6003,6 @@ function printSelectedQRs() {
         }
     );
 
-    /*
-        Wait until every QRCode.js canvas
-        actually exists before printing.
-    */
-
     let attempts = 0;
 
     function waitForQRCodes() {
@@ -4699,11 +6019,6 @@ function printSelectedQRs() {
             selectedCards.length
         ) {
 
-            /*
-                Force the browser to perform
-                layout/paint before print.
-            */
-
             requestAnimationFrame(
                 () => {
 
@@ -4714,18 +6029,15 @@ function printSelectedQRs() {
 
                         }
                     );
-
                 }
             );
 
             return;
         }
 
-        /*
-            Give up after 5 seconds.
-        */
-
-        if (attempts >= 50) {
+        if (
+            attempts >= 50
+        ) {
 
             alert(
                 "The QR codes took too long to generate. Please try again."
@@ -4750,7 +6062,8 @@ function printSelectedQRs() {
 
 function productMenu() {
 
-    currentView = "productMenu";
+    currentView =
+        "productMenu";
 
     document.getElementById(
         "app"
@@ -4760,15 +6073,19 @@ function productMenu() {
 
             <button
                 class="gray back"
-                onclick="showMenu()">
+                onclick="
+                    showMenu()
+                ">
 
                 ← Main Menu
 
             </button>
 
+
             <h2>
                 📦 Product Management
             </h2>
+
 
             <div class="option">
 
@@ -4787,6 +6104,7 @@ function productMenu() {
                 </button>
 
             </div>
+
 
             <div class="option">
 
@@ -4812,10 +6130,11 @@ function productMenu() {
 
 function addProductScreen() {
 
-    if (!requireMasterPassword()) {
+    if (
+        !requireMasterPassword()
+    ) {
         return;
     }
-
 
     document.getElementById(
         "app"
@@ -4825,15 +6144,19 @@ function addProductScreen() {
 
             <button
                 class="gray back"
-                onclick="productMenu()">
+                onclick="
+                    productMenu()
+                ">
 
                 ← Product Menu
 
             </button>
 
+
             <h2>
                 Add Product
             </h2>
+
 
             <label>
                 Product Name
@@ -4841,7 +6164,10 @@ function addProductScreen() {
 
             <input
                 id="productName"
-                placeholder="Candy">
+                placeholder="
+                    Candy
+                ">
+
 
             <label>
                 Price
@@ -4854,9 +6180,12 @@ function addProductScreen() {
                 step=".01"
                 placeholder="2.50">
 
+
             <button
                 class="green full"
-                onclick="addProduct()">
+                onclick="
+                    addProduct()
+                ">
 
                 Add Product
 
@@ -4894,7 +6223,8 @@ function addProduct() {
 
     products.push({
 
-        id: Date.now(),
+        id:
+            Date.now(),
 
         name,
 
@@ -4912,7 +6242,8 @@ function addProduct() {
 
 function editProductsScreen() {
 
-    currentView = "editProducts";
+    currentView =
+        "editProducts";
 
     document.getElementById(
         "app"
@@ -4922,21 +6253,27 @@ function editProductsScreen() {
 
             <button
                 class="gray back"
-                onclick="productMenu()">
+                onclick="
+                    productMenu()
+                ">
 
                 ← Product Menu
 
             </button>
 
+
             <h2>
                 Edit Products
             </h2>
+
 
             ${
                 products.map(
                     product => `
 
-                        <div class="option">
+                        <div
+                            class="option"
+                        >
 
                             <strong>
                                 ${escapeHTML(
@@ -4963,6 +6300,7 @@ function editProductsScreen() {
                                 Edit
 
                             </button>
+
 
                             <button
                                 class="red"
@@ -5010,9 +6348,11 @@ function editProduct(id) {
 
             </button>
 
+
             <h2>
                 Edit Product
             </h2>
+
 
             <label>
                 Name
@@ -5024,6 +6364,7 @@ function editProduct(id) {
                     product.name
                 )}">
 
+
             <label>
                 Price
             </label>
@@ -5033,6 +6374,7 @@ function editProduct(id) {
                 type="number"
                 step=".01"
                 value="${product.price}">
+
 
             <button
                 class="primary full"
@@ -5076,14 +6418,18 @@ function saveProduct(id) {
 }
 
 function deleteProduct(id) {
-    if (!requireMasterPassword()) {
+
+    if (
+        !requireMasterPassword()
+    ) {
         return;
     }
 
-
-    if (!confirm(
-        "Delete this product?"
-    ))
+    if (
+        !confirm(
+            "Delete this product?"
+        )
+    )
         return;
 
     products =
@@ -5104,7 +6450,8 @@ function deleteProduct(id) {
 
 function historyScreen() {
 
-    currentView = "history";
+    currentView =
+        "history";
 
     document.getElementById(
         "app"
@@ -5114,24 +6461,30 @@ function historyScreen() {
 
             <button
                 class="gray back"
-                onclick="showMenu()">
+                onclick="
+                    showMenu()
+                ">
 
                 ← Main Menu
 
             </button>
 
+
             <h2>
                 📋 Transaction History
             </h2>
+
 
             ${
                 transactions.length === 0
 
                 ?
 
-                `<div class="empty">
+                `
+                <div class="empty">
                     No transactions yet.
-                </div>`
+                </div>
+                `
 
                 :
 
@@ -5142,7 +6495,8 @@ function historyScreen() {
                             class="history"
                             id="
                                 transaction-${transaction.id}
-                            ">
+                            "
+                        >
 
                             <strong>
                                 ${escapeHTML(
@@ -5158,7 +6512,9 @@ function historyScreen() {
 
                             <br><br>
 
+
                             Normal amount:
+
                             ${money(
                                 transaction.normalAmount ??
                                 transaction.amount
@@ -5166,91 +6522,136 @@ function historyScreen() {
 
                             <br>
 
+
                             Subtotal:
+
                             ${money(
                                 transaction.subtotal
                             )}
 
                             <br>
 
+
                             Tip:
+
                             ${money(
                                 transaction.tip
                             )}
 
+
+                            <br>
+
+
                             ${
-                                transaction.buyerTax > 0
+                                transaction.taxEnabled === false
+
                                 ?
+
                                 `
-                                <br>
-                                Buyer tax:
+                                Tax:
+                                <strong>
+                                    NO TAX
+                                </strong>
+                                `
+
+                                :
+
+                                `
+                                Tax:
                                 ${money(
-                                    transaction.buyerTax
+                                    transaction.buyerTax || 0
                                 )}
                                 `
-                                :
-                                ""
                             }
+
 
                             ${
                                 transaction.recipientTax > 0
+
                                 ?
+
                                 `
                                 <br>
+
                                 Recipient tax:
+
                                 ${money(
                                     transaction.recipientTax
                                 )}
                                 `
+
                                 :
+
                                 ""
                             }
 
+
                             <br>
+
 
                             <strong>
                                 Total charged:
+
                                 ${money(
                                     transaction.amount
                                 )}
                             </strong>
 
+
                             <br><br>
+
 
                             Money went to:
 
+
                             <strong>
+
                                 ${
                                     transaction.recipient
+
                                     ?
+
                                     escapeHTML(
                                         transaction.recipient
                                     )
+
                                     :
+
                                     "No one"
                                 }
+
                             </strong>
 
+
                             <br><br>
+
 
                             <strong>
                                 Items:
                             </strong>
 
+
                             <br>
 
+
                             ${
-                                transaction.items
+                                (transaction.items || [])
                                 .map(
                                     item =>
                                         `${escapeHTML(
                                             item.name
                                         )}
                                         ×
-                                        ${item.quantity}`
+                                        ${item.quantity}
+                                        ${
+                                            item.custom
+                                            ? " — Custom"
+                                            : ""
+                                        }`
                                 )
                                 .join("<br>")
                             }
+
 
                             <button
                                 class="
@@ -5274,9 +6675,12 @@ function historyScreen() {
                 ).join("")
             }
 
+
             ${
                 transactions.length > 0
+
                 ?
+
                 `
 
                 <br>
@@ -5292,7 +6696,9 @@ function historyScreen() {
                 </button>
 
                 `
+
                 :
+
                 ""
             }
 
@@ -5301,30 +6707,36 @@ function historyScreen() {
 }
 
 function deleteTransaction(id) {
-    if (!requireMasterPassword()) {
+
+    if (
+        !requireMasterPassword()
+    ) {
         return;
     }
-
 
     const transaction =
         transactions.find(
             transaction =>
-                transaction.id === id
+                transaction.id ===
+                id
         );
 
     if (!transaction)
         return;
 
-    if (!confirm(
-        "Delete this transaction from history?"
-    )) {
+    if (
+        !confirm(
+            "Delete this transaction from history?"
+        )
+    ) {
         return;
     }
 
     transactions =
         transactions.filter(
             transaction =>
-                transaction.id !== id
+                transaction.id !==
+                id
         );
 
     save();
@@ -5333,14 +6745,18 @@ function deleteTransaction(id) {
 }
 
 function clearHistory() {
-    if (!requireMasterPassword()) {
+
+    if (
+        !requireMasterPassword()
+    ) {
         return;
     }
 
-
-    if (!confirm(
-        "Delete ALL fake transaction history?"
-    )) {
+    if (
+        !confirm(
+            "Delete ALL fake transaction history?"
+        )
+    ) {
         return;
     }
 
@@ -5358,14 +6774,23 @@ function clearHistory() {
 
 async function initializeApp() {
 
-    document.getElementById("app").innerHTML = `
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
         <div class="screen">
-            <h2>Loading...</h2>
+
+            <h2>
+                Loading...
+            </h2>
+
         </div>
     `;
 
     await loadData();
+
     startRealtimeUpdates();
+
     showMenu();
 }
 
