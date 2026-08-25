@@ -1,0 +1,30 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+
+    "cards": {
+      "$cardId": {
+        ".validate": "newData.hasChildren(['name', 'code', 'balance'])",
+        "balance": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+
+    "products": {
+      "$productId": {
+        ".validate": "newData.hasChildren(['name', 'price'])",
+        "price": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+
+    "transactions": {
+      "$transactionId": {
+        ".validate": "newData.hasChildren(['customerCard', 'amount', 'timestamp'])"
+      }
+    }
+  }
+}
