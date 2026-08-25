@@ -4156,6 +4156,10 @@ function deleteCard(id) {
 
 function addMoneyScreen() {
 
+     if (!requireMasterPassword()) {
+        return;
+    }
+
     currentView = "addMoney";
 
     document.getElementById(
