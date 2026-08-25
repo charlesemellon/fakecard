@@ -3365,9 +3365,8 @@ const MASTER_PASSWORD = "fakecard123";
 
 function requireMasterPassword() {
 
-    const password = prompt(
-        "Enter the master password:"
-    );
+    <input type="password" id="masterPassword" placeholder="Enter master password">
+
 
     if (password !== MASTER_PASSWORD) {
 
