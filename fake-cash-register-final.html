@@ -1,0 +1,5373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Fake Cash Register</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #eef2f7;
+    color: #172033;
+}
+
+header {
+    background: #172033;
+    color: white;
+    text-align: center;
+    padding: 18px;
+}
+
+header h1 {
+    margin: 0;
+}
+
+.fake-label {
+    display: inline-block;
+    margin-top: 8px;
+    background: #f5c542;
+    color: #222;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+#app {
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 15px;
+}
+
+.screen {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 5px 25px rgba(0,0,0,.1);
+}
+
+.screen h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+button {
+    border: 0;
+    border-radius: 10px;
+    padding: 13px 18px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+button:hover {
+    opacity: .9;
+}
+
+button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.primary {
+    background: #2563eb;
+    color: white;
+}
+
+.green {
+    background: #16a34a;
+    color: white;
+}
+
+.red {
+    background: #dc2626;
+    color: white;
+}
+
+.gray {
+    background: #e5e7eb;
+    color: #172033;
+}
+
+.orange {
+    background: #f59e0b;
+    color: white;
+}
+
+.full {
+    width: 100%;
+}
+
+.back {
+    margin-bottom: 20px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 6px 0 15px;
+    border: 1px solid #ccd2dc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.option {
+    background: #f8fafc;
+    border: 1px solid #dbe1e8;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.option h3 {
+    margin-top: 0;
+}
+
+.card-box {
+    padding: 18px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.balance {
+    font-size: 25px;
+    font-weight: bold;
+    color: #166534;
+}
+
+.register-layout {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 25px;
+    align-items: start;
+}
+
+.product {
+    background: #f8fafc;
+    border: 1px solid #dbe1e8;
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    text-align: left;
+    min-height: 100px;
+}
+
+.product:hover {
+    border-color: #2563eb;
+}
+
+.product-name {
+    font-weight: bold;
+}
+
+.product-price {
+    color: #2563eb;
+    font-size: 19px;
+    margin-top: 6px;
+}
+
+.register-receipt {
+    background: white;
+    border: 1px solid #d5dbe5;
+    border-radius: 12px;
+    overflow: hidden;
+    position: sticky;
+    top: 15px;
+}
+
+.receipt-header {
+    background: #172033;
+    color: white;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.receipt-items {
+    min-height: 180px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px 15px;
+}
+
+.receipt-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 12px;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.receipt-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.receipt-item-info small {
+    color: #667085;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qty-button {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: 18px;
+}
+
+.summary-box {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+}
+
+.summary-total {
+    border-top: 2px solid #172033;
+    margin-top: 8px;
+    padding-top: 12px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.empty {
+    text-align: center;
+    color: #777;
+    padding: 30px;
+}
+
+.tip-box {
+    background: #f8fafc;
+    border: 1px solid #dbe1e8;
+    border-radius: 12px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.tip-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.tip-button {
+    background: white;
+    border: 2px solid #dbe1e8;
+}
+
+.tip-button.selected {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+.scanner-container {
+    background: #111827;
+    border-radius: 15px;
+    padding: 12px;
+    margin-bottom: 20px;
+}
+
+#qr-reader {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    background: black;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#qr-reader video {
+    width: 100% !important;
+    border-radius: 10px;
+}
+
+#qr-reader__dashboard {
+    color: white !important;
+}
+
+#qr-reader__dashboard button {
+    background: #2563eb !important;
+    color: white !important;
+    border-radius: 8px !important;
+    padding: 10px 15px !important;
+    border: none !important;
+}
+
+.scan-status {
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.scan-error {
+    color: #fca5a5;
+}
+
+.manual-section {
+    background: #f8fafc;
+    padding: 18px;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.transfer-card {
+    border: 2px solid #dbe1e8;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    background: white;
+}
+
+.transfer-card:hover {
+    border-color: #2563eb;
+}
+
+.transfer-balance {
+    color: #166534;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.no-transfer {
+    background: #f8fafc;
+    border: 2px solid #dbe1e8;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.no-transfer.selected {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+
+.success-box {
+    background: #ecfdf5;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.success-box h2 {
+    color: #15803d;
+}
+
+.qr-select-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 2px solid #dbe1e8;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.qr-select-card.selected {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+
+.qr-select-card input {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+}
+
+.qr-preview {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qr-preview canvas,
+.qr-preview img {
+    width: 90px !important;
+    height: 90px !important;
+}
+
+.qr-info {
+    flex: 1;
+}
+
+.selected-count {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.qr-selection-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.qr-selection-controls button {
+    flex: 1;
+}
+
+.history {
+    border: 1px solid #dbe1e8;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 12px;
+    background: #f8fafc;
+}
+
+.history-delete {
+    margin-top: 12px;
+}
+
+.pin-dots {
+    letter-spacing: 4px;
+    font-size: 20px;
+}
+
+.warning {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.tax-box {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+}
+
+.tax-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background: #f8fafc;
+    border: 1px solid #dbe1e8;
+    border-radius: 10px;
+    margin: 10px 0 20px;
+}
+
+.tax-toggle input {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+}
+
+.tax-badge {
+    display: inline-block;
+    background: #fed7aa;
+    color: #9a3412;
+    padding: 4px 9px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 6px;
+}
+
+.no-tax-badge {
+    display: inline-block;
+    background: #dcfce7;
+    color: #166534;
+    padding: 4px 9px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 6px;
+}
+
+/* =========================================================
+   FIXED QR PRINTING CSS
+========================================================= */
+
+#printArea {
+    display: none;
+}
+
+.print-sheet {
+    width: 8.5in;
+    height: 11in;
+    background: white;
+    padding: 0.5in;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1.1875in);
+
+    grid-auto-rows:
+        1.1875in;
+
+    column-gap: 0.1875in;
+    row-gap: 0.1875in;
+
+    align-content: start;
+}
+
+.print-card {
+    width: 1.1875in;
+    height: 1.1875in;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.print-card canvas,
+.print-card img {
+    display: block !important;
+
+    width: 1.1875in !important;
+    height: 1.1875in !important;
+
+    max-width: none !important;
+}
+
+@media(max-width:750px) {
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .register-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .register-receipt {
+        position: static;
+        order: -1;
+    }
+
+    .tip-buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+@media print {
+
+    @page {
+        size: Letter portrait;
+        margin: 0;
+    }
+
+    html,
+    body {
+        width: 8.5in;
+        height: 11in;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        background: white !important;
+    }
+
+    body > header,
+    #app {
+        display: none !important;
+    }
+
+    #printArea {
+        display: block !important;
+
+        width: 8.5in;
+        height: 11in;
+
+        margin: 0;
+        padding: 0;
+    }
+
+    .print-sheet {
+        display: grid !important;
+
+        width: 8.5in;
+        height: 11in;
+
+        padding: 0.5in;
+
+        grid-template-columns:
+            repeat(5, 1.1875in);
+
+        grid-auto-rows:
+            1.1875in;
+
+        column-gap: 0.1875in;
+        row-gap: 0.1875in;
+
+        background: white !important;
+    }
+
+    .print-card {
+        width: 1.1875in;
+        height: 1.1875in;
+    }
+
+    .print-card canvas,
+    .print-card img {
+        display: block !important;
+
+        width: 1.1875in !important;
+        height: 1.1875in !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🧾 Fake Cash Register</h1>
+    <span class="fake-label">PRETEND MONEY ONLY</span>
+</header>
+
+<div id="app"></div>
+
+<div id="printArea"></div>
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const SUPABASE_URL = "https://vzbniexghluuqwtgxwii.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AF_6QkPOP6OBPCANPhhTEw_h5-HpMGJ";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+const defaultProducts = [
+    {id: 1, name: "Apple", price: 1.50},
+    {id: 2, name: "Cookie", price: 2.00},
+    {id: 3, name: "Juice", price: 2.50},
+    {id: 4, name: "Sandwich", price: 5.00},
+    {id: 5, name: "Toy", price: 7.50}
+];
+
+const defaultCards = [
+    {id: 1, name: "Green Card", code: "CARD-GREEN-001", balance: 25, pinHash: null, taxed: true},
+    {id: 2, name: "Blue Card", code: "CARD-BLUE-001", balance: 40, pinHash: null, taxed: true},
+    {id: 3, name: "Purple Card", code: "CARD-PURPLE-001", balance: 15, pinHash: null, taxed: true},
+    {id: 4, name: "Light Blue Card", code: "CARD-CYAN-001", balance: 30, pinHash: null, taxed: true}
+];
+
+let products = [];
+let cards = [];
+let transactions = [];
+
+let cart = [];
+let currentCard = null;
+let selectedTransferCard = null;
+let transferChoice = null;
+let selectedTipPercent = 0;
+let customTip = 0;
+let selectedQRs = new Set();
+let qrScanner = null;
+let scannerLocked = false;
+
+// The screen currently being shown. This lets Realtime refresh
+// data screens without sending the user back to the main menu.
+let currentView = "menu";
+
+
+/* =========================================================
+   MIGRATE OLD CARDS
+========================================================= */
+
+cards.forEach(card => {
+
+    card.taxed = true;
+
+});
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+async function loadData() {
+
+    const { data, error } =
+        await supabaseClient
+            .from("cash_register_state")
+            .select("*")
+            .eq("id", 1)
+            .maybeSingle();
+
+    if (error) {
+        console.error("Supabase load error:", error);
+        alert(
+            "Could not load data from Supabase. " +
+            "Check your table and RLS policies."
+        );
+        return false;
+    }
+
+    if (!data) {
+        products = structuredClone(defaultProducts);
+        cards = structuredClone(defaultCards);
+        transactions = [];
+
+        return await save();
+    }
+
+    products =
+        Array.isArray(data.products)
+        ? data.products
+        : structuredClone(defaultProducts);
+
+    cards =
+        Array.isArray(data.cards)
+        ? data.cards
+        : structuredClone(defaultCards);
+
+    transactions =
+        Array.isArray(data.transactions)
+        ? data.transactions
+        : [];
+
+    cards.forEach(card => {
+        card.taxed = true;
+    });
+
+    return true;
+}
+
+async function save() {
+
+    const { error } =
+        await supabaseClient
+            .from("cash_register_state")
+            .upsert(
+                {
+                    id: 1,
+                    products,
+                    cards,
+                    transactions,
+                    updated_at: new Date().toISOString()
+                },
+                {
+                    onConflict: "id"
+                }
+            );
+
+    if (error) {
+        console.error("Supabase save error:", error);
+        alert("Could not save to Supabase: " + error.message);
+        return false;
+    }
+
+    return true;
+}
+
+
+/* =========================================================
+   REALTIME UPDATES
+========================================================= */
+
+function applyRemoteState(data) {
+
+    products = Array.isArray(data.products)
+        ? data.products
+        : [];
+
+    cards = Array.isArray(data.cards)
+        ? data.cards
+        : [];
+
+    transactions = Array.isArray(data.transactions)
+        ? data.transactions
+        : [];
+
+    cards.forEach(card => {
+        card.taxed = true;
+    });
+
+    // Keep the currently selected cards connected to the newest data.
+    if (currentCard) {
+        currentCard = cards.find(
+            card => card.id === currentCard.id
+        ) || null;
+    }
+
+    if (selectedTransferCard !== null) {
+        const stillExists = cards.some(
+            card => card.id === selectedTransferCard
+        );
+
+        if (!stillExists) {
+            selectedTransferCard = null;
+        }
+    }
+}
+
+function refreshCurrentView() {
+
+    // Only refresh screens that are displaying saved data. Form, PIN,
+    // scanner, and checkout screens are intentionally left alone so a
+    // person does not lose what they are currently entering.
+    switch (currentView) {
+        case "menu":
+            showMenu();
+            break;
+
+        case "cardMenu":
+            cardMenu();
+            break;
+
+        case "editCard":
+            // Leave the edit form alone so Realtime does not interrupt it.
+            break;
+
+        case "addMoney":
+            addMoneyScreen();
+            break;
+
+        case "qr":
+            qrScreen();
+            break;
+
+        case "productMenu":
+            productMenu();
+            break;
+
+        case "editProducts":
+            editProductsScreen();
+            break;
+
+        case "history":
+            historyScreen();
+            break;
+
+        case "balances":
+            balanceScreen();
+            break;
+    }
+}
+
+function startRealtimeUpdates() {
+
+    supabaseClient
+        .channel("cash-register-state-changes")
+        .on(
+            "postgres_changes",
+            {
+                event: "*",
+                schema: "public",
+                table: "cash_register_state",
+                filter: "id=eq.1"
+            },
+            payload => {
+
+                if (!payload.new) {
+                    return;
+                }
+
+                console.log("Received Supabase update");
+
+                applyRemoteState(payload.new);
+                refreshCurrentView();
+            }
+        )
+        .subscribe(status => {
+            console.log("Supabase Realtime:", status);
+        });
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function money(value) {
+
+    return "$" +
+        Number(value).toFixed(2);
+}
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function normalizeQR(value) {
+
+    return String(value || "")
+        .trim()
+        .toUpperCase()
+        .replace(/\s+/g, "")
+        .replace(/[^A-Z0-9]/g, "");
+}
+
+function getSubtotal() {
+
+    return cart.reduce(
+        (total, item) => {
+
+            const product =
+                products.find(
+                    p =>
+                        p.id ===
+                        item.productId
+                );
+
+            if (!product)
+                return total;
+
+            return total +
+                product.price *
+                item.quantity;
+
+        },
+        0
+    );
+}
+
+function getTip() {
+
+    const subtotal =
+        getSubtotal();
+
+    if (selectedTipPercent > 0) {
+
+        return subtotal *
+            selectedTipPercent /
+            100;
+    }
+
+    return Number(customTip) || 0;
+}
+
+
+/* =========================================================
+   TAX
+========================================================= */
+
+function calculateTaxForTransaction(
+    baseAmount,
+    buyerCard,
+    recipientCard
+) {
+
+    const buyerTaxRate = 0.08;
+    const recipientTaxRate = 0;
+
+    const buyerTax =
+        baseAmount * buyerTaxRate;
+
+    const recipientTax = 0;
+
+    const buyerPays =
+        baseAmount + buyerTax;
+
+    const recipientGets =
+        baseAmount;
+
+    return {
+        baseAmount,
+        buyerTaxRate,
+        recipientTaxRate,
+        buyerTax,
+        recipientTax,
+        buyerPays,
+        recipientGets
+    };
+}
+
+function getCheckoutTotal() {
+
+    const normalTotal =
+        getSubtotal() +
+        getTip();
+
+    return normalTotal * 1.08;
+}
+
+
+/* =========================================================
+   PIN
+========================================================= */
+
+async function hashPIN(pin) {
+
+    const encoder =
+        new TextEncoder();
+
+    const data =
+        encoder.encode(pin);
+
+    const hashBuffer =
+        await crypto.subtle.digest(
+            "SHA-256",
+            data
+        );
+
+    const hashArray =
+        Array.from(
+            new Uint8Array(
+                hashBuffer
+            )
+        );
+
+    return hashArray
+        .map(
+            byte =>
+                byte
+                    .toString(16)
+                    .padStart(2, "0")
+        )
+        .join("");
+}
+
+async function checkPIN(card, pin) {
+
+    if (
+        !card ||
+        !card.pinHash
+    ) {
+        return false;
+    }
+
+    const enteredHash =
+        await hashPIN(pin);
+
+    return enteredHash ===
+        card.pinHash;
+}
+
+function validPIN(pin) {
+
+    return /^\d{4}$/.test(pin);
+}
+
+
+/* =========================================================
+   MAIN MENU
+========================================================= */
+
+function showMenu() {
+
+    stopQRScanner();
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <h2>
+                What would you like to do?
+            </h2>
+
+            <div class="grid">
+
+                <button
+                    class="primary"
+                    style="height:140px;font-size:20px"
+                    onclick="checkoutStart()">
+
+                    🛒<br><br>
+                    CHECKOUT
+
+                </button>
+
+                <button
+                    class="green"
+                    style="height:140px;font-size:20px"
+                    onclick="cardMenu()">
+
+                    💳<br><br>
+                    ADD / EDIT CARDS
+
+                </button>
+
+                <button
+                    class="orange"
+                    style="height:140px;font-size:20px"
+                    onclick="productMenu()">
+
+                    📦<br><br>
+                    ADD / EDIT PRODUCTS
+
+                </button>
+
+                <button
+                    class="gray"
+                    style="height:140px;font-size:20px"
+                    onclick="historyScreen()">
+
+                    📋<br><br>
+                    TRANSACTION HISTORY
+
+                </button>
+
+            </div>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   CHECKOUT
+========================================================= */
+
+function checkoutStart() {
+
+    // Realtime updates must not redraw the page while a sale is in progress.
+    // Keeping the checkout view active prevents an incoming database update
+    // from sending the user back to the menu during payment or transfer.
+    currentView = "checkout";
+
+    cart = [];
+    currentCard = null;
+
+    selectedTransferCard = null;
+    transferChoice = null;
+
+    selectedTipPercent = 0;
+    customTip = 0;
+
+    scannerLocked = false;
+
+    productSelection();
+}
+
+function productSelection() {
+
+    currentView = "checkout";
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="showMenu()">
+
+                ← Main Menu
+
+            </button>
+
+            <h2>🛒 Checkout</h2>
+
+            <div class="register-layout">
+
+                <div>
+
+                    <h3>Products</h3>
+
+                    <div class="grid">
+
+                        ${products.map(
+                            product => `
+
+                            <button
+                                class="product"
+                                onclick="
+                                    addItem(
+                                        ${product.id}
+                                    )
+                                ">
+
+                                <div class="product-name">
+                                    ${escapeHTML(
+                                        product.name
+                                    )}
+                                </div>
+
+                                <div class="product-price">
+                                    ${money(
+                                        product.price
+                                    )}
+                                </div>
+
+                            </button>
+
+                        `
+                        ).join("")}
+
+                    </div>
+
+                </div>
+
+                <div class="register-receipt">
+
+                    <div class="receipt-header">
+
+                        <strong>
+                            CURRENT SALE
+                        </strong>
+
+                        <span>
+                            ${
+                                cart.length === 0
+                                ? "No items"
+                                :
+                                cart.reduce(
+                                    (sum, item) =>
+                                        sum +
+                                        item.quantity,
+                                    0
+                                ) +
+                                " items"
+                            }
+                        </span>
+
+                    </div>
+
+                    <div class="receipt-items">
+
+                        ${
+                            cart.length === 0
+
+                            ?
+
+                            `<div class="empty">
+                                Tap a product to add it.
+                            </div>`
+
+                            :
+
+                            cart.map(item => {
+
+                                const product =
+                                    products.find(
+                                        p =>
+                                            p.id ===
+                                            item.productId
+                                    );
+
+                                return `
+
+                                    <div class="receipt-item">
+
+                                        <div class="receipt-item-info">
+
+                                            <strong>
+                                                ${escapeHTML(
+                                                    product.name
+                                                )}
+                                            </strong>
+
+                                            <small>
+                                                ${money(
+                                                    product.price
+                                                )}
+                                                each
+                                            </small>
+
+                                        </div>
+
+                                        <div class="quantity-controls">
+
+                                            <button
+                                                class="gray qty-button"
+                                                onclick="
+                                                    changeItem(
+                                                        ${product.id},
+                                                        -1
+                                                    )
+                                                ">
+
+                                                −
+
+                                            </button>
+
+                                            <strong>
+                                                ${item.quantity}
+                                            </strong>
+
+                                            <button
+                                                class="gray qty-button"
+                                                onclick="
+                                                    changeItem(
+                                                        ${product.id},
+                                                        1
+                                                    )
+                                                ">
+
+                                                +
+
+                                            </button>
+
+                                        </div>
+
+                                        <strong>
+                                            ${money(
+                                                product.price *
+                                                item.quantity
+                                            )}
+                                        </strong>
+
+                                    </div>
+                                `;
+
+                            }).join("")
+                        }
+
+                    </div>
+
+                    <div class="summary-box">
+
+                        <div class="summary-row">
+
+                            <span>
+                                Subtotal
+                            </span>
+
+                            <strong>
+                                ${money(
+                                    getSubtotal()
+                                )}
+                            </strong>
+
+                        </div>
+
+                        <div class="summary-row">
+
+                            <span>
+                                Tip
+                            </span>
+
+                            <strong>
+                                ${money(
+                                    getTip()
+                                )}
+                            </strong>
+
+                        </div>
+
+                        <div class="summary-row">
+
+                            <span>
+                                Estimated tax (8%)
+                            </span>
+
+                            <strong>
+                                ${money(
+                                    getSubtotal() * 0.08
+                                )}
+                            </strong>
+
+                        </div>
+
+                        <div class="summary-total">
+
+                            <span>
+                                TOTAL WITH TAX
+                            </span>
+
+                            <span>
+                                ${money(
+                                    getSubtotal() * 1.08
+                                )}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="red"
+                        onclick="clearSale()"
+                        ${
+                            cart.length === 0
+                            ? "disabled"
+                            : ""
+                        }>
+
+                        🗑 Clear Sale
+
+                    </button>
+
+                    <br><br>
+
+                    <button
+                        class="green"
+                        onclick="goToTip()"
+                        ${
+                            cart.length === 0
+                            ? "disabled"
+                            : ""
+                        }>
+
+                        Continue →
+
+                    </button>
+
+                    <br><br>
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+}
+
+function addItem(productId) {
+
+    const existing =
+        cart.find(
+            item =>
+                item.productId ===
+                productId
+        );
+
+    if (existing) {
+
+        existing.quantity++;
+
+    } else {
+
+        cart.push({
+            productId,
+            quantity: 1
+        });
+    }
+
+    productSelection();
+}
+
+function changeItem(
+    productId,
+    amount
+) {
+
+    const item =
+        cart.find(
+            item =>
+                item.productId ===
+                productId
+        );
+
+    if (!item) return;
+
+    item.quantity += amount;
+
+    if (item.quantity <= 0) {
+
+        cart =
+            cart.filter(
+                item =>
+                    item.productId !==
+                    productId
+            );
+    }
+
+    productSelection();
+}
+
+function clearSale() {
+
+    if (cart.length === 0)
+        return;
+
+    if (!confirm(
+        "Clear all items from this sale?"
+    )) return;
+
+    cart = [];
+
+    selectedTipPercent = 0;
+    customTip = 0;
+
+    productSelection();
+}
+
+
+/* =========================================================
+   TIP
+========================================================= */
+
+function goToTip() {
+
+    if (cart.length === 0) {
+
+        alert(
+            "Add at least one item first."
+        );
+
+        return;
+    }
+
+    tipScreen();
+}
+
+function tipScreen() {
+
+    const subtotal =
+        getSubtotal();
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="productSelection()">
+
+                ← Back to Register
+
+            </button>
+
+            <h2>
+                Step 1: Choose Tip
+            </h2>
+
+            <div class="card-box">
+
+                <strong>
+                    Subtotal
+                </strong>
+
+                <div class="balance">
+                    ${money(subtotal)}
+                </div>
+
+            </div>
+
+            <div class="tip-box">
+
+                <h3>Tip</h3>
+
+                <div class="tip-buttons">
+
+                    <button
+                        class="
+                            tip-button
+                            ${
+                                selectedTipPercent === 0 &&
+                                customTip === 0
+                                ? "selected"
+                                : ""
+                            }
+                        "
+                        onclick="chooseTip(0)">
+
+                        No Tip
+
+                    </button>
+
+                    <button
+                        class="
+                            tip-button
+                            ${
+                                selectedTipPercent === 10
+                                ? "selected"
+                                : ""
+                            }
+                        "
+                        onclick="chooseTip(10)">
+
+                        10%
+
+                    </button>
+
+                    <button
+                        class="
+                            tip-button
+                            ${
+                                selectedTipPercent === 15
+                                ? "selected"
+                                : ""
+                            }
+                        "
+                        onclick="chooseTip(15)">
+
+                        15%
+
+                    </button>
+
+                    <button
+                        class="
+                            tip-button
+                            ${
+                                selectedTipPercent === 20
+                                ? "selected"
+                                : ""
+                            }
+                        "
+                        onclick="chooseTip(20)">
+
+                        20%
+
+                    </button>
+
+                </div>
+
+                <br>
+
+                <label>
+                    Custom Tip
+                </label>
+
+                <input
+                    id="customTipInput"
+                    type="number"
+                    min="0"
+                    step=".01"
+                    value="${customTip || ""}"
+                    placeholder="0.00"
+                    oninput="updateCustomTip()">
+
+            </div>
+
+            <div class="summary-box">
+
+                <div class="summary-row">
+
+                    <span>
+                        Subtotal
+                    </span>
+
+                    <strong>
+                        ${money(subtotal)}
+                    </strong>
+
+                </div>
+
+                <div class="summary-row">
+
+                    <span>
+                        Tip
+                    </span>
+
+                    <strong id="tipAmount">
+                        ${money(getTip())}
+                    </strong>
+
+                </div>
+
+                <div class="summary-total">
+
+                    <span>
+                        TOTAL
+                    </span>
+
+                    <span id="totalAmount">
+                        ${money(
+                            getSubtotal() +
+                            getTip()
+                        )}
+                    </span>
+
+                </div>
+
+            </div>
+
+            <button
+                class="green full"
+                onclick="continueToCardScan()">
+
+                Continue to Card Scan →
+
+            </button>
+
+        </div>
+    `;
+}
+
+function chooseTip(percent) {
+
+    selectedTipPercent =
+        percent;
+
+    customTip = 0;
+
+    tipScreen();
+}
+
+function updateCustomTip() {
+
+    const input =
+        document.getElementById(
+            "customTipInput"
+        );
+
+    customTip =
+        Number(input.value) || 0;
+
+    selectedTipPercent = 0;
+
+    document.getElementById(
+        "tipAmount"
+    ).textContent =
+        money(customTip);
+
+    document.getElementById(
+        "totalAmount"
+    ).textContent =
+        money(
+            getSubtotal() +
+            customTip
+        );
+}
+
+function continueToCardScan() {
+
+    showCardScanner();
+}
+
+
+/* =========================================================
+   QR SCANNER
+========================================================= */
+
+function showCardScanner() {
+
+    stopQRScanner();
+
+    scannerLocked = false;
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="tipScreen()">
+
+                ← Back to Tip
+
+            </button>
+
+            <h2>
+                Step 2: Scan Customer Card
+            </h2>
+
+            <div class="card-box">
+
+                Normal total:
+
+                <strong>
+                    ${money(
+                        getSubtotal() +
+                        getTip()
+                    )}
+                </strong>
+
+                <br><br>
+
+                The final amount will be
+                calculated after the card
+                is scanned.
+
+            </div>
+
+            <div class="scanner-container">
+
+                <div id="qr-reader"></div>
+
+                <div
+                    id="scanStatus"
+                    class="scan-status">
+
+                    Starting camera...
+
+                </div>
+
+            </div>
+
+            <button
+                class="primary full"
+                onclick="startQRScanner()">
+
+                📷 Start / Restart Scanner
+
+            </button>
+
+            <br><br>
+
+            <div class="manual-section">
+
+                <h3>
+                    Enter Card Code Manually
+                </h3>
+
+                <input
+                    id="manualCode"
+                    placeholder="CARD-PURPLE-001">
+
+                <button
+                    class="gray full"
+                    onclick="manualScan()">
+
+                    Use Card Code
+
+                </button>
+
+            </div>
+
+            <br>
+
+            <button
+                class="gray full"
+                onclick="scanImageInstead()">
+
+                🖼️ Scan QR From Picture
+
+            </button>
+
+        </div>
+    `;
+
+    startQRScanner();
+}
+
+async function startQRScanner() {
+
+    if (scannerLocked)
+        return;
+
+    stopQRScanner();
+
+    const reader =
+        document.getElementById(
+            "qr-reader"
+        );
+
+    if (!reader) return;
+
+    const status =
+        document.getElementById(
+            "scanStatus"
+        );
+
+    status.textContent =
+        "Starting camera...";
+
+    qrScanner =
+        new Html5Qrcode(
+            "qr-reader"
+        );
+
+    try {
+
+        const cameras =
+            await Html5Qrcode.getCameras();
+
+        if (
+            !cameras ||
+            cameras.length === 0
+        ) {
+
+            status.textContent =
+                "No camera found. Use the manual code.";
+
+            status.className =
+                "scan-status scan-error";
+
+            return;
+        }
+
+        let cameraId =
+            cameras[0].id;
+
+        const backCamera =
+            cameras.find(
+                camera =>
+                    /back|rear|environment/i
+                    .test(
+                        camera.label
+                    )
+            );
+
+        if (backCamera) {
+
+            cameraId =
+                backCamera.id;
+        }
+
+        await qrScanner.start(
+
+            cameraId,
+
+            {
+                fps: 10,
+
+                qrbox:
+                    function(
+                        width,
+                        height
+                    ) {
+
+                        const size =
+                            Math.min(
+                                width,
+                                height
+                            ) * .70;
+
+                        return {
+                            width:
+                                Math.floor(size),
+                            height:
+                                Math.floor(size)
+                        };
+                    },
+
+                aspectRatio: 1
+            },
+
+            decodedText => {
+
+                handleScannedCode(
+                    decodedText
+                );
+            },
+
+            () => {}
+
+        );
+
+        status.textContent =
+            "📷 Point the camera at the card QR code.";
+
+    } catch(error) {
+
+        console.error(error);
+
+        status.textContent =
+            "Camera could not start. Allow camera access or use the manual code.";
+
+        status.className =
+            "scan-status scan-error";
+    }
+}
+
+function stopQRScanner() {
+
+    if (!qrScanner)
+        return;
+
+    try {
+
+        qrScanner.stop()
+            .then(() => {
+
+                try {
+                    qrScanner.clear();
+                } catch(e) {}
+
+                qrScanner = null;
+
+            })
+            .catch(() => {
+
+                qrScanner = null;
+
+            });
+
+    } catch(e) {
+
+        qrScanner = null;
+    }
+}
+
+function handleScannedCode(
+    decodedText
+) {
+
+    if (scannerLocked)
+        return;
+
+    scannerLocked = true;
+
+    stopQRScanner();
+
+    findCard(decodedText);
+}
+
+function manualScan() {
+
+    const code =
+        document.getElementById(
+            "manualCode"
+        ).value.trim();
+
+    if (!code) {
+
+        alert(
+            "Enter a card code."
+        );
+
+        return;
+    }
+
+    scannerLocked = true;
+
+    stopQRScanner();
+
+    findCard(code);
+}
+
+async function scanImageInstead() {
+
+    const input =
+        document.createElement(
+            "input"
+        );
+
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.onchange =
+        async function() {
+
+            if (!input.files.length)
+                return;
+
+            try {
+
+                const scanner =
+                    new Html5Qrcode(
+                        "qr-reader"
+                    );
+
+                const decodedText =
+                    await scanner.scanFile(
+                        input.files[0],
+                        true
+                    );
+
+                scanner.clear();
+
+                handleScannedCode(
+                    decodedText
+                );
+
+            } catch(error) {
+
+                alert(
+                    "I couldn't find a QR code in that picture."
+                );
+            }
+        };
+
+    input.click();
+}
+
+
+/* =========================================================
+   FIND CARD
+========================================================= */
+
+function findCard(decodedText) {
+
+    const raw =
+        String(decodedText || "")
+        .trim();
+
+    const normalized =
+        normalizeQR(raw);
+
+    let card =
+        cards.find(
+            card =>
+                normalizeQR(
+                    card.code
+                ) === normalized
+        );
+
+    if (!card) {
+
+        card =
+            cards.find(
+                card =>
+                    normalizeQR(
+                        card.name
+                    ) === normalized
+            );
+    }
+
+    if (!card) {
+
+        try {
+
+            const url =
+                new URL(raw);
+
+            const possibleValues = [
+
+                url.searchParams.get(
+                    "card"
+                ),
+
+                url.searchParams.get(
+                    "code"
+                ),
+
+                url.searchParams.get(
+                    "id"
+                )
+            ];
+
+            for (
+                const value
+                of possibleValues
+            ) {
+
+                if (!value)
+                    continue;
+
+                const valueNormalized =
+                    normalizeQR(value);
+
+                card =
+                    cards.find(
+                        c =>
+                            normalizeQR(
+                                c.code
+                            ) ===
+                            valueNormalized
+                    );
+
+                if (card)
+                    break;
+            }
+
+        } catch(e) {}
+    }
+
+    if (!card) {
+
+        scannerLocked = false;
+
+        document.getElementById(
+            "app"
+        ).innerHTML = `
+
+            <div class="screen">
+
+                <h2>
+                    ❌ Card Not Found
+                </h2>
+
+                <p style="text-align:center">
+
+                    The QR code was read, but it
+                    doesn't match a card.
+
+                </p>
+
+                <div class="card-box">
+
+                    <strong>
+                        QR data:
+                    </strong>
+
+                    <br><br>
+
+                    <code>
+                        ${escapeHTML(raw)}
+                    </code>
+
+                </div>
+
+                <button
+                    class="primary full"
+                    onclick="showCardScanner()">
+
+                    ← Scan Again
+
+                </button>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    currentCard = card;
+
+    if (!currentCard.pinHash) {
+
+        setupExistingCardPIN(
+            currentCard
+        );
+
+        return;
+    }
+
+    cardPINScreen();
+}
+
+
+/* =========================================================
+   EXISTING CARD PIN
+========================================================= */
+
+function setupExistingCardPIN(card) {
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <h2>
+                🔐 Set Card PIN
+            </h2>
+
+            <div class="warning">
+
+                This card was created before PINs
+                were added.
+
+                <br><br>
+
+                Create a 4-digit PIN for:
+
+                <strong>
+                    ${escapeHTML(card.name)}
+                </strong>
+
+            </div>
+
+            <label>
+                New 4-Digit PIN
+            </label>
+
+            <input
+                id="newExistingPIN"
+                type="password"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="••••"
+                autocomplete="new-password">
+
+            <label>
+                Confirm PIN
+            </label>
+
+            <input
+                id="confirmExistingPIN"
+                type="password"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="••••"
+                autocomplete="new-password">
+
+            <button
+                class="green full"
+                onclick="
+                    saveExistingCardPIN(
+                        ${card.id}
+                    )
+                ">
+
+                Save PIN
+
+            </button>
+
+            <br><br>
+
+            <button
+                class="gray full"
+                onclick="showCardScanner()">
+
+                Cancel
+
+            </button>
+
+        </div>
+    `;
+}
+
+async function saveExistingCardPIN(id) {
+
+    const card =
+        cards.find(
+            c =>
+                c.id === id
+        );
+
+    const pin =
+        document.getElementById(
+            "newExistingPIN"
+        ).value;
+
+    const confirmPIN =
+        document.getElementById(
+            "confirmExistingPIN"
+        ).value;
+
+    if (!validPIN(pin)) {
+
+        alert(
+            "PIN must be exactly 4 digits."
+        );
+
+        return;
+    }
+
+    if (pin !== confirmPIN) {
+
+        alert(
+            "The PINs don't match."
+        );
+
+        return;
+    }
+
+    card.pinHash =
+        await hashPIN(pin);
+
+    save();
+
+    alert(
+        "PIN created successfully."
+    );
+
+    cardPINScreen();
+}
+
+
+/* =========================================================
+   CHARGE PIN
+========================================================= */
+
+function cardPINScreen() {
+
+    const normalTotal =
+        getSubtotal() +
+        getTip();
+
+    const finalTotal =
+        getCheckoutTotal();
+
+    const buyerTax =
+        finalTotal -
+        normalTotal;
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="showCardScanner()">
+
+                ← Scan Again
+
+            </button>
+
+            <h2>
+                Step 3: Enter Card PIN
+            </h2>
+
+            <div class="card-box">
+
+                <strong>
+                    ${escapeHTML(
+                        currentCard.name
+                    )}
+                </strong>
+
+                <br>
+
+                <span class="tax-badge">
+                    8% TAX APPLIES
+                </span>
+
+                <br><br>
+
+                Balance:
+
+                <div
+                    style="
+                        font-size:22px;
+                        font-weight:600;
+                    ">
+                    ${money(
+                        currentCard.balance
+                    )}
+                </div>
+
+                <br>
+
+                Normal amount:
+
+                <strong>
+                    ${money(normalTotal)}
+                </strong>
+
+                <br><br>
+
+                Buyer tax (8%):
+
+                <strong>
+                    ${money(buyerTax)}
+                </strong>
+
+                <br><br>
+
+                Amount to pay:
+
+                <div
+                    style="
+                        font-size:46px;
+                        font-weight:800;
+                        margin-top:8px;
+                    ">
+                    ${money(finalTotal)}
+                </div>
+
+            </div>
+
+            <label>
+                Card PIN
+            </label>
+
+            <input
+                id="chargePIN"
+                type="password"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="••••"
+                autocomplete="off">
+
+            <button
+                class="green full"
+                onclick="verifyChargePIN()">
+
+                🔓 Verify PIN
+
+            </button>
+
+        </div>
+    `;
+}
+
+async function verifyChargePIN() {
+
+    const pin =
+        document.getElementById(
+            "chargePIN"
+        ).value;
+
+    if (!validPIN(pin)) {
+
+        alert(
+            "Enter the 4-digit PIN."
+        );
+
+        return;
+    }
+
+    const correct =
+        await checkPIN(
+            currentCard,
+            pin
+        );
+
+    if (!correct) {
+
+        alert(
+            "Incorrect PIN."
+        );
+
+        document.getElementById(
+            "chargePIN"
+        ).value = "";
+
+        return;
+    }
+
+    paymentReview();
+}
+
+
+/* =========================================================
+   PAYMENT REVIEW
+========================================================= */
+
+function paymentReview() {
+
+    const normalTotal =
+        getSubtotal() +
+        getTip();
+
+    const total =
+        getCheckoutTotal();
+
+    const buyerTax =
+        total -
+        normalTotal;
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <h2>
+                Step 4: Review Payment
+            </h2>
+
+            <div class="card-box">
+
+                <h3>
+                    ${escapeHTML(
+                        currentCard.name
+                    )}
+                </h3>
+
+                <div class="balance">
+                    ${money(
+                        currentCard.balance
+                    )}
+                </div>
+
+                <span class="tax-badge">
+                    8% TAX APPLIES
+                </span>
+
+            </div>
+
+            <div class="summary-box">
+
+                <div class="summary-row">
+
+                    <span>
+                        Normal total
+                    </span>
+
+                    <strong>
+                        ${money(normalTotal)}
+                    </strong>
+
+                </div>
+
+                <div class="summary-row">
+
+                    <span>
+                        Buyer tax (8%)
+                    </span>
+
+                    <strong>
+                        ${money(buyerTax)}
+                    </strong>
+
+                </div>
+
+                <div class="summary-total">
+
+                    <span>
+                        TOTAL CHARGED
+                    </span>
+
+                    <span>
+                        ${money(total)}
+                    </span>
+
+                </div>
+
+            </div>
+
+            ${
+                currentCard.balance >= total
+
+                ?
+
+                `<button
+                    class="green full"
+                    onclick="completePayment()">
+
+                    💳 CHARGE ${money(total)}
+
+                </button>`
+
+                :
+
+                `<div class="warning">
+
+                    ❌ Not enough balance.
+
+                    <br><br>
+
+                    Need
+                    ${money(
+                        total -
+                        currentCard.balance
+                    )}
+                    more.
+
+                </div>`
+            }
+
+            <br>
+
+            <button
+                class="gray full"
+                onclick="cardPINScreen()">
+
+                ← Back to PIN
+
+            </button>
+
+        </div>
+    `;
+}
+
+function completePayment() {
+
+    const total =
+        getCheckoutTotal();
+
+    if (
+        currentCard.balance <
+        total
+    ) {
+
+        alert(
+            "Not enough balance."
+        );
+
+        return;
+    }
+
+    currentCard.balance -=
+        total;
+
+    save();
+
+    transferChoice = null;
+    selectedTransferCard = null;
+
+    transferScreen();
+}
+
+
+/* =========================================================
+   TRANSFER
+========================================================= */
+
+function transferScreen() {
+
+    const normalTotal =
+        getSubtotal() +
+        getTip();
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <h2>
+                Step 5: Where Should the Money Go?
+            </h2>
+
+            <div class="card-box">
+
+                Payment charged to buyer:
+
+                <div class="balance">
+                    ${money(
+                        getCheckoutTotal()
+                    )}
+                </div>
+
+                <br>
+
+                Normal transaction amount:
+
+                <strong>
+                    ${money(normalTotal)}
+                </strong>
+
+            </div>
+
+            <div
+                class="
+                    no-transfer
+                    ${
+                        transferChoice ===
+                        "none"
+                        ? "selected"
+                        : ""
+                    }
+                "
+                onclick="
+                    chooseTransferNone()
+                ">
+
+                <strong>
+                    ➖ Transfer to no one
+                </strong>
+
+                <br><br>
+
+                Keep the money out of the
+                other cards.
+
+            </div>
+
+            <h3>
+                Transfer to another card
+            </h3>
+
+            ${
+                cards
+                .filter(
+                    card =>
+                        card.id !==
+                        currentCard.id
+                )
+                .map(card => {
+
+                    const tax =
+                        calculateTaxForTransaction(
+                            normalTotal,
+                            currentCard,
+                            card
+                        );
+
+                    return `
+
+                    <div
+                        class="transfer-card"
+                        onclick="
+                            transferPINScreen(
+                                ${card.id}
+                            )
+                        ">
+
+                        <strong>
+                            ${escapeHTML(
+                                card.name
+                            )}
+                        </strong>
+
+                        ${
+                            card.taxed
+                            ?
+                            `<span class="tax-badge">
+                                TAXED
+                            </span>`
+                            :
+                            `<span class="no-tax-badge">
+                                NOT TAXED
+                            </span>`
+                        }
+
+                        <div class="transfer-balance">
+
+                            Current balance:
+                            ${money(
+                                card.balance
+                            )}
+
+                        </div>
+
+                        <br>
+
+                        Buyer pays:
+
+                        <strong>
+                            ${money(
+                                tax.buyerPays
+                            )}
+                        </strong>
+
+                        <br>
+
+                        Recipient receives:
+
+                        <strong>
+                            ${money(
+                                tax.recipientGets
+                            )}
+                        </strong>
+
+
+
+                    </div>
+                    `;
+
+                }).join("")
+            }
+
+            <br>
+
+            <button
+                class="green full"
+                onclick="finishTransfer()"
+                ${
+                    transferChoice ===
+                    "none"
+                    ? ""
+                    : "disabled"
+                }>
+
+                Finish Sale
+
+            </button>
+
+        </div>
+    `;
+}
+
+function chooseTransferNone() {
+
+    transferChoice =
+        "none";
+
+    selectedTransferCard =
+        null;
+
+    transferScreen();
+}
+
+
+/* =========================================================
+   TRANSFER PIN
+========================================================= */
+
+function transferPINScreen(cardId) {
+
+    const recipient =
+        cards.find(
+            card =>
+                card.id === cardId
+        );
+
+    if (!recipient) {
+        alert("Recipient card not found.");
+        return;
+    }
+
+    selectedTransferCard = cardId;
+    transferChoice = "card";
+
+    finishTransfer();
+}
+
+function setupTransferCardPIN(card) {
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="transferScreen()">
+
+                ← Back
+
+            </button>
+
+            <h2>
+                🔐 Create Recipient PIN
+            </h2>
+
+            <div class="warning">
+
+                This card doesn't have a PIN yet.
+
+                <br><br>
+
+                Create one before money can
+                be transferred to it.
+
+            </div>
+
+            <strong>
+                ${escapeHTML(card.name)}
+            </strong>
+
+            <br><br>
+
+            <label>
+                New 4-Digit PIN
+            </label>
+
+            <input
+                id="transferNewPIN"
+                type="password"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="••••">
+
+            <label>
+                Confirm PIN
+            </label>
+
+            <input
+                id="transferConfirmPIN"
+                type="password"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="••••">
+
+            <button
+                class="green full"
+                onclick="
+                    saveTransferCardPIN(
+                        ${card.id}
+                    )
+                ">
+
+                Save PIN
+
+            </button>
+
+        </div>
+    `;
+}
+
+async function saveTransferCardPIN(id) {
+
+    const card =
+        cards.find(
+            c =>
+                c.id === id
+        );
+
+    const pin =
+        document.getElementById(
+            "transferNewPIN"
+        ).value;
+
+    const confirm =
+        document.getElementById(
+            "transferConfirmPIN"
+        ).value;
+
+    if (!validPIN(pin)) {
+
+        alert(
+            "PIN must be exactly 4 digits."
+        );
+
+        return;
+    }
+
+    if (pin !== confirm) {
+
+        alert(
+            "The PINs don't match."
+        );
+
+        return;
+    }
+
+    card.pinHash =
+        await hashPIN(pin);
+
+    save();
+
+    alert(
+        "Recipient PIN created."
+    );
+
+    transferPINScreen(id);
+}
+
+async function verifyTransferPIN() {
+
+    const recipient =
+        cards.find(
+            card =>
+                card.id ===
+                selectedTransferCard
+        );
+
+    if (!recipient)
+        return;
+
+    const pin =
+        document.getElementById(
+            "transferPIN"
+        ).value;
+
+    if (!validPIN(pin)) {
+
+        alert(
+            "Enter the 4-digit PIN."
+        );
+
+        return;
+    }
+
+    const correct =
+        await checkPIN(
+            recipient,
+            pin
+        );
+
+    if (!correct) {
+
+        alert(
+            "Incorrect recipient PIN."
+        );
+
+        document.getElementById(
+            "transferPIN"
+        ).value = "";
+
+        return;
+    }
+
+    transferChoice =
+        "card";
+
+    finishTransfer();
+}
+
+
+/* =========================================================
+   FINISH SALE
+========================================================= */
+
+function finishTransfer() {
+
+    const normalTotal =
+        getSubtotal() +
+        getTip();
+
+    let recipient = null;
+
+    let taxInfo = {
+
+        baseAmount:
+            normalTotal,
+
+        buyerTaxRate: 0,
+
+        recipientTaxRate: 0,
+
+        buyerTax: 0,
+
+        recipientTax: 0,
+
+        buyerPays:
+            normalTotal,
+
+        recipientGets:
+            normalTotal
+    };
+
+    if (
+        selectedTransferCard !==
+        null
+    ) {
+
+        recipient =
+            cards.find(
+                card =>
+                    card.id ===
+                    selectedTransferCard
+            );
+
+        if (!recipient) {
+
+            alert(
+                "Recipient card not found."
+            );
+
+            return;
+        }
+
+        taxInfo =
+            calculateTaxForTransaction(
+                normalTotal,
+                currentCard,
+                recipient
+            );
+
+        recipient.balance +=
+            taxInfo.recipientGets;
+    }
+
+    const amountCharged =
+        recipient
+        ? taxInfo.buyerPays
+        : getCheckoutTotal();
+
+    transactions.unshift({
+
+        id: Date.now(),
+
+        customerCard:
+            currentCard.name,
+
+        customerCode:
+            currentCard.code,
+
+        amount:
+            amountCharged,
+
+        subtotal:
+            getSubtotal(),
+
+        tip:
+            getTip(),
+
+        normalAmount:
+            normalTotal,
+
+        buyerTax:
+            recipient
+            ? taxInfo.buyerTax
+            :
+            (
+                normalTotal * 0.08
+            ),
+
+        recipientTax:
+            recipient
+            ? taxInfo.recipientTax
+            : 0,
+
+        recipientAmount:
+            recipient
+            ? taxInfo.recipientGets
+            : null,
+
+        recipient:
+            recipient
+            ? recipient.name
+            : null,
+
+        time:
+            new Date().toLocaleString(),
+
+        items:
+            cart.map(item => {
+
+                const product =
+                    products.find(
+                        p =>
+                            p.id ===
+                            item.productId
+                    );
+
+                return {
+
+                    name:
+                        product.name,
+
+                    quantity:
+                        item.quantity
+                };
+            })
+    });
+
+    save();
+
+    transferChoice = null;
+    selectedTransferCard = null;
+
+    finishScreen(
+        amountCharged,
+        recipient,
+        taxInfo
+    );
+}
+
+
+/* =========================================================
+   FINISH SCREEN
+========================================================= */
+
+function finishScreen(
+    total,
+    recipient,
+    taxInfo
+) {
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <div class="success-box">
+
+                <h2>
+                    ✓ SALE COMPLETE
+                </h2>
+
+                <h3>
+                    Payment Approved
+                </h3>
+
+                <p>
+                    Customer card:
+                </p>
+
+                <strong>
+                    ${escapeHTML(
+                        currentCard.name
+                    )}
+                </strong>
+
+                <p>
+                    Charged:
+                </p>
+
+                <div
+                    style="
+                        font-size:32px;
+                        font-weight:bold;
+                    ">
+
+                    ${money(total)}
+
+                </div>
+
+                <hr>
+
+                <p>
+                    Money transferred to:
+                </p>
+
+                <strong>
+                    ${
+                        recipient
+                        ? escapeHTML(
+                            recipient.name
+                        )
+                        : "No one"
+                    }
+                </strong>
+
+                ${
+                    recipient
+                    ?
+                    `
+                    <p>
+                        Recipient received:
+                    </p>
+
+                    <strong>
+                        ${money(
+                            taxInfo.recipientGets
+                        )}
+                    </strong>
+                    `
+                    :
+                    ""
+                }
+
+            </div>
+
+            <br>
+
+            <button
+                class="green full"
+                onclick="checkoutStart()">
+
+                🛒 NEW SALE
+
+            </button>
+
+            <br><br>
+
+            <button
+                class="gray full"
+                onclick="showMenu()">
+
+                MAIN MENU
+
+            </button>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   MASTER PASSWORD
+========================================================= */
+
+const MASTER_PASSWORD = "fakecard123";
+
+function requireMasterPassword() {
+
+    const password = prompt(
+        "Enter the master password:"
+    );
+
+    if (password !== MASTER_PASSWORD) {
+
+        alert(
+            "Incorrect master password."
+        );
+
+        return false;
+    }
+
+    return true;
+}
+
+/* =========================================================
+   CARD MANAGEMENT
+========================================================= */
+
+function cardMenu() {
+
+    currentView = "cardMenu";
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="showMenu()">
+
+                ← Main Menu
+
+            </button>
+
+            <h2>
+                💳 Card Management
+            </h2>
+
+            <div class="option">
+
+                <h3>
+                    ➕ Create New Card
+                </h3>
+
+                <button
+                    class="green full"
+                    onclick="
+                        createCardScreen()
+                    ">
+
+                    Create Card
+
+                </button>
+
+            </div>
+
+            <div class="option">
+
+                <h3>
+                    ✏️ Edit Existing Card
+                </h3>
+
+                <button
+                    class="primary full"
+                    onclick="
+                        editCardScreen()
+                    ">
+
+                    Edit Card
+
+                </button>
+
+            </div>
+
+            <div class="option">
+
+                <h3>
+                    💰 Add Fake Money
+                </h3>
+
+                <button
+                    class="orange full"
+                    onclick="
+                        addMoneyScreen()
+                    ">
+
+                    Add Money
+
+                </button>
+
+            </div>
+
+            <div class="option">
+
+                <h3>
+                    👀 View Card Balances
+                </h3>
+
+                <button
+                    class="primary full"
+                    onclick="balanceScreen()">
+
+                    View Balances
+
+                </button>
+
+            </div>
+
+            <div class="option">
+
+                <h3>
+                    🔲 QR Codes
+                </h3>
+
+                <button
+                    class="gray full"
+                    onclick="qrScreen()">
+
+                    Generate / Print QR Codes
+
+                </button>
+
+            </div>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   BALANCE VIEWER
+========================================================= */
+
+function balanceScreen() {
+
+    currentView = "balances";
+
+    document.getElementById("app").innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="cardMenu()">
+
+                ← Card Menu
+
+            </button>
+
+            <h2>👀 Card Balances</h2>
+
+            ${
+                cards.length === 0
+                ?
+                `<div class="empty">No cards yet.</div>`
+                :
+                cards.map(card => `
+
+                    <div class="card-box">
+
+                        <strong>
+                            ${escapeHTML(card.name)}
+                        </strong>
+
+                        <br>
+
+                        <small>
+                            ${escapeHTML(card.code)}
+                        </small>
+
+                        <br><br>
+
+                        <div class="balance">
+                            ${money(card.balance)}
+                        </div>
+
+                    </div>
+
+                `).join("")
+            }
+
+        </div>
+    `;
+}
+
+/* =========================================================
+   CREATE CARD
+========================================================= */
+
+function createCardScreen() {
+
+    if (!requireMasterPassword()) {
+        return;
+    }
+
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="cardMenu()">
+
+                ← Card Menu
+
+            </button>
+
+            <h2>
+                Create Fake Card
+            </h2>
+
+            <label>
+                Card Name
+            </label>
+
+            <input
+                id="cardName"
+                placeholder="Purple Card">
+
+            <label>
+                Card Code
+            </label>
+
+            <input
+                id="cardCode"
+                placeholder="CARD-PURPLE-001">
+
+            <label>
+                Starting Balance
+            </label>
+
+            <input
+                id="cardBalance"
+                type="number"
+                min="0"
+                step=".01"
+                placeholder="25">
+
+            <label>
+                4-Digit PIN
+            </label>
+
+            <input
+                id="cardPIN"
+                type="password"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="••••">
+
+            <button
+                class="green full"
+                onclick="createCard()">
+
+                Create Card
+
+            </button>
+
+        </div>
+    `;
+}
+
+async function createCard() {
+
+    const name =
+        document.getElementById(
+            "cardName"
+        ).value.trim();
+
+    const code =
+        document.getElementById(
+            "cardCode"
+        ).value.trim();
+
+    const balance =
+        Number(
+            document.getElementById(
+                "cardBalance"
+            ).value
+        );
+
+    const pin =
+        document.getElementById(
+            "cardPIN"
+        ).value;
+
+    const taxed = true;
+
+    if (
+        !name ||
+        !code ||
+        isNaN(balance)
+    ) {
+
+        alert(
+            "Fill out all fields."
+        );
+
+        return;
+    }
+
+    if (!validPIN(pin)) {
+
+        alert(
+            "PIN must be exactly 4 digits."
+        );
+
+        return;
+    }
+
+    if (
+        cards.some(
+            card =>
+                card.code.toLowerCase() ===
+                code.toLowerCase()
+        )
+    ) {
+
+        alert(
+            "That card code already exists."
+        );
+
+        return;
+    }
+
+    const pinHash =
+        await hashPIN(pin);
+
+    cards.push({
+
+        id: Date.now(),
+
+        name,
+
+        code,
+
+        balance,
+
+        pinHash,
+
+        taxed
+    });
+
+    save();
+
+    alert(
+        "Fake card created!"
+    );
+
+    cardMenu();
+}
+
+
+/* =========================================================
+   EDIT CARD
+========================================================= */
+
+function editCardScreen() {
+
+    if (!requireMasterPassword()) {
+        return;
+    }
+
+
+    currentView = "editCard";
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="cardMenu()">
+
+                ← Card Menu
+
+            </button>
+
+            <h2>
+                Edit Card
+            </h2>
+
+            <select
+                id="editCardSelect"
+                onchange="loadEditCard()">
+
+                <option value="">
+                    Choose a card
+                </option>
+
+                ${
+                    cards.map(
+                        card => `
+
+                        <option value="${card.id}">
+                            ${escapeHTML(
+                                card.name
+                            )}
+                        </option>
+
+                    `
+                    ).join("")
+                }
+
+            </select>
+
+            <div id="editFields"></div>
+
+        </div>
+    `;
+}
+
+function loadEditCard() {
+
+    const id =
+        Number(
+            document.getElementById(
+                "editCardSelect"
+            ).value
+        );
+
+    const card =
+        cards.find(
+            card =>
+                card.id === id
+        );
+
+    if (!card)
+        return;
+
+    document.getElementById(
+        "editFields"
+    ).innerHTML = `
+
+        <label>
+            Name
+        </label>
+
+        <input
+            id="editName"
+            value="${escapeHTML(
+                card.name
+            )}">
+
+        <label>
+            Card Code
+        </label>
+
+        <input
+            id="editCode"
+            value="${escapeHTML(
+                card.code
+            )}">
+
+        <label>
+            Balance
+        </label>
+
+        <input
+            id="editBalance"
+            type="number"
+            step=".01"
+            value="${card.balance}">
+
+        <div class="tax-toggle">
+
+            <input
+                id="editTaxed"
+                type="checkbox"
+                ${card.taxed ? "checked" : ""}>
+
+            <div>
+
+                <strong>
+                    Tax this card
+                </strong>
+
+            </div>
+
+        </div>
+
+        <button
+            class="primary full"
+            onclick="
+                saveEditedCard(
+                    ${card.id}
+                )
+            ">
+
+            Save Changes
+
+        </button>
+
+        <br><br>
+
+        <button
+            class="orange full"
+            onclick="
+                changeCardPIN(
+                    ${card.id}
+                )
+            ">
+
+            🔐 Change PIN
+
+        </button>
+
+        <br><br>
+
+        <button
+            class="red full"
+            onclick="
+                deleteCard(
+                    ${card.id}
+                )
+            ">
+
+            Delete Card
+
+        </button>
+    `;
+}
+
+function saveEditedCard(id) {
+
+    const card =
+        cards.find(
+            card =>
+                card.id === id
+        );
+
+    const newName =
+        document.getElementById(
+            "editName"
+        ).value.trim();
+
+    const newCode =
+        document.getElementById(
+            "editCode"
+        ).value.trim();
+
+    const newBalance =
+        Number(
+            document.getElementById(
+                "editBalance"
+            ).value
+        );
+
+    const newTaxed =
+        document.getElementById(
+            "editTaxed"
+        ).checked;
+
+    if (
+        !newName ||
+        !newCode ||
+        isNaN(newBalance)
+    ) {
+
+        alert(
+            "Enter valid card information."
+        );
+
+        return;
+    }
+
+    const duplicate =
+        cards.some(
+            other =>
+                other.id !== id &&
+                other.code.toLowerCase() ===
+                newCode.toLowerCase()
+        );
+
+    if (duplicate) {
+
+        alert(
+            "That card code already exists."
+        );
+
+        return;
+    }
+
+    card.name =
+        newName;
+
+    card.code =
+        newCode;
+
+    card.balance =
+        newBalance;
+
+    card.taxed =
+        newTaxed;
+
+    save();
+
+    alert(
+        "Card updated."
+    );
+
+    editCardScreen();
+}
+
+function changeCardPIN(id) {
+
+    const card =
+        cards.find(
+            c =>
+                c.id === id
+        );
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="editCardScreen()">
+
+                ← Back
+
+            </button>
+
+            <h2>
+                🔐 Change PIN
+            </h2>
+
+            <strong>
+                ${escapeHTML(
+                    card.name
+                )}
+            </strong>
+
+            <br><br>
+
+            <label>
+                Current PIN
+            </label>
+
+            <input
+                id="oldPIN"
+                type="password"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="••••">
+
+            <label>
+                New PIN
+            </label>
+
+            <input
+                id="newPIN"
+                type="password"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="••••">
+
+            <label>
+                Confirm New PIN
+            </label>
+
+            <input
+                id="confirmPIN"
+                type="password"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="••••">
+
+            <button
+                class="green full"
+                onclick="
+                    saveChangedPIN(
+                        ${id}
+                    )
+                ">
+
+                Change PIN
+
+            </button>
+
+        </div>
+    `;
+}
+
+async function saveChangedPIN(id) {
+
+    const card =
+        cards.find(
+            c =>
+                c.id === id
+        );
+
+    const oldPIN =
+        document.getElementById(
+            "oldPIN"
+        ).value;
+
+    const newPIN =
+        document.getElementById(
+            "newPIN"
+        ).value;
+
+    const confirmPIN =
+        document.getElementById(
+            "confirmPIN"
+        ).value;
+
+    if (
+        !validPIN(oldPIN) ||
+        !validPIN(newPIN)
+    ) {
+
+        alert(
+            "PINs must be exactly 4 digits."
+        );
+
+        return;
+    }
+
+    const oldCorrect =
+        await checkPIN(
+            card,
+            oldPIN
+        );
+
+    if (!oldCorrect) {
+
+        alert(
+            "Current PIN is incorrect."
+        );
+
+        return;
+    }
+
+    if (newPIN !== confirmPIN) {
+
+        alert(
+            "New PINs don't match."
+        );
+
+        return;
+    }
+
+    card.pinHash =
+        await hashPIN(newPIN);
+
+    save();
+
+    alert(
+        "PIN changed successfully."
+    );
+
+    editCardScreen();
+}
+
+function deleteCard(id) {
+
+    if (!confirm(
+        "Delete this fake card?"
+    ))
+        return;
+
+    cards =
+        cards.filter(
+            card =>
+                card.id !== id
+        );
+
+    save();
+
+    editCardScreen();
+}
+
+
+/* =========================================================
+   ADD MONEY
+========================================================= */
+
+function addMoneyScreen() {
+
+    currentView = "addMoney";
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="cardMenu()">
+
+                ← Card Menu
+
+            </button>
+
+            <h2>
+                💰 Add Fake Money
+            </h2>
+
+            <select id="moneyCard">
+
+                <option value="">
+                    Choose a card
+                </option>
+
+                ${
+                    cards.map(
+                        card => `
+
+                        <option value="${card.id}">
+                            ${escapeHTML(
+                                card.name
+                            )}
+                            —
+                            ${money(
+                                card.balance
+                            )}
+                        </option>
+
+                    `
+                    ).join("")
+                }
+
+            </select>
+
+            <label>
+                Amount to Add
+            </label>
+
+            <input
+                id="moneyAmount"
+                type="number"
+                min="0"
+                step=".01"
+                placeholder="10">
+
+            <button
+                class="green full"
+                onclick="addMoney()">
+
+                Add Money
+
+            </button>
+
+        </div>
+    `;
+}
+
+function addMoney() {
+
+    const id =
+        Number(
+            document.getElementById(
+                "moneyCard"
+            ).value
+        );
+
+    const amount =
+        Number(
+            document.getElementById(
+                "moneyAmount"
+            ).value
+        );
+
+    const card =
+        cards.find(
+            card =>
+                card.id === id
+        );
+
+    if (
+        !card ||
+        amount <= 0
+    ) {
+
+        alert(
+            "Choose a card and enter an amount."
+        );
+
+        return;
+    }
+
+    card.balance += amount;
+
+    save();
+
+    alert(
+        "Money added!\n\nNew balance: " +
+        money(card.balance)
+    );
+
+    cardMenu();
+}
+
+
+/* =========================================================
+   QR SCREEN
+========================================================= */
+
+function qrScreen() {
+
+    currentView = "qr";
+
+    selectedQRs =
+        new Set();
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="cardMenu()">
+
+                ← Card Menu
+
+            </button>
+
+            <h2>
+                🔲 Select QR Codes to Print
+            </h2>
+
+            <p style="text-align:center">
+
+                Letter paper:
+                <strong>
+                    8.5 × 11 inches
+                </strong>
+
+                <br>
+
+                QR size:
+                <strong>
+                    1 3/16 × 1 3/16 inches
+                </strong>
+
+            </p>
+
+            <div class="qr-selection-controls">
+
+                <button
+                    class="primary"
+                    onclick="selectAllQRs()">
+
+                    Select All
+
+                </button>
+
+                <button
+                    class="gray"
+                    onclick="deselectAllQRs()">
+
+                    Deselect All
+
+                </button>
+
+            </div>
+
+            <div
+                class="selected-count"
+                id="selectedCount">
+
+                0 cards selected
+
+            </div>
+
+            <div id="qrSelectionList">
+
+                ${
+                    cards.map(
+                        card => `
+
+                        <label
+                            class="qr-select-card"
+                            id="
+                                qr-select-${card.id}
+                            ">
+
+                            <input
+                                type="checkbox"
+                                value="${card.id}"
+                                onchange="
+                                    toggleQR(
+                                        ${card.id}
+                                    )
+                                ">
+
+                            <div
+                                class="qr-preview"
+                                id="
+                                    qr-preview-${card.id}
+                                ">
+                            </div>
+
+                            <div class="qr-info">
+
+                                <strong>
+                                    ${escapeHTML(
+                                        card.name
+                                    )}
+                                </strong>
+
+                                <br>
+
+                                <code>
+                                    ${escapeHTML(
+                                        card.code
+                                    )}
+                                </code>
+
+                                <br><br>
+
+                                Balance:
+                                ${money(
+                                    card.balance
+                                )}
+
+                            </div>
+
+                        </label>
+
+                    `
+                    ).join("")
+                }
+
+            </div>
+
+            <br>
+
+            <button
+                class="primary full"
+                onclick="
+                    printSelectedQRs()
+                ">
+
+                🖨️ PRINT SELECTED QR CODES
+
+            </button>
+
+        </div>
+    `;
+
+    cards.forEach(card => {
+
+        new QRCode(
+
+            document.getElementById(
+                "qr-preview-" +
+                card.id
+            ),
+
+            {
+                text:
+                    card.code,
+
+                width: 90,
+
+                height: 90,
+
+                correctLevel:
+                    QRCode.CorrectLevel.H
+            }
+        );
+    });
+
+    updateSelectedCount();
+}
+
+function toggleQR(id) {
+
+    const checkbox =
+        document.querySelector(
+            `input[type="checkbox"][value="${id}"]`
+        );
+
+    if (checkbox.checked) {
+
+        selectedQRs.add(id);
+
+    } else {
+
+        selectedQRs.delete(id);
+    }
+
+    updateQRVisual(id);
+
+    updateSelectedCount();
+}
+
+function updateQRVisual(id) {
+
+    const element =
+        document.getElementById(
+            "qr-select-" +
+            id
+        );
+
+    const checkbox =
+        element.querySelector(
+            "input"
+        );
+
+    element.classList.toggle(
+        "selected",
+        checkbox.checked
+    );
+}
+
+function selectAllQRs() {
+
+    selectedQRs =
+        new Set(
+            cards.map(
+                card =>
+                    card.id
+            )
+        );
+
+    document
+        .querySelectorAll(
+            "#qrSelectionList input"
+        )
+        .forEach(
+            checkbox =>
+                checkbox.checked =
+                    true
+        );
+
+    cards.forEach(
+        card =>
+            updateQRVisual(
+                card.id
+            )
+    );
+
+    updateSelectedCount();
+}
+
+function deselectAllQRs() {
+
+    selectedQRs =
+        new Set();
+
+    document
+        .querySelectorAll(
+            "#qrSelectionList input"
+        )
+        .forEach(
+            checkbox =>
+                checkbox.checked =
+                    false
+        );
+
+    cards.forEach(
+        card =>
+            updateQRVisual(
+                card.id
+            )
+    );
+
+    updateSelectedCount();
+}
+
+function updateSelectedCount() {
+
+    const element =
+        document.getElementById(
+            "selectedCount"
+        );
+
+    if (!element)
+        return;
+
+    const count =
+        selectedQRs.size;
+
+    element.textContent =
+        count +
+        (
+            count === 1
+            ? " card selected"
+            : " cards selected"
+        );
+}
+
+
+/* =========================================================
+   FIXED QR PRINT FUNCTION
+========================================================= */
+
+function printSelectedQRs() {
+
+    if (
+        selectedQRs.size === 0
+    ) {
+
+        alert(
+            "Select at least one QR code."
+        );
+
+        return;
+    }
+
+    const printArea =
+        document.getElementById(
+            "printArea"
+        );
+
+    const selectedCards =
+        cards.filter(
+            card =>
+                selectedQRs.has(
+                    card.id
+                )
+        );
+
+    /*
+        Clear previous print content.
+    */
+
+    printArea.innerHTML = "";
+
+    /*
+        Create the exact Letter-size
+        print sheet.
+    */
+
+    const sheet =
+        document.createElement(
+            "div"
+        );
+
+    sheet.className =
+        "print-sheet";
+
+    printArea.appendChild(
+        sheet
+    );
+
+    /*
+        Create one container for
+        every selected QR code.
+    */
+
+    selectedCards.forEach(
+        card => {
+
+            const cardElement =
+                document.createElement(
+                    "div"
+                );
+
+            cardElement.className =
+                "print-card";
+
+            cardElement.id =
+                "print-qr-" +
+                card.id;
+
+            sheet.appendChild(
+                cardElement
+            );
+        }
+    );
+
+    /*
+        Generate the QR codes.
+    */
+
+    selectedCards.forEach(
+        card => {
+
+            const container =
+                document.getElementById(
+                    "print-qr-" +
+                    card.id
+                );
+
+            new QRCode(
+                container,
+                {
+                    text:
+                        card.code,
+
+                    width: 500,
+
+                    height: 500,
+
+                    correctLevel:
+                        QRCode.CorrectLevel.H
+                }
+            );
+        }
+    );
+
+    /*
+        Wait until every QRCode.js canvas
+        actually exists before printing.
+    */
+
+    let attempts = 0;
+
+    function waitForQRCodes() {
+
+        attempts++;
+
+        const qrElements =
+            printArea.querySelectorAll(
+                ".print-card canvas, .print-card img"
+            );
+
+        if (
+            qrElements.length ===
+            selectedCards.length
+        ) {
+
+            /*
+                Force the browser to perform
+                layout/paint before print.
+            */
+
+            requestAnimationFrame(
+                () => {
+
+                    requestAnimationFrame(
+                        () => {
+
+                            window.print();
+
+                        }
+                    );
+
+                }
+            );
+
+            return;
+        }
+
+        /*
+            Give up after 5 seconds.
+        */
+
+        if (attempts >= 50) {
+
+            alert(
+                "The QR codes took too long to generate. Please try again."
+            );
+
+            return;
+        }
+
+        setTimeout(
+            waitForQRCodes,
+            100
+        );
+    }
+
+    waitForQRCodes();
+}
+
+
+/* =========================================================
+   PRODUCT MANAGEMENT
+========================================================= */
+
+function productMenu() {
+
+    currentView = "productMenu";
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="showMenu()">
+
+                ← Main Menu
+
+            </button>
+
+            <h2>
+                📦 Product Management
+            </h2>
+
+            <div class="option">
+
+                <h3>
+                    ➕ Add Product
+                </h3>
+
+                <button
+                    class="green full"
+                    onclick="
+                        addProductScreen()
+                    ">
+
+                    Add Product
+
+                </button>
+
+            </div>
+
+            <div class="option">
+
+                <h3>
+                    ✏️ Edit Products
+                </h3>
+
+                <button
+                    class="primary full"
+                    onclick="
+                        editProductsScreen()
+                    ">
+
+                    Edit Products
+
+                </button>
+
+            </div>
+
+        </div>
+    `;
+}
+
+function addProductScreen() {
+
+    if (!requireMasterPassword()) {
+        return;
+    }
+
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="productMenu()">
+
+                ← Product Menu
+
+            </button>
+
+            <h2>
+                Add Product
+            </h2>
+
+            <label>
+                Product Name
+            </label>
+
+            <input
+                id="productName"
+                placeholder="Candy">
+
+            <label>
+                Price
+            </label>
+
+            <input
+                id="productPrice"
+                type="number"
+                min="0"
+                step=".01"
+                placeholder="2.50">
+
+            <button
+                class="green full"
+                onclick="addProduct()">
+
+                Add Product
+
+            </button>
+
+        </div>
+    `;
+}
+
+function addProduct() {
+
+    const name =
+        document.getElementById(
+            "productName"
+        ).value.trim();
+
+    const price =
+        Number(
+            document.getElementById(
+                "productPrice"
+            ).value
+        );
+
+    if (
+        !name ||
+        isNaN(price)
+    ) {
+
+        alert(
+            "Enter a valid product."
+        );
+
+        return;
+    }
+
+    products.push({
+
+        id: Date.now(),
+
+        name,
+
+        price
+    });
+
+    save();
+
+    alert(
+        "Product added!"
+    );
+
+    productMenu();
+}
+
+function editProductsScreen() {
+
+    currentView = "editProducts";
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="productMenu()">
+
+                ← Product Menu
+
+            </button>
+
+            <h2>
+                Edit Products
+            </h2>
+
+            ${
+                products.map(
+                    product => `
+
+                        <div class="option">
+
+                            <strong>
+                                ${escapeHTML(
+                                    product.name
+                                )}
+                            </strong>
+
+                            <br><br>
+
+                            ${money(
+                                product.price
+                            )}
+
+                            <br><br>
+
+                            <button
+                                class="primary"
+                                onclick="
+                                    editProduct(
+                                        ${product.id}
+                                    )
+                                ">
+
+                                Edit
+
+                            </button>
+
+                            <button
+                                class="red"
+                                onclick="
+                                    deleteProduct(
+                                        ${product.id}
+                                    )
+                                ">
+
+                                Delete
+
+                            </button>
+
+                        </div>
+
+                    `
+                ).join("")
+            }
+
+        </div>
+    `;
+}
+
+function editProduct(id) {
+
+    const product =
+        products.find(
+            product =>
+                product.id === id
+        );
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="
+                    editProductsScreen()
+                ">
+
+                ← Products
+
+            </button>
+
+            <h2>
+                Edit Product
+            </h2>
+
+            <label>
+                Name
+            </label>
+
+            <input
+                id="editProductName"
+                value="${escapeHTML(
+                    product.name
+                )}">
+
+            <label>
+                Price
+            </label>
+
+            <input
+                id="editProductPrice"
+                type="number"
+                step=".01"
+                value="${product.price}">
+
+            <button
+                class="primary full"
+                onclick="
+                    saveProduct(
+                        ${id}
+                    )
+                ">
+
+                Save
+
+            </button>
+
+        </div>
+    `;
+}
+
+function saveProduct(id) {
+
+    const product =
+        products.find(
+            product =>
+                product.id === id
+        );
+
+    product.name =
+        document.getElementById(
+            "editProductName"
+        ).value.trim();
+
+    product.price =
+        Number(
+            document.getElementById(
+                "editProductPrice"
+            ).value
+        );
+
+    save();
+
+    editProductsScreen();
+}
+
+function deleteProduct(id) {
+    if (!requireMasterPassword()) {
+        return;
+    }
+
+
+    if (!confirm(
+        "Delete this product?"
+    ))
+        return;
+
+    products =
+        products.filter(
+            product =>
+                product.id !== id
+        );
+
+    save();
+
+    editProductsScreen();
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function historyScreen() {
+
+    currentView = "history";
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="showMenu()">
+
+                ← Main Menu
+
+            </button>
+
+            <h2>
+                📋 Transaction History
+            </h2>
+
+            ${
+                transactions.length === 0
+
+                ?
+
+                `<div class="empty">
+                    No transactions yet.
+                </div>`
+
+                :
+
+                transactions.map(
+                    transaction => `
+
+                        <div
+                            class="history"
+                            id="
+                                transaction-${transaction.id}
+                            ">
+
+                            <strong>
+                                ${escapeHTML(
+                                    transaction.customerCard
+                                )}
+                            </strong>
+
+                            <br>
+
+                            ${escapeHTML(
+                                transaction.time
+                            )}
+
+                            <br><br>
+
+                            Normal amount:
+                            ${money(
+                                transaction.normalAmount ??
+                                transaction.amount
+                            )}
+
+                            <br>
+
+                            Subtotal:
+                            ${money(
+                                transaction.subtotal
+                            )}
+
+                            <br>
+
+                            Tip:
+                            ${money(
+                                transaction.tip
+                            )}
+
+                            ${
+                                transaction.buyerTax > 0
+                                ?
+                                `
+                                <br>
+                                Buyer tax:
+                                ${money(
+                                    transaction.buyerTax
+                                )}
+                                `
+                                :
+                                ""
+                            }
+
+                            ${
+                                transaction.recipientTax > 0
+                                ?
+                                `
+                                <br>
+                                Recipient tax:
+                                ${money(
+                                    transaction.recipientTax
+                                )}
+                                `
+                                :
+                                ""
+                            }
+
+                            <br>
+
+                            <strong>
+                                Total charged:
+                                ${money(
+                                    transaction.amount
+                                )}
+                            </strong>
+
+                            <br><br>
+
+                            Money went to:
+
+                            <strong>
+                                ${
+                                    transaction.recipient
+                                    ?
+                                    escapeHTML(
+                                        transaction.recipient
+                                    )
+                                    :
+                                    "No one"
+                                }
+                            </strong>
+
+                            <br><br>
+
+                            <strong>
+                                Items:
+                            </strong>
+
+                            <br>
+
+                            ${
+                                transaction.items
+                                .map(
+                                    item =>
+                                        `${escapeHTML(
+                                            item.name
+                                        )}
+                                        ×
+                                        ${item.quantity}`
+                                )
+                                .join("<br>")
+                            }
+
+                            <button
+                                class="
+                                    red
+                                    full
+                                    history-delete
+                                "
+                                onclick="
+                                    deleteTransaction(
+                                        ${transaction.id}
+                                    )
+                                ">
+
+                                🗑 Delete This Transaction
+
+                            </button>
+
+                        </div>
+
+                    `
+                ).join("")
+            }
+
+            ${
+                transactions.length > 0
+                ?
+                `
+
+                <br>
+
+                <button
+                    class="red full"
+                    onclick="
+                        clearHistory()
+                    ">
+
+                    🗑 Delete ALL Transactions
+
+                </button>
+
+                `
+                :
+                ""
+            }
+
+        </div>
+    `;
+}
+
+function deleteTransaction(id) {
+    if (!requireMasterPassword()) {
+        return;
+    }
+
+
+    const transaction =
+        transactions.find(
+            transaction =>
+                transaction.id === id
+        );
+
+    if (!transaction)
+        return;
+
+    if (!confirm(
+        "Delete this transaction from history?"
+    )) {
+        return;
+    }
+
+    transactions =
+        transactions.filter(
+            transaction =>
+                transaction.id !== id
+        );
+
+    save();
+
+    historyScreen();
+}
+
+function clearHistory() {
+    if (!requireMasterPassword()) {
+        return;
+    }
+
+
+    if (!confirm(
+        "Delete ALL fake transaction history?"
+    )) {
+        return;
+    }
+
+    transactions = [];
+
+    save();
+
+    historyScreen();
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+async function initializeApp() {
+
+    document.getElementById("app").innerHTML = `
+        <div class="screen">
+            <h2>Loading...</h2>
+        </div>
+    `;
+
+    await loadData();
+    startRealtimeUpdates();
+    showMenu();
+}
+
+initializeApp();
+
+</script>
+
+</body>
+</html>
