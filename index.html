@@ -6130,11 +6130,6 @@ function productMenu() {
 
 function addProductScreen() {
 
-    if (
-        !requireMasterPassword()
-    ) {
-        return;
-    }
 
     document.getElementById(
         "app"
@@ -6708,11 +6703,7 @@ function historyScreen() {
 
 function deleteTransaction(id) {
 
-    if (
-        !requireMasterPassword()
-    ) {
-        return;
-    }
+
 
     const transaction =
         transactions.find(
