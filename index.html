@@ -793,7 +793,42 @@ async function loadData() {
 
     return true;
 }
+const stateChannel = supabaseClient
+    .channel("cash-register-updates")
+    .on(
+        "postgres_changes",
+        {
+            event: "*",
+            schema: "public",
+            table: "cash_register_state",
+            filter: "id=eq.1"
+        },
+        async (payload) => {
 
+            console.log("Database updated!");
+
+            // Don't reload if this browser caused the update
+            const { data, error } =
+                await supabaseClient
+                    .from("cash_register_state")
+                    .select("*")
+                    .eq("id", 1)
+                    .single();
+
+            if (error) {
+                console.error(error);
+                return;
+            }
+
+            products = data.products || [];
+            cards = data.cards || [];
+            transactions = data.transactions || [];
+
+            // Refresh the current screen
+            showMenu();
+        }
+    )
+    .subscribe();
 async function save() {
 
     const { error } =
