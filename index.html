@@ -3364,8 +3364,9 @@ function finishScreen(
 const MASTER_PASSWORD = "fakecard123";
 
 function requireMasterPassword() {
-    const password = promt( 
-        "Enter The Masterpassword"
+    
+    const password = prompt( 
+        "Enter The Masterpassword."
     );
     
     if (password !== MASTER_PASSWORD) {
