@@ -43,6 +43,20 @@ header h1 {
     font-weight: bold;
 }
 
+#connectionStatus {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.connected {
+    color: #86efac;
+}
+
+.disconnected {
+    color: #fca5a5;
+}
+
 #app {
     max-width: 1100px;
     margin: 25px auto;
@@ -369,20 +383,6 @@ label {
     margin-top: 5px;
 }
 
-.no-transfer {
-    background: #f8fafc;
-    border: 2px solid #dbe1e8;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 15px;
-    cursor: pointer;
-}
-
-.no-transfer.selected {
-    border-color: #2563eb;
-    background: #eff6ff;
-}
-
 .success-box {
     background: #ecfdf5;
     color: #166534;
@@ -394,6 +394,110 @@ label {
 
 .success-box h2 {
     color: #15803d;
+}
+
+.warning {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.tax-box {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+}
+
+.tax-badge {
+    display: inline-block;
+    background: #fed7aa;
+    color: #9a3412;
+    padding: 4px 9px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 6px;
+}
+
+.tax-notice {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    border-radius: 10px;
+    padding: 12px;
+    margin: 12px 0;
+    font-weight: bold;
+}
+
+.big-pay-box {
+    background: #172033;
+    color: white;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.big-pay-label {
+    font-size: 14px;
+    opacity: .8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.big-pay-amount {
+    font-size: 48px;
+    font-weight: 900;
+    margin-top: 8px;
+}
+
+.small-balance {
+    margin-top: 18px;
+    font-size: 17px;
+    color: #d1d5db;
+}
+
+.balance-list-card {
+    background: white;
+    border: 2px solid #dbe1e8;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 12px;
+}
+
+.balance-list-card:hover {
+    border-color: #2563eb;
+}
+
+.balance-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.balance-amount {
+    color: #15803d;
+    font-size: 28px;
+    font-weight: 900;
+    margin-top: 8px;
+}
+
+.balance-code {
+    color: #667085;
+    font-family: monospace;
+    margin-top: 5px;
+}
+
+.balance-tax {
+    margin-top: 10px;
+    color: #9a3412;
+    font-size: 13px;
+    font-weight: bold;
 }
 
 .qr-select-card {
@@ -473,66 +577,18 @@ label {
     font-size: 20px;
 }
 
-.warning {
-    background: #fff7ed;
-    border: 1px solid #fed7aa;
-    color: #9a3412;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 15px;
+.loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: #667085;
 }
 
-.tax-box {
-    background: #fff7ed;
-    border: 1px solid #fed7aa;
-    color: #9a3412;
-    padding: 15px;
-    border-radius: 10px;
-    margin: 15px 0;
+.user-id {
+    font-size: 11px;
+    opacity: .7;
+    margin-top: 5px;
+    word-break: break-all;
 }
-
-.tax-toggle {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 15px;
-    background: #f8fafc;
-    border: 1px solid #dbe1e8;
-    border-radius: 10px;
-    margin: 10px 0 20px;
-}
-
-.tax-toggle input {
-    width: 22px;
-    height: 22px;
-    margin: 0;
-}
-
-.tax-badge {
-    display: inline-block;
-    background: #fed7aa;
-    color: #9a3412;
-    padding: 4px 9px;
-    border-radius: 15px;
-    font-size: 12px;
-    font-weight: bold;
-    margin-left: 6px;
-}
-
-.no-tax-badge {
-    display: inline-block;
-    background: #dcfce7;
-    color: #166534;
-    padding: 4px 9px;
-    border-radius: 15px;
-    font-size: 12px;
-    font-weight: bold;
-    margin-left: 6px;
-}
-
-/* =========================================================
-   FIXED QR PRINTING CSS
-========================================================= */
 
 #printArea {
     display: none;
@@ -572,10 +628,8 @@ label {
 .print-card canvas,
 .print-card img {
     display: block !important;
-
     width: 1.1875in !important;
     height: 1.1875in !important;
-
     max-width: none !important;
 }
 
@@ -597,11 +651,11 @@ label {
     .tip-buttons {
         grid-template-columns: repeat(2, 1fr);
     }
-}
 
-/* =========================================================
-   PRINT
-========================================================= */
+    .big-pay-amount {
+        font-size: 38px;
+    }
+}
 
 @media print {
 
@@ -614,10 +668,8 @@ label {
     body {
         width: 8.5in;
         height: 11in;
-
         margin: 0 !important;
         padding: 0 !important;
-
         background: white !important;
     }
 
@@ -628,20 +680,16 @@ label {
 
     #printArea {
         display: block !important;
-
         width: 8.5in;
         height: 11in;
-
         margin: 0;
         padding: 0;
     }
 
     .print-sheet {
         display: grid !important;
-
         width: 8.5in;
         height: 11in;
-
         padding: 0.5in;
 
         grid-template-columns:
@@ -664,7 +712,6 @@ label {
     .print-card canvas,
     .print-card img {
         display: block !important;
-
         width: 1.1875in !important;
         height: 1.1875in !important;
     }
@@ -675,121 +722,214 @@ label {
 <body>
 
 <header>
+
     <h1>🧾 Fake Cash Register</h1>
-    <span class="fake-label">PRETEND MONEY ONLY</span>
+
+    <span class="fake-label">
+        PRETEND MONEY ONLY
+    </span>
+
+    <div id="connectionStatus">
+        Connecting...
+    </div>
+
+    <div
+        id="userIdDisplay"
+        class="user-id">
+    </div>
+
 </header>
 
-<div id="app"></div>
+<div id="app">
+
+    <div class="loading">
+        Connecting to the shared register...
+    </div>
+
+</div>
 
 <div id="printArea"></div>
 
-<script>
+
+<script type="module">
 
 /* =========================================================
-   DATA
+   FIREBASE
 ========================================================= */
 
-let products =
-    JSON.parse(localStorage.getItem("fakeProducts")) || [
-        {id: 1, name: "Apple", price: 1.50},
-        {id: 2, name: "Cookie", price: 2.00},
-        {id: 3, name: "Juice", price: 2.50},
-        {id: 4, name: "Sandwich", price: 5.00},
-        {id: 5, name: "Toy", price: 7.50}
-    ];
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-let cards =
-    JSON.parse(localStorage.getItem("fakeCards")) || [
-        {
-            id: 1,
-            name: "Green Card",
-            code: "CARD-GREEN-001",
-            balance: 25,
-            pinHash: null,
-            taxed: false
-        },
-        {
-            id: 2,
-            name: "Blue Card",
-            code: "CARD-BLUE-001",
-            balance: 40,
-            pinHash: null,
-            taxed: false
-        },
-        {
-            id: 3,
-            name: "Purple Card",
-            code: "CARD-PURPLE-001",
-            balance: 15,
-            pinHash: null,
-            taxed: false
-        },
-        {
-            id: 4,
-            name: "Light Blue Card",
-            code: "CARD-CYAN-001",
-            balance: 30,
-            pinHash: null,
-            taxed: false
-        }
-    ];
+import {
+    getAuth,
+    signInAnonymously,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-let transactions =
-    JSON.parse(
-        localStorage.getItem(
-            "fakeTransactions"
-        )
-    ) || [];
+import {
+    getDatabase,
+    ref,
+    onValue,
+    set,
+    push,
+    update,
+    remove,
+    get,
+    runTransaction
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+/*
+    ========================================================
+    PUT YOUR FIREBASE CONFIG HERE
+    ========================================================
+
+    Firebase Console:
+    Project Settings
+    -> Your apps
+    -> Web app
+
+    Copy the firebaseConfig object here.
+*/
+
+const firebaseConfig = {
+
+    apiKey:
+        "YOUR_API_KEY",
+
+    authDomain:
+        "YOUR_PROJECT.firebaseapp.com",
+
+    databaseURL:
+        "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+
+    projectId:
+        "YOUR_PROJECT_ID",
+
+    storageBucket:
+        "YOUR_PROJECT.firebasestorage.app",
+
+    messagingSenderId:
+        "YOUR_MESSAGING_SENDER_ID",
+
+    appId:
+        "YOUR_APP_ID"
+};
+
+
+const firebaseApp =
+    initializeApp(
+        firebaseConfig
+    );
+
+const auth =
+    getAuth(firebaseApp);
+
+const db =
+    getDatabase(firebaseApp);
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let products = [];
+
+let cards = [];
+
+let transactions = [];
 
 let cart = [];
+
 let currentCard = null;
 
 let selectedTransferCard = null;
-let transferChoice = null;
 
 let selectedTipPercent = 0;
+
 let customTip = 0;
 
 let selectedQRs = new Set();
 
 let qrScanner = null;
+
 let scannerLocked = false;
 
+let currentUser = null;
+
+let dataReady = false;
+
 
 /* =========================================================
-   MIGRATE OLD CARDS
+   CONSTANTS
 ========================================================= */
 
-cards.forEach(card => {
+const TAX_RATE = 0.08;
 
-    if (typeof card.taxed !== "boolean") {
-        card.taxed = false;
+
+/* =========================================================
+   DEFAULT DATA
+========================================================= */
+
+const DEFAULT_PRODUCTS = {
+
+    product1: {
+        name: "Apple",
+        price: 1.50
+    },
+
+    product2: {
+        name: "Cookie",
+        price: 2.00
+    },
+
+    product3: {
+        name: "Juice",
+        price: 2.50
+    },
+
+    product4: {
+        name: "Sandwich",
+        price: 5.00
+    },
+
+    product5: {
+        name: "Toy",
+        price: 7.50
     }
+};
 
-});
+const DEFAULT_CARDS = {
 
+    card1: {
+        name: "Green Card",
+        code: "CARD-GREEN-001",
+        balance: 25,
+        pinHash: null
+    },
 
-/* =========================================================
-   STORAGE
-========================================================= */
+    card2: {
+        name: "Blue Card",
+        code: "CARD-BLUE-001",
+        balance: 40,
+        pinHash: null
+    },
 
-function save() {
+    card3: {
+        name: "Purple Card",
+        code: "CARD-PURPLE-001",
+        balance: 15,
+        pinHash: null
+    },
 
-    localStorage.setItem(
-        "fakeProducts",
-        JSON.stringify(products)
-    );
-
-    localStorage.setItem(
-        "fakeCards",
-        JSON.stringify(cards)
-    );
-
-    localStorage.setItem(
-        "fakeTransactions",
-        JSON.stringify(transactions)
-    );
-}
+    card4: {
+        name: "Light Blue Card",
+        code: "CARD-CYAN-001",
+        balance: 30,
+        pinHash: null
+    }
+};
 
 
 /* =========================================================
@@ -799,18 +939,21 @@ function save() {
 function money(value) {
 
     return "$" +
-        Number(value).toFixed(2);
+        Number(value || 0)
+            .toFixed(2);
 }
+
 
 function escapeHTML(value) {
 
-    return String(value)
+    return String(value ?? "")
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
 }
+
 
 function normalizeQR(value) {
 
@@ -820,6 +963,7 @@ function normalizeQR(value) {
         .replace(/\s+/g, "")
         .replace(/[^A-Z0-9]/g, "");
 }
+
 
 function getSubtotal() {
 
@@ -837,13 +981,14 @@ function getSubtotal() {
                 return total;
 
             return total +
-                product.price *
-                item.quantity;
+                Number(product.price) *
+                Number(item.quantity);
 
         },
         0
     );
 }
+
 
 function getTip() {
 
@@ -861,90 +1006,24 @@ function getTip() {
 }
 
 
-/* =========================================================
-   TAX
-========================================================= */
+function getPreTaxTotal() {
 
-function calculateTaxForTransaction(
-    baseAmount,
-    buyerCard,
-    recipientCard
-) {
-
-    const buyerTaxed =
-        !!(
-            buyerCard &&
-            buyerCard.taxed
-        );
-
-    const recipientTaxed =
-        !!(
-            recipientCard &&
-            recipientCard.taxed
-        );
-
-    let buyerTaxRate = 0;
-    let recipientTaxRate = 0;
-
-    if (
-        buyerTaxed &&
-        recipientTaxed
-    ) {
-
-        buyerTaxRate = 0.04;
-        recipientTaxRate = 0.04;
-
-    } else if (buyerTaxed) {
-
-        buyerTaxRate = 0.08;
-
-    } else if (recipientTaxed) {
-
-        recipientTaxRate = 0.08;
-    }
-
-    const buyerTax =
-        baseAmount *
-        buyerTaxRate;
-
-    const recipientTax =
-        baseAmount *
-        recipientTaxRate;
-
-    const buyerPays =
-        baseAmount +
-        buyerTax;
-
-    const recipientGets =
-        baseAmount -
-        recipientTax;
-
-    return {
-        baseAmount,
-        buyerTaxRate,
-        recipientTaxRate,
-        buyerTax,
-        recipientTax,
-        buyerPays,
-        recipientGets
-    };
+    return getSubtotal() +
+        getTip();
 }
 
-function getCheckoutTotal() {
 
-    const normalTotal =
-        getSubtotal() +
-        getTip();
+function getTaxAmount() {
 
-    if (!currentCard) {
-        return normalTotal;
-    }
+    return getPreTaxTotal() *
+        TAX_RATE;
+}
 
-    if (currentCard.taxed) {
-        return normalTotal * 1.08;
-    }
 
-    return normalTotal;
+function getFinalTotal() {
+
+    return getPreTaxTotal() +
+        getTaxAmount();
 }
 
 
@@ -966,14 +1045,9 @@ async function hashPIN(pin) {
             data
         );
 
-    const hashArray =
-        Array.from(
-            new Uint8Array(
-                hashBuffer
-            )
-        );
-
-    return hashArray
+    return Array.from(
+        new Uint8Array(hashBuffer)
+    )
         .map(
             byte =>
                 byte
@@ -982,6 +1056,7 @@ async function hashPIN(pin) {
         )
         .join("");
 }
+
 
 async function checkPIN(card, pin) {
 
@@ -999,9 +1074,288 @@ async function checkPIN(card, pin) {
         card.pinHash;
 }
 
+
 function validPIN(pin) {
 
     return /^\d{4}$/.test(pin);
+}
+
+
+/* =========================================================
+   FIREBASE DATA LISTENERS
+========================================================= */
+
+function startRealtimeListeners() {
+
+    onValue(
+        ref(db, "products"),
+        snapshot => {
+
+            const data =
+                snapshot.val() || {};
+
+            products =
+                Object.entries(data)
+                    .map(
+                        ([id, product]) => ({
+                            id,
+                            ...product
+                        })
+                    );
+
+            dataReady = true;
+
+            refreshCurrentScreen();
+        }
+    );
+
+
+    onValue(
+        ref(db, "cards"),
+        snapshot => {
+
+            const data =
+                snapshot.val() || {};
+
+            cards =
+                Object.entries(data)
+                    .map(
+                        ([id, card]) => ({
+                            id,
+                            ...card
+                        })
+                    );
+
+            dataReady = true;
+
+            if (
+                currentCard &&
+                cards.some(
+                    card =>
+                        card.id ===
+                        currentCard.id
+                )
+            ) {
+
+                currentCard =
+                    cards.find(
+                        card =>
+                            card.id ===
+                            currentCard.id
+                    );
+            }
+
+            refreshCurrentScreen();
+        }
+    );
+
+
+    onValue(
+        ref(db, "transactions"),
+        snapshot => {
+
+            const data =
+                snapshot.val() || {};
+
+            transactions =
+                Object.entries(data)
+                    .map(
+                        ([id, transaction]) => ({
+                            id,
+                            ...transaction
+                        })
+                    )
+                    .sort(
+                        (a, b) =>
+                            Number(b.timestamp || 0) -
+                            Number(a.timestamp || 0)
+                    );
+
+            refreshCurrentScreen();
+        }
+    );
+}
+
+
+/* =========================================================
+   INITIALIZE DATABASE
+========================================================= */
+
+async function initializeDatabase() {
+
+    const productsSnapshot =
+        await get(
+            ref(db, "products")
+        );
+
+    if (!productsSnapshot.exists()) {
+
+        await set(
+            ref(db, "products"),
+            DEFAULT_PRODUCTS
+        );
+    }
+
+
+    const cardsSnapshot =
+        await get(
+            ref(db, "cards")
+        );
+
+    if (!cardsSnapshot.exists()) {
+
+        await set(
+            ref(db, "cards"),
+            DEFAULT_CARDS
+        );
+    }
+}
+
+
+/* =========================================================
+   CONNECTION
+========================================================= */
+
+function updateConnectionStatus(
+    connected
+) {
+
+    const element =
+        document.getElementById(
+            "connectionStatus"
+        );
+
+    if (!element)
+        return;
+
+    if (connected) {
+
+        element.textContent =
+            "● LIVE — Shared Register Connected";
+
+        element.className =
+            "connected";
+
+    } else {
+
+        element.textContent =
+            "● OFFLINE — Waiting for connection";
+
+        element.className =
+            "disconnected";
+    }
+}
+
+
+onValue(
+    ref(db, ".info/connected"),
+    snapshot => {
+
+        updateConnectionStatus(
+            snapshot.val() === true
+        );
+    }
+);
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+onAuthStateChanged(
+    auth,
+    async user => {
+
+        if (!user)
+            return;
+
+        currentUser =
+            user;
+
+        document.getElementById(
+            "userIdDisplay"
+        ).textContent =
+            "Register user: " +
+            user.uid;
+
+        await initializeDatabase();
+
+        startRealtimeListeners();
+
+        showMenu();
+    }
+);
+
+
+signInAnonymously(auth)
+    .catch(error => {
+
+        console.error(error);
+
+        document.getElementById(
+            "app"
+        ).innerHTML = `
+
+            <div class="screen">
+
+                <h2>
+                    Firebase Login Error
+                </h2>
+
+                <div class="warning">
+
+                    ${escapeHTML(
+                        error.message
+                    )}
+
+                </div>
+
+                <p>
+                    Check your Firebase
+                    configuration and make sure
+                    Anonymous Authentication is enabled.
+                </p>
+
+            </div>
+        `;
+    });
+
+
+/* =========================================================
+   SCREEN REFRESH
+========================================================= */
+
+function refreshCurrentScreen() {
+
+    /*
+        Re-render only lightweight screens.
+        Never automatically rerender a form that
+        somebody is typing into.
+    */
+
+    const title =
+        document.querySelector(
+            "#app h2"
+        );
+
+    if (!title)
+        return;
+
+    const text =
+        title.textContent;
+
+    if (
+        text.includes("View Balances")
+    ) {
+
+        balanceScreen();
+
+    } else if (
+        text.includes("Transaction History")
+    ) {
+
+        historyScreen();
+    }
 }
 
 
@@ -1041,7 +1395,7 @@ function showMenu() {
                     onclick="cardMenu()">
 
                     💳<br><br>
-                    ADD / EDIT CARDS
+                    CARDS
 
                 </button>
 
@@ -1051,7 +1405,17 @@ function showMenu() {
                     onclick="productMenu()">
 
                     📦<br><br>
-                    ADD / EDIT PRODUCTS
+                    PRODUCTS
+
+                </button>
+
+                <button
+                    class="gray"
+                    style="height:140px;font-size:20px"
+                    onclick="balanceScreen()">
+
+                    💰<br><br>
+                    VIEW BALANCES
 
                 </button>
 
@@ -1079,12 +1443,13 @@ function showMenu() {
 function checkoutStart() {
 
     cart = [];
+
     currentCard = null;
 
     selectedTransferCard = null;
-    transferChoice = null;
 
     selectedTipPercent = 0;
+
     customTip = 0;
 
     scannerLocked = false;
@@ -1092,7 +1457,20 @@ function checkoutStart() {
     productSelection();
 }
 
+
 function productSelection() {
+
+    const subtotal =
+        getSubtotal();
+
+    const tip =
+        getTip();
+
+    const tax =
+        getTaxAmount();
+
+    const total =
+        getFinalTotal();
 
     document.getElementById(
         "app"
@@ -1108,43 +1486,75 @@ function productSelection() {
 
             </button>
 
-            <h2>🛒 Checkout</h2>
+            <h2>
+                🛒 Checkout
+            </h2>
+
+            <div class="tax-notice">
+
+                🧾 TAX:
+                Every purchase has an
+                <strong>8% customer tax</strong>.
+
+                <br>
+
+                Tax is calculated on the
+                subtotal + tip.
+
+            </div>
 
             <div class="register-layout">
 
                 <div>
 
-                    <h3>Products</h3>
+                    <h3>
+                        Products
+                    </h3>
 
                     <div class="grid">
 
-                        ${products.map(
-                            product => `
+                        ${
+                            products.length === 0
 
-                            <button
-                                class="product"
-                                onclick="
-                                    addItem(
-                                        ${product.id}
-                                    )
-                                ">
+                            ?
 
-                                <div class="product-name">
-                                    ${escapeHTML(
-                                        product.name
-                                    )}
-                                </div>
+                            `<div class="empty">
+                                No products yet.
+                            </div>`
 
-                                <div class="product-price">
-                                    ${money(
-                                        product.price
-                                    )}
-                                </div>
+                            :
 
-                            </button>
+                            products.map(
+                                product => `
 
-                        `
-                        ).join("")}
+                                <button
+                                    class="product"
+                                    onclick="
+                                        addItem(
+                                            '${product.id}'
+                                        )
+                                    ">
+
+                                    <div class="product-name">
+
+                                        ${escapeHTML(
+                                            product.name
+                                        )}
+
+                                    </div>
+
+                                    <div class="product-price">
+
+                                        ${money(
+                                            product.price
+                                        )}
+
+                                    </div>
+
+                                </button>
+                            `
+                            ).join("")
+                        }
 
                     </div>
 
@@ -1188,81 +1598,87 @@ function productSelection() {
 
                             :
 
-                            cart.map(item => {
+                            cart.map(
+                                item => {
 
-                                const product =
-                                    products.find(
-                                        p =>
-                                            p.id ===
-                                            item.productId
-                                    );
+                                    const product =
+                                        products.find(
+                                            p =>
+                                                p.id ===
+                                                item.productId
+                                        );
 
-                                return `
+                                    if (!product)
+                                        return "";
 
-                                    <div class="receipt-item">
+                                    return `
 
-                                        <div class="receipt-item-info">
+                                        <div class="receipt-item">
+
+                                            <div
+                                                class="receipt-item-info">
+
+                                                <strong>
+                                                    ${escapeHTML(
+                                                        product.name
+                                                    )}
+                                                </strong>
+
+                                                <small>
+                                                    ${money(
+                                                        product.price
+                                                    )}
+                                                    each
+                                                </small>
+
+                                            </div>
+
+                                            <div
+                                                class="quantity-controls">
+
+                                                <button
+                                                    class="gray qty-button"
+                                                    onclick="
+                                                        changeItem(
+                                                            '${product.id}',
+                                                            -1
+                                                        )
+                                                    ">
+
+                                                    −
+
+                                                </button>
+
+                                                <strong>
+                                                    ${item.quantity}
+                                                </strong>
+
+                                                <button
+                                                    class="gray qty-button"
+                                                    onclick="
+                                                        changeItem(
+                                                            '${product.id}',
+                                                            1
+                                                        )
+                                                    ">
+
+                                                    +
+
+                                                </button>
+
+                                            </div>
 
                                             <strong>
-                                                ${escapeHTML(
-                                                    product.name
-                                                )}
-                                            </strong>
-
-                                            <small>
                                                 ${money(
-                                                    product.price
+                                                    product.price *
+                                                    item.quantity
                                                 )}
-                                                each
-                                            </small>
-
-                                        </div>
-
-                                        <div class="quantity-controls">
-
-                                            <button
-                                                class="gray qty-button"
-                                                onclick="
-                                                    changeItem(
-                                                        ${product.id},
-                                                        -1
-                                                    )
-                                                ">
-
-                                                −
-
-                                            </button>
-
-                                            <strong>
-                                                ${item.quantity}
                                             </strong>
 
-                                            <button
-                                                class="gray qty-button"
-                                                onclick="
-                                                    changeItem(
-                                                        ${product.id},
-                                                        1
-                                                    )
-                                                ">
-
-                                                +
-
-                                            </button>
-
                                         </div>
-
-                                        <strong>
-                                            ${money(
-                                                product.price *
-                                                item.quantity
-                                            )}
-                                        </strong>
-
-                                    </div>
-                                `;
-
-                            }).join("")
+                                    `;
+                                }
+                            ).join("")
                         }
 
                     </div>
@@ -1276,9 +1692,7 @@ function productSelection() {
                             </span>
 
                             <strong>
-                                ${money(
-                                    getSubtotal()
-                                )}
+                                ${money(subtotal)}
                             </strong>
 
                         </div>
@@ -1290,9 +1704,21 @@ function productSelection() {
                             </span>
 
                             <strong>
-                                ${money(
-                                    getTip()
-                                )}
+                                ${money(tip)}
+                            </strong>
+
+                        </div>
+
+                        <div
+                            class="summary-row"
+                            style="color:#9a3412">
+
+                            <span>
+                                Tax (8%)
+                            </span>
+
+                            <strong>
+                                ${money(tax)}
                             </strong>
 
                         </div>
@@ -1304,10 +1730,7 @@ function productSelection() {
                             </span>
 
                             <span>
-                                ${money(
-                                    getSubtotal() +
-                                    getTip()
-                                )}
+                                ${money(total)}
                             </span>
 
                         </div>
@@ -1342,8 +1765,6 @@ function productSelection() {
 
                     </button>
 
-                    <br><br>
-
                 </div>
 
             </div>
@@ -1351,6 +1772,7 @@ function productSelection() {
         </div>
     `;
 }
+
 
 function addItem(productId) {
 
@@ -1368,13 +1790,17 @@ function addItem(productId) {
     } else {
 
         cart.push({
+
             productId,
+
             quantity: 1
+
         });
     }
 
     productSelection();
 }
+
 
 function changeItem(
     productId,
@@ -1388,7 +1814,8 @@ function changeItem(
                 productId
         );
 
-    if (!item) return;
+    if (!item)
+        return;
 
     item.quantity += amount;
 
@@ -1405,6 +1832,7 @@ function changeItem(
     productSelection();
 }
 
+
 function clearSale() {
 
     if (cart.length === 0)
@@ -1412,11 +1840,13 @@ function clearSale() {
 
     if (!confirm(
         "Clear all items from this sale?"
-    )) return;
+    ))
+        return;
 
     cart = [];
 
     selectedTipPercent = 0;
+
     customTip = 0;
 
     productSelection();
@@ -1441,10 +1871,23 @@ function goToTip() {
     tipScreen();
 }
 
+
 function tipScreen() {
 
     const subtotal =
         getSubtotal();
+
+    const tip =
+        getTip();
+
+    const tax =
+        subtotal + tip;
+
+    const taxAmount =
+        tax * TAX_RATE;
+
+    const total =
+        tax + taxAmount;
 
     document.getElementById(
         "app"
@@ -1461,7 +1904,7 @@ function tipScreen() {
             </button>
 
             <h2>
-                Step 1: Choose Tip
+                Choose Tip
             </h2>
 
             <div class="card-box">
@@ -1478,7 +1921,9 @@ function tipScreen() {
 
             <div class="tip-box">
 
-                <h3>Tip</h3>
+                <h3>
+                    Tip
+                </h3>
 
                 <div class="tip-buttons">
 
@@ -1583,7 +2028,21 @@ function tipScreen() {
                     </span>
 
                     <strong id="tipAmount">
-                        ${money(getTip())}
+                        ${money(tip)}
+                    </strong>
+
+                </div>
+
+                <div
+                    class="summary-row"
+                    style="color:#9a3412">
+
+                    <span>
+                        Tax (8%)
+                    </span>
+
+                    <strong id="taxAmount">
+                        ${money(taxAmount)}
                     </strong>
 
                 </div>
@@ -1595,10 +2054,7 @@ function tipScreen() {
                     </span>
 
                     <span id="totalAmount">
-                        ${money(
-                            getSubtotal() +
-                            getTip()
-                        )}
+                        ${money(total)}
                     </span>
 
                 </div>
@@ -1607,7 +2063,7 @@ function tipScreen() {
 
             <button
                 class="green full"
-                onclick="continueToCardScan()">
+                onclick="showCardScanner()">
 
                 Continue to Card Scan →
 
@@ -1616,6 +2072,7 @@ function tipScreen() {
         </div>
     `;
 }
+
 
 function chooseTip(percent) {
 
@@ -1626,6 +2083,7 @@ function chooseTip(percent) {
 
     tipScreen();
 }
+
 
 function updateCustomTip() {
 
@@ -1639,23 +2097,27 @@ function updateCustomTip() {
 
     selectedTipPercent = 0;
 
+    const base =
+        getSubtotal() +
+        customTip;
+
+    const tax =
+        base * TAX_RATE;
+
     document.getElementById(
         "tipAmount"
     ).textContent =
         money(customTip);
 
     document.getElementById(
+        "taxAmount"
+    ).textContent =
+        money(tax);
+
+    document.getElementById(
         "totalAmount"
     ).textContent =
-        money(
-            getSubtotal() +
-            customTip
-        );
-}
-
-function continueToCardScan() {
-
-    showCardScanner();
+        money(base + tax);
 }
 
 
@@ -1684,25 +2146,35 @@ function showCardScanner() {
             </button>
 
             <h2>
-                Step 2: Scan Customer Card
+                Scan Customer Card
             </h2>
 
-            <div class="card-box">
+            <div class="big-pay-box">
 
-                Normal total:
+                <div class="big-pay-label">
+                    Customer Has To Pay
+                </div>
 
-                <strong>
+                <div class="big-pay-amount">
                     ${money(
-                        getSubtotal() +
-                        getTip()
+                        getFinalTotal()
                     )}
-                </strong>
+                </div>
 
-                <br><br>
+                <div class="small-balance">
+                    Final amount includes 8% tax
+                </div>
 
-                The final amount will be
-                calculated after the card
-                is scanned.
+            </div>
+
+            <div class="tax-notice">
+
+                Every card pays the same
+                <strong>8% buyer tax</strong>.
+
+                <br>
+
+                No tax split between cards.
 
             </div>
 
@@ -1766,6 +2238,7 @@ function showCardScanner() {
     startQRScanner();
 }
 
+
 async function startQRScanner() {
 
     if (scannerLocked)
@@ -1778,7 +2251,8 @@ async function startQRScanner() {
             "qr-reader"
         );
 
-    if (!reader) return;
+    if (!reader)
+        return;
 
     const status =
         document.getElementById(
@@ -1819,9 +2293,9 @@ async function startQRScanner() {
             cameras.find(
                 camera =>
                     /back|rear|environment/i
-                    .test(
-                        camera.label
-                    )
+                        .test(
+                            camera.label
+                        )
             );
 
         if (backCamera) {
@@ -1850,8 +2324,10 @@ async function startQRScanner() {
                             ) * .70;
 
                         return {
+
                             width:
                                 Math.floor(size),
+
                             height:
                                 Math.floor(size)
                         };
@@ -1886,6 +2362,7 @@ async function startQRScanner() {
     }
 }
 
+
 function stopQRScanner() {
 
     if (!qrScanner)
@@ -1915,6 +2392,7 @@ function stopQRScanner() {
     }
 }
 
+
 function handleScannedCode(
     decodedText
 ) {
@@ -1929,12 +2407,16 @@ function handleScannedCode(
     findCard(decodedText);
 }
 
+
 function manualScan() {
 
-    const code =
+    const input =
         document.getElementById(
             "manualCode"
-        ).value.trim();
+        );
+
+    const code =
+        input.value.trim();
 
     if (!code) {
 
@@ -1952,6 +2434,7 @@ function manualScan() {
     findCard(code);
 }
 
+
 async function scanImageInstead() {
 
     const input =
@@ -1960,6 +2443,7 @@ async function scanImageInstead() {
         );
 
     input.type = "file";
+
     input.accept = "image/*";
 
     input.onchange =
@@ -2007,7 +2491,7 @@ function findCard(decodedText) {
 
     const raw =
         String(decodedText || "")
-        .trim();
+            .trim();
 
     const normalized =
         normalizeQR(raw);
@@ -2038,30 +2522,23 @@ function findCard(decodedText) {
             const url =
                 new URL(raw);
 
-            const possibleValues = [
+            const values = [
 
-                url.searchParams.get(
-                    "card"
-                ),
+                url.searchParams.get("card"),
 
-                url.searchParams.get(
-                    "code"
-                ),
+                url.searchParams.get("code"),
 
-                url.searchParams.get(
-                    "id"
-                )
+                url.searchParams.get("id")
             ];
 
             for (
-                const value
-                of possibleValues
+                const value of values
             ) {
 
                 if (!value)
                     continue;
 
-                const valueNormalized =
+                const normalizedValue =
                     normalizeQR(value);
 
                 card =
@@ -2070,7 +2547,7 @@ function findCard(decodedText) {
                             normalizeQR(
                                 c.code
                             ) ===
-                            valueNormalized
+                            normalizedValue
                     );
 
                 if (card)
@@ -2093,13 +2570,6 @@ function findCard(decodedText) {
                 <h2>
                     ❌ Card Not Found
                 </h2>
-
-                <p style="text-align:center">
-
-                    The QR code was read, but it
-                    doesn't match a card.
-
-                </p>
 
                 <div class="card-box">
 
@@ -2129,167 +2599,26 @@ function findCard(decodedText) {
         return;
     }
 
-    currentCard = card;
-
-    if (!currentCard.pinHash) {
-
-        setupExistingCardPIN(
-            currentCard
-        );
-
-        return;
-    }
+    currentCard =
+        card;
 
     cardPINScreen();
 }
 
 
 /* =========================================================
-   EXISTING CARD PIN
-========================================================= */
-
-function setupExistingCardPIN(card) {
-
-    document.getElementById(
-        "app"
-    ).innerHTML = `
-
-        <div class="screen">
-
-            <h2>
-                🔐 Set Card PIN
-            </h2>
-
-            <div class="warning">
-
-                This card was created before PINs
-                were added.
-
-                <br><br>
-
-                Create a 4-digit PIN for:
-
-                <strong>
-                    ${escapeHTML(card.name)}
-                </strong>
-
-            </div>
-
-            <label>
-                New 4-Digit PIN
-            </label>
-
-            <input
-                id="newExistingPIN"
-                type="password"
-                inputmode="numeric"
-                maxlength="4"
-                placeholder="••••"
-                autocomplete="new-password">
-
-            <label>
-                Confirm PIN
-            </label>
-
-            <input
-                id="confirmExistingPIN"
-                type="password"
-                inputmode="numeric"
-                maxlength="4"
-                placeholder="••••"
-                autocomplete="new-password">
-
-            <button
-                class="green full"
-                onclick="
-                    saveExistingCardPIN(
-                        ${card.id}
-                    )
-                ">
-
-                Save PIN
-
-            </button>
-
-            <br><br>
-
-            <button
-                class="gray full"
-                onclick="showCardScanner()">
-
-                Cancel
-
-            </button>
-
-        </div>
-    `;
-}
-
-async function saveExistingCardPIN(id) {
-
-    const card =
-        cards.find(
-            c =>
-                c.id === id
-        );
-
-    const pin =
-        document.getElementById(
-            "newExistingPIN"
-        ).value;
-
-    const confirmPIN =
-        document.getElementById(
-            "confirmExistingPIN"
-        ).value;
-
-    if (!validPIN(pin)) {
-
-        alert(
-            "PIN must be exactly 4 digits."
-        );
-
-        return;
-    }
-
-    if (pin !== confirmPIN) {
-
-        alert(
-            "The PINs don't match."
-        );
-
-        return;
-    }
-
-    card.pinHash =
-        await hashPIN(pin);
-
-    save();
-
-    alert(
-        "PIN created successfully."
-    );
-
-    cardPINScreen();
-}
-
-
-/* =========================================================
-   CHARGE PIN
+   PAYMENT PIN
 ========================================================= */
 
 function cardPINScreen() {
 
-    const normalTotal =
-        getSubtotal() +
-        getTip();
+    const total =
+        getFinalTotal();
 
-    const finalTotal =
-        getCheckoutTotal();
-
-    const buyerTax =
-        finalTotal -
-        normalTotal;
+    const balance =
+        Number(
+            currentCard.balance
+        );
 
     document.getElementById(
         "app"
@@ -2306,8 +2635,40 @@ function cardPINScreen() {
             </button>
 
             <h2>
-                Step 3: Enter Card PIN
+                Payment Authorization
             </h2>
+
+            <div class="big-pay-box">
+
+                <div class="big-pay-label">
+                    You Have To Pay
+                </div>
+
+                <div class="big-pay-amount">
+                    ${money(total)}
+                </div>
+
+                <div class="small-balance">
+
+                    Your balance:
+                    <strong>
+                        ${money(balance)}
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <div class="tax-notice">
+
+                Tax included:
+                <strong>
+                    ${money(getTaxAmount())}
+                </strong>
+
+                &nbsp; — 8%
+
+            </div>
 
             <div class="card-box">
 
@@ -2317,61 +2678,22 @@ function cardPINScreen() {
                     )}
                 </strong>
 
-                <br>
-
-                ${
-                    currentCard.taxed
-                    ?
-                    `<span class="tax-badge">
-                        TAXED
-                    </span>`
-                    :
-                    `<span class="no-tax-badge">
-                        NOT TAXED
-                    </span>`
-                }
-
                 <br><br>
 
-                Balance:
+                <small>
+                    Your balance
+                </small>
 
-                <div class="balance">
-                    ${money(
-                        currentCard.balance
-                    )}
+                <div
+                    style="
+                        font-size:18px;
+                        font-weight:bold;
+                        color:#166534;
+                    ">
+
+                    ${money(balance)}
+
                 </div>
-
-                <br>
-
-                Normal amount:
-
-                <strong>
-                    ${money(normalTotal)}
-                </strong>
-
-                ${
-                    currentCard.taxed
-                    ?
-                    `
-                    <br><br>
-
-                    Buyer tax (8%):
-
-                    <strong>
-                        ${money(buyerTax)}
-                    </strong>
-                    `
-                    :
-                    ""
-                }
-
-                <br><br>
-
-                Amount to charge:
-
-                <strong>
-                    ${money(finalTotal)}
-                </strong>
 
             </div>
 
@@ -2399,6 +2721,7 @@ function cardPINScreen() {
     `;
 }
 
+
 async function verifyChargePIN() {
 
     const pin =
@@ -2410,6 +2733,21 @@ async function verifyChargePIN() {
 
         alert(
             "Enter the 4-digit PIN."
+        );
+
+        return;
+    }
+
+    /*
+        Existing old cards may not have
+        a PIN. Give them the option to
+        create one.
+    */
+
+    if (!currentCard.pinHash) {
+
+        setupExistingCardPIN(
+            currentCard
         );
 
         return;
@@ -2439,21 +2777,10 @@ async function verifyChargePIN() {
 
 
 /* =========================================================
-   PAYMENT REVIEW
+   OLD CARD PIN SETUP
 ========================================================= */
 
-function paymentReview() {
-
-    const normalTotal =
-        getSubtotal() +
-        getTip();
-
-    const total =
-        getCheckoutTotal();
-
-    const buyerTax =
-        total -
-        normalTotal;
+function setupExistingCardPIN(card) {
 
     document.getElementById(
         "app"
@@ -2462,34 +2789,175 @@ function paymentReview() {
         <div class="screen">
 
             <h2>
-                Step 4: Review Payment
+                🔐 Set Card PIN
             </h2>
 
-            <div class="card-box">
+            <div class="warning">
 
-                <h3>
-                    ${escapeHTML(
-                        currentCard.name
-                    )}
-                </h3>
+                This card does not have a PIN yet.
 
-                <div class="balance">
-                    ${money(
-                        currentCard.balance
-                    )}
+                <br><br>
+
+                Create a 4-digit PIN for:
+
+                <strong>
+                    ${escapeHTML(card.name)}
+                </strong>
+
+            </div>
+
+            <label>
+                New 4-Digit PIN
+            </label>
+
+            <input
+                id="newExistingPIN"
+                type="password"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="••••">
+
+            <label>
+                Confirm PIN
+            </label>
+
+            <input
+                id="confirmExistingPIN"
+                type="password"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="••••">
+
+            <button
+                class="green full"
+                onclick="
+                    saveExistingCardPIN(
+                        '${card.id}'
+                    )
+                ">
+
+                Save PIN
+
+            </button>
+
+            <br><br>
+
+            <button
+                class="gray full"
+                onclick="showCardScanner()">
+
+                Cancel
+
+            </button>
+
+        </div>
+    `;
+}
+
+
+async function saveExistingCardPIN(id) {
+
+    const pin =
+        document.getElementById(
+            "newExistingPIN"
+        ).value;
+
+    const confirmPIN =
+        document.getElementById(
+            "confirmExistingPIN"
+        ).value;
+
+    if (!validPIN(pin)) {
+
+        alert(
+            "PIN must be exactly 4 digits."
+        );
+
+        return;
+    }
+
+    if (pin !== confirmPIN) {
+
+        alert(
+            "The PINs don't match."
+        );
+
+        return;
+    }
+
+    const pinHash =
+        await hashPIN(pin);
+
+    await update(
+        ref(db, "cards/" + id),
+        {
+            pinHash
+        }
+    );
+
+    currentCard =
+        cards.find(
+            card =>
+                card.id === id
+        );
+
+    alert(
+        "PIN created successfully."
+    );
+
+    cardPINScreen();
+}
+
+
+/* =========================================================
+   PAYMENT REVIEW
+========================================================= */
+
+function paymentReview() {
+
+    const subtotal =
+        getSubtotal();
+
+    const tip =
+        getTip();
+
+    const tax =
+        getTaxAmount();
+
+    const total =
+        getFinalTotal();
+
+    const balance =
+        Number(
+            currentCard.balance
+        );
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <h2>
+                Review Payment
+            </h2>
+
+            <div class="big-pay-box">
+
+                <div class="big-pay-label">
+                    You Have To Pay
                 </div>
 
-                ${
-                    currentCard.taxed
-                    ?
-                    `<span class="tax-badge">
-                        TAXED
-                    </span>`
-                    :
-                    `<span class="no-tax-badge">
-                        NOT TAXED
-                    </span>`
-                }
+                <div class="big-pay-amount">
+                    ${money(total)}
+                </div>
+
+                <div class="small-balance">
+
+                    Your balance:
+                    ${money(balance)}
+
+                </div>
 
             </div>
 
@@ -2498,34 +2966,40 @@ function paymentReview() {
                 <div class="summary-row">
 
                     <span>
-                        Normal total
+                        Subtotal
                     </span>
 
                     <strong>
-                        ${money(normalTotal)}
+                        ${money(subtotal)}
                     </strong>
 
                 </div>
 
-                ${
-                    currentCard.taxed
-                    ?
-                    `
-                    <div class="summary-row">
+                <div class="summary-row">
 
-                        <span>
-                            Buyer tax (8%)
-                        </span>
+                    <span>
+                        Tip
+                    </span>
 
-                        <strong>
-                            ${money(buyerTax)}
-                        </strong>
+                    <strong>
+                        ${money(tip)}
+                    </strong>
 
-                    </div>
-                    `
-                    :
-                    ""
-                }
+                </div>
+
+                <div
+                    class="summary-row"
+                    style="color:#9a3412">
+
+                    <span>
+                        Buyer tax (8%)
+                    </span>
+
+                    <strong>
+                        ${money(tax)}
+                    </strong>
+
+                </div>
 
                 <div class="summary-total">
 
@@ -2542,7 +3016,7 @@ function paymentReview() {
             </div>
 
             ${
-                currentCard.balance >= total
+                balance >= total
 
                 ?
 
@@ -2562,11 +3036,22 @@ function paymentReview() {
 
                     <br><br>
 
-                    Need
-                    ${money(
-                        total -
-                        currentCard.balance
-                    )}
+                    Your balance:
+
+                    <strong>
+                        ${money(balance)}
+                    </strong>
+
+                    <br>
+
+                    You need:
+
+                    <strong>
+                        ${money(
+                            total - balance
+                        )}
+                    </strong>
+
                     more.
 
                 </div>`
@@ -2578,7 +3063,7 @@ function paymentReview() {
                 class="gray full"
                 onclick="cardPINScreen()">
 
-                ← Back to PIN
+                ← Back
 
             </button>
 
@@ -2586,30 +3071,82 @@ function paymentReview() {
     `;
 }
 
-function completePayment() {
+
+/* =========================================================
+   CHARGE CUSTOMER
+========================================================= */
+
+async function completePayment() {
+
+    if (!currentCard)
+        return;
 
     const total =
-        getCheckoutTotal();
+        Number(
+            getFinalTotal()
+        );
 
-    if (
-        currentCard.balance <
-        total
-    ) {
+    const cardRef =
+        ref(
+            db,
+            "cards/" +
+            currentCard.id +
+            "/balance"
+        );
+
+    let transactionResult;
+
+    try {
+
+        transactionResult =
+            await runTransaction(
+                cardRef,
+                currentBalance => {
+
+                    const balance =
+                        Number(
+                            currentBalance || 0
+                        );
+
+                    if (balance < total) {
+
+                        return;
+                    }
+
+                    return balance - total;
+                }
+            );
+
+    } catch(error) {
+
+        console.error(error);
 
         alert(
-            "Not enough balance."
+            "The payment could not be completed."
         );
 
         return;
     }
 
-    currentCard.balance -=
-        total;
+    if (
+        !transactionResult.committed
+    ) {
 
-    save();
+        alert(
+            "Not enough balance. Another user may have just spent some of this card's money."
+        );
 
-    transferChoice = null;
-    selectedTransferCard = null;
+        currentCard =
+            cards.find(
+                card =>
+                    card.id ===
+                    currentCard.id
+            );
+
+        cardPINScreen();
+
+        return;
+    }
 
     transferScreen();
 }
@@ -2621,9 +3158,11 @@ function completePayment() {
 
 function transferScreen() {
 
+    const total =
+        getFinalTotal();
+
     const normalTotal =
-        getSubtotal() +
-        getTip();
+        getPreTaxTotal();
 
     document.getElementById(
         "app"
@@ -2632,42 +3171,31 @@ function transferScreen() {
         <div class="screen">
 
             <h2>
-                Step 5: Where Should the Money Go?
+                Where Should the Money Go?
             </h2>
 
-            <div class="card-box">
+            <div class="big-pay-box">
 
-                Payment charged to buyer:
-
-                <div class="balance">
-                    ${money(
-                        getCheckoutTotal()
-                    )}
+                <div class="big-pay-label">
+                    Customer Paid
                 </div>
 
-                <br>
+                <div class="big-pay-amount">
+                    ${money(total)}
+                </div>
 
-                Normal transaction amount:
+                <div class="small-balance">
 
-                <strong>
-                    ${money(normalTotal)}
-                </strong>
+                    Includes 8% buyer tax:
+                    ${money(getTaxAmount())}
+
+                </div>
 
             </div>
 
             <div
-                class="
-                    no-transfer
-                    ${
-                        transferChoice ===
-                        "none"
-                        ? "selected"
-                        : ""
-                    }
-                "
-                onclick="
-                    chooseTransferNone()
-                ">
+                class="transfer-card"
+                onclick="transferToNoOne()">
 
                 <strong>
                     ➖ Transfer to no one
@@ -2675,8 +3203,9 @@ function transferScreen() {
 
                 <br><br>
 
-                Keep the money out of the
-                other cards.
+                The money is charged from the
+                customer but isn't added to
+                another card.
 
             </div>
 
@@ -2686,517 +3215,162 @@ function transferScreen() {
 
             ${
                 cards
-                .filter(
-                    card =>
-                        card.id !==
-                        currentCard.id
-                )
-                .map(card => {
+                    .filter(
+                        card =>
+                            card.id !==
+                            currentCard.id
+                    )
+                    .map(
+                        card => `
 
-                    const tax =
-                        calculateTaxForTransaction(
-                            normalTotal,
-                            currentCard,
-                            card
-                        );
+                        <div
+                            class="transfer-card"
+                            onclick="
+                                transferMoney(
+                                    '${card.id}'
+                                )
+                            ">
 
-                    return `
+                            <strong>
+                                ${escapeHTML(
+                                    card.name
+                                )}
+                            </strong>
 
-                    <div
-                        class="transfer-card"
-                        onclick="
-                            transferPINScreen(
-                                ${card.id}
-                            )
-                        ">
+                            <div
+                                class="transfer-balance">
 
-                        <strong>
-                            ${escapeHTML(
-                                card.name
-                            )}
-                        </strong>
+                                Current balance:
+                                ${money(
+                                    card.balance
+                                )}
 
-                        ${
-                            card.taxed
-                            ?
-                            `<span class="tax-badge">
-                                TAXED
-                            </span>`
-                            :
-                            `<span class="no-tax-badge">
-                                NOT TAXED
-                            </span>`
-                        }
+                            </div>
 
-                        <div class="transfer-balance">
+                            <br>
 
-                            Current balance:
-                            ${money(
-                                card.balance
-                            )}
+                            Transfer amount:
+
+                            <strong>
+                                ${money(
+                                    normalTotal
+                                )}
+                            </strong>
+
+                            <br><br>
+
+                            <small>
+                                No recipient PIN required.
+                            </small>
 
                         </div>
-
-                        <br>
-
-                        Buyer pays:
-
-                        <strong>
-                            ${money(
-                                tax.buyerPays
-                            )}
-                        </strong>
-
-                        <br>
-
-                        Recipient receives:
-
-                        <strong>
-                            ${money(
-                                tax.recipientGets
-                            )}
-                        </strong>
-
-                        <br><br>
-
-                        🔐 PIN required
-
-                    </div>
-                    `;
-
-                }).join("")
+                    `
+                    )
+                    .join("")
             }
-
-            <br>
-
-            <button
-                class="green full"
-                onclick="finishTransfer()"
-                ${
-                    transferChoice ===
-                    "none"
-                    ? ""
-                    : "disabled"
-                }>
-
-                Finish Sale
-
-            </button>
 
         </div>
     `;
-}
-
-function chooseTransferNone() {
-
-    transferChoice =
-        "none";
-
-    selectedTransferCard =
-        null;
-
-    transferScreen();
 }
 
 
 /* =========================================================
-   TRANSFER PIN
+   TRANSFER WITHOUT PIN
 ========================================================= */
 
-function transferPINScreen(cardId) {
-
-    const recipient =
-        cards.find(
-            card =>
-                card.id === cardId
-        );
-
-    if (!recipient)
-        return;
-
-    selectedTransferCard =
-        cardId;
-
-    if (!recipient.pinHash) {
-
-        setupTransferCardPIN(
-            recipient
-        );
-
-        return;
-    }
-
-    const normalTotal =
-        getSubtotal() +
-        getTip();
-
-    const tax =
-        calculateTaxForTransaction(
-            normalTotal,
-            currentCard,
-            recipient
-        );
-
-    document.getElementById(
-        "app"
-    ).innerHTML = `
-
-        <div class="screen">
-
-            <button
-                class="gray back"
-                onclick="transferScreen()">
-
-                ← Back
-
-            </button>
-
-            <h2>
-                Enter Recipient PIN
-            </h2>
-
-            <div class="card-box">
-
-                <strong>
-                    ${escapeHTML(
-                        recipient.name
-                    )}
-                </strong>
-
-                <br><br>
-
-                Normal transaction amount:
-
-                <div class="balance">
-                    ${money(normalTotal)}
-                </div>
-
-                <br>
-
-                Buyer pays:
-
-                <strong>
-                    ${money(
-                        tax.buyerPays
-                    )}
-                </strong>
-
-                <br><br>
-
-                Recipient receives:
-
-                <strong>
-                    ${money(
-                        tax.recipientGets
-                    )}
-                </strong>
-
-                ${
-                    tax.buyerTax > 0 ||
-                    tax.recipientTax > 0
-                    ?
-                    `
-                    <div class="tax-box">
-
-                        <strong>
-                            Tax calculation
-                        </strong>
-
-                        <br><br>
-
-                        Buyer tax:
-                        ${money(
-                            tax.buyerTax
-                        )}
-
-                        <br>
-
-                        Recipient tax:
-                        ${money(
-                            tax.recipientTax
-                        )}
-
-                    </div>
-                    `
-                    :
-                    ""
-                }
-
-            </div>
-
-            <label>
-                Recipient Card PIN
-            </label>
-
-            <input
-                id="transferPIN"
-                type="password"
-                inputmode="numeric"
-                maxlength="4"
-                placeholder="••••"
-                autocomplete="off">
-
-            <button
-                class="green full"
-                onclick="
-                    verifyTransferPIN()
-                ">
-
-                🔓 Verify PIN & Transfer
-
-            </button>
-
-        </div>
-    `;
-}
-
-function setupTransferCardPIN(card) {
-
-    document.getElementById(
-        "app"
-    ).innerHTML = `
-
-        <div class="screen">
-
-            <button
-                class="gray back"
-                onclick="transferScreen()">
-
-                ← Back
-
-            </button>
-
-            <h2>
-                🔐 Create Recipient PIN
-            </h2>
-
-            <div class="warning">
-
-                This card doesn't have a PIN yet.
-
-                <br><br>
-
-                Create one before money can
-                be transferred to it.
-
-            </div>
-
-            <strong>
-                ${escapeHTML(card.name)}
-            </strong>
-
-            <br><br>
-
-            <label>
-                New 4-Digit PIN
-            </label>
-
-            <input
-                id="transferNewPIN"
-                type="password"
-                inputmode="numeric"
-                maxlength="4"
-                placeholder="••••">
-
-            <label>
-                Confirm PIN
-            </label>
-
-            <input
-                id="transferConfirmPIN"
-                type="password"
-                inputmode="numeric"
-                maxlength="4"
-                placeholder="••••">
-
-            <button
-                class="green full"
-                onclick="
-                    saveTransferCardPIN(
-                        ${card.id}
-                    )
-                ">
-
-                Save PIN
-
-            </button>
-
-        </div>
-    `;
-}
-
-async function saveTransferCardPIN(id) {
-
-    const card =
-        cards.find(
-            c =>
-                c.id === id
-        );
-
-    const pin =
-        document.getElementById(
-            "transferNewPIN"
-        ).value;
-
-    const confirm =
-        document.getElementById(
-            "transferConfirmPIN"
-        ).value;
-
-    if (!validPIN(pin)) {
-
-        alert(
-            "PIN must be exactly 4 digits."
-        );
-
-        return;
-    }
-
-    if (pin !== confirm) {
-
-        alert(
-            "The PINs don't match."
-        );
-
-        return;
-    }
-
-    card.pinHash =
-        await hashPIN(pin);
-
-    save();
-
-    alert(
-        "Recipient PIN created."
-    );
-
-    transferPINScreen(id);
-}
-
-async function verifyTransferPIN() {
+async function transferMoney(
+    recipientId
+) {
 
     const recipient =
         cards.find(
             card =>
                 card.id ===
-                selectedTransferCard
+                recipientId
         );
 
     if (!recipient)
         return;
 
-    const pin =
-        document.getElementById(
-            "transferPIN"
-        ).value;
+    const amount =
+        getPreTaxTotal();
 
-    if (!validPIN(pin)) {
+    /*
+        The buyer already paid the 8% tax.
+
+        Only the pre-tax transaction amount
+        goes to the recipient.
+    */
+
+    const recipientRef =
+        ref(
+            db,
+            "cards/" +
+            recipientId +
+            "/balance"
+        );
+
+    try {
+
+        await runTransaction(
+            recipientRef,
+            currentBalance => {
+
+                return Number(
+                    currentBalance || 0
+                ) + amount;
+            }
+        );
+
+    } catch(error) {
+
+        console.error(error);
 
         alert(
-            "Enter the 4-digit PIN."
+            "The transfer could not be completed."
         );
 
         return;
     }
 
-    const correct =
-        await checkPIN(
-            recipient,
-            pin
-        );
+    await createTransaction(
+        recipient
+    );
 
-    if (!correct) {
+    finishScreen(
+        getFinalTotal(),
+        recipient
+    );
+}
 
-        alert(
-            "Incorrect recipient PIN."
-        );
 
-        document.getElementById(
-            "transferPIN"
-        ).value = "";
+async function transferToNoOne() {
 
-        return;
-    }
+    await createTransaction(
+        null
+    );
 
-    transferChoice =
-        "card";
-
-    finishTransfer();
+    finishScreen(
+        getFinalTotal(),
+        null
+    );
 }
 
 
 /* =========================================================
-   FINISH SALE
+   TRANSACTION CREATION
 ========================================================= */
 
-function finishTransfer() {
+async function createTransaction(
+    recipient
+) {
 
-    const normalTotal =
-        getSubtotal() +
-        getTip();
+    const transactionRef =
+        push(
+            ref(db, "transactions")
+        );
 
-    let recipient = null;
-
-    let taxInfo = {
-
-        baseAmount:
-            normalTotal,
-
-        buyerTaxRate: 0,
-
-        recipientTaxRate: 0,
-
-        buyerTax: 0,
-
-        recipientTax: 0,
-
-        buyerPays:
-            normalTotal,
-
-        recipientGets:
-            normalTotal
-    };
-
-    if (
-        selectedTransferCard !==
-        null
-    ) {
-
-        recipient =
-            cards.find(
-                card =>
-                    card.id ===
-                    selectedTransferCard
-            );
-
-        if (!recipient) {
-
-            alert(
-                "Recipient card not found."
-            );
-
-            return;
-        }
-
-        taxInfo =
-            calculateTaxForTransaction(
-                normalTotal,
-                currentCard,
-                recipient
-            );
-
-        recipient.balance +=
-            taxInfo.recipientGets;
-    }
-
-    const amountCharged =
-        recipient
-        ? taxInfo.buyerPays
-        : getCheckoutTotal();
-
-    transactions.unshift({
-
-        id: Date.now(),
+    const transaction = {
 
         customerCard:
             currentCard.name,
@@ -3204,88 +3378,79 @@ function finishTransfer() {
         customerCode:
             currentCard.code,
 
-        amount:
-            amountCharged,
-
         subtotal:
             getSubtotal(),
 
         tip:
             getTip(),
 
-        normalAmount:
-            normalTotal,
-
         buyerTax:
-            recipient
-            ? taxInfo.buyerTax
-            :
-            (
-                currentCard.taxed
-                ? normalTotal * 0.08
-                : 0
-            ),
+            getTaxAmount(),
 
-        recipientTax:
-            recipient
-            ? taxInfo.recipientTax
-            : 0,
-
-        recipientAmount:
-            recipient
-            ? taxInfo.recipientGets
-            : null,
+        amount:
+            getFinalTotal(),
 
         recipient:
             recipient
             ? recipient.name
             : null,
 
+        recipientAmount:
+            recipient
+            ? getPreTaxTotal()
+            : null,
+
+        timestamp:
+            Date.now(),
+
         time:
-            new Date().toLocaleString(),
+            new Date()
+                .toLocaleString(),
+
+        createdBy:
+            currentUser
+            ? currentUser.uid
+            : "unknown",
 
         items:
-            cart.map(item => {
+            cart.map(
+                item => {
 
-                const product =
-                    products.find(
-                        p =>
-                            p.id ===
-                            item.productId
-                    );
+                    const product =
+                        products.find(
+                            p =>
+                                p.id ===
+                                item.productId
+                        );
 
-                return {
+                    return {
 
-                    name:
-                        product.name,
+                        name:
+                            product
+                            ? product.name
+                            : "Unknown",
 
-                    quantity:
-                        item.quantity
-                };
-            })
-    });
+                        quantity:
+                            item.quantity
+                    };
+                }
+            )
+    };
 
-    save();
-
-    transferChoice = null;
-    selectedTransferCard = null;
-
-    finishScreen(
-        amountCharged,
-        recipient,
-        taxInfo
+    await set(
+        transactionRef,
+        transaction
     );
 }
 
 
 /* =========================================================
-   FINISH SCREEN
+   FINISH
 ========================================================= */
 
 function finishScreen(
     total,
-    recipient,
-    taxInfo
+    recipient
 ) {
 
     document.getElementById(
@@ -3315,7 +3480,7 @@ function finishScreen(
                 </strong>
 
                 <p>
-                    Charged:
+                    Customer paid:
                 </p>
 
                 <div
@@ -3327,6 +3492,10 @@ function finishScreen(
                     ${money(total)}
 
                 </div>
+
+                <p>
+                    8% tax included.
+                </p>
 
                 <hr>
 
@@ -3346,7 +3515,9 @@ function finishScreen(
 
                 ${
                     recipient
+
                     ?
+
                     `
                     <p>
                         Recipient received:
@@ -3354,11 +3525,13 @@ function finishScreen(
 
                     <strong>
                         ${money(
-                            taxInfo.recipientGets
+                            getPreTaxTotal()
                         )}
                     </strong>
                     `
+
                     :
+
                     ""
                 }
 
@@ -3381,6 +3554,108 @@ function finishScreen(
                 onclick="showMenu()">
 
                 MAIN MENU
+
+            </button>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   BALANCES
+========================================================= */
+
+function balanceScreen() {
+
+    document.getElementById(
+        "app"
+    ).innerHTML = `
+
+        <div class="screen">
+
+            <button
+                class="gray back"
+                onclick="showMenu()">
+
+                ← Main Menu
+
+            </button>
+
+            <h2>
+                💰 View Balances
+            </h2>
+
+            <div class="tax-notice">
+
+                🔄 Balances are live.
+
+                <br>
+
+                If another person changes a card,
+                this screen updates automatically.
+
+            </div>
+
+            ${
+                cards.length === 0
+
+                ?
+
+                `<div class="empty">
+                    No cards created yet.
+                </div>`
+
+                :
+
+                cards.map(
+                    card => `
+
+                        <div class="balance-list-card">
+
+                            <div class="balance-name">
+
+                                ${escapeHTML(
+                                    card.name
+                                )}
+
+                            </div>
+
+                            <div class="balance-amount">
+
+                                ${money(
+                                    card.balance
+                                )}
+
+                            </div>
+
+                            <div class="balance-code">
+
+                                ${escapeHTML(
+                                    card.code
+                                )}
+
+                            </div>
+
+                            <div class="balance-tax">
+
+                                🧾 8% buyer tax applies
+                                to purchases
+
+                            </div>
+
+                        </div>
+                    `
+                ).join("")
+            }
+
+            <br>
+
+            <button
+                class="primary full"
+                onclick="balanceScreen()">
+
+                🔄 Refresh Balances
 
             </button>
 
@@ -3550,26 +3825,15 @@ function createCardScreen() {
                 maxlength="4"
                 placeholder="••••">
 
-            <div class="tax-toggle">
+            <div class="tax-notice">
 
-                <input
-                    id="cardTaxed"
-                    type="checkbox">
+                🧾 All cards automatically have
+                an 8% buyer tax.
 
-                <div>
+                <br><br>
 
-                    <strong>
-                        Tax this card
-                    </strong>
-
-                    <br>
-
-                    <small>
-                        Tax rules will apply when
-                        this card buys or receives money.
-                    </small>
-
-                </div>
+                There is no tax toggle because
+                every card follows the same rule.
 
             </div>
 
@@ -3584,6 +3848,7 @@ function createCardScreen() {
         </div>
     `;
 }
+
 
 async function createCard() {
 
@@ -3609,15 +3874,10 @@ async function createCard() {
             "cardPIN"
         ).value;
 
-    const taxed =
-        document.getElementById(
-            "cardTaxed"
-        ).checked;
-
     if (
         !name ||
         !code ||
-        isNaN(balance)
+        !Number.isFinite(balance)
     ) {
 
         alert(
@@ -3636,13 +3896,14 @@ async function createCard() {
         return;
     }
 
-    if (
+    const duplicate =
         cards.some(
             card =>
                 card.code.toLowerCase() ===
                 code.toLowerCase()
-        )
-    ) {
+        );
+
+    if (duplicate) {
 
         alert(
             "That card code already exists."
@@ -3654,22 +3915,24 @@ async function createCard() {
     const pinHash =
         await hashPIN(pin);
 
-    cards.push({
+    const cardRef =
+        push(
+            ref(db, "cards")
+        );
 
-        id: Date.now(),
+    await set(
+        cardRef,
+        {
 
-        name,
+            name,
 
-        code,
+            code,
 
-        balance,
+            balance,
 
-        pinHash,
-
-        taxed
-    });
-
-    save();
+            pinHash
+        }
+    );
 
     alert(
         "Fake card created!"
@@ -3720,7 +3983,6 @@ function editCardScreen() {
                                 card.name
                             )}
                         </option>
-
                     `
                     ).join("")
                 }
@@ -3733,14 +3995,13 @@ function editCardScreen() {
     `;
 }
 
+
 function loadEditCard() {
 
     const id =
-        Number(
-            document.getElementById(
-                "editCardSelect"
-            ).value
-        );
+        document.getElementById(
+            "editCardSelect"
+        ).value;
 
     const card =
         cards.find(
@@ -3785,20 +4046,10 @@ function loadEditCard() {
             step=".01"
             value="${card.balance}">
 
-        <div class="tax-toggle">
+        <div class="tax-notice">
 
-            <input
-                id="editTaxed"
-                type="checkbox"
-                ${card.taxed ? "checked" : ""}>
-
-            <div>
-
-                <strong>
-                    Tax this card
-                </strong>
-
-            </div>
+            🧾 8% buyer tax is automatically
+            applied to this card.
 
         </div>
 
@@ -3806,7 +4057,7 @@ function loadEditCard() {
             class="primary full"
             onclick="
                 saveEditedCard(
-                    ${card.id}
+                    '${card.id}'
                 )
             ">
 
@@ -3820,7 +4071,7 @@ function loadEditCard() {
             class="orange full"
             onclick="
                 changeCardPIN(
-                    ${card.id}
+                    '${card.id}'
                 )
             ">
 
@@ -3834,7 +4085,7 @@ function loadEditCard() {
             class="red full"
             onclick="
                 deleteCard(
-                    ${card.id}
+                    '${card.id}'
                 )
             ">
 
@@ -3844,13 +4095,17 @@ function loadEditCard() {
     `;
 }
 
-function saveEditedCard(id) {
+
+async function saveEditedCard(id) {
 
     const card =
         cards.find(
             card =>
                 card.id === id
         );
+
+    if (!card)
+        return;
 
     const newName =
         document.getElementById(
@@ -3869,15 +4124,10 @@ function saveEditedCard(id) {
             ).value
         );
 
-    const newTaxed =
-        document.getElementById(
-            "editTaxed"
-        ).checked;
-
     if (
         !newName ||
         !newCode ||
-        isNaN(newBalance)
+        !Number.isFinite(newBalance)
     ) {
 
         alert(
@@ -3904,19 +4154,23 @@ function saveEditedCard(id) {
         return;
     }
 
-    card.name =
-        newName;
+    await update(
+        ref(
+            db,
+            "cards/" + id
+        ),
+        {
 
-    card.code =
-        newCode;
+            name:
+                newName,
 
-    card.balance =
-        newBalance;
+            code:
+                newCode,
 
-    card.taxed =
-        newTaxed;
-
-    save();
+            balance:
+                newBalance
+        }
+    );
 
     alert(
         "Card updated."
@@ -3925,6 +4179,7 @@ function saveEditedCard(id) {
     editCardScreen();
 }
 
+
 function changeCardPIN(id) {
 
     const card =
@@ -3932,6 +4187,9 @@ function changeCardPIN(id) {
             c =>
                 c.id === id
         );
+
+    if (!card)
+        return;
 
     document.getElementById(
         "app"
@@ -3996,7 +4254,7 @@ function changeCardPIN(id) {
                 class="green full"
                 onclick="
                     saveChangedPIN(
-                        ${id}
+                        '${id}'
                     )
                 ">
 
@@ -4007,6 +4265,7 @@ function changeCardPIN(id) {
         </div>
     `;
 }
+
 
 async function saveChangedPIN(id) {
 
@@ -4043,19 +4302,24 @@ async function saveChangedPIN(id) {
         return;
     }
 
-    const oldCorrect =
-        await checkPIN(
-            card,
-            oldPIN
-        );
+    if (
+        card.pinHash
+    ) {
 
-    if (!oldCorrect) {
+        const oldCorrect =
+            await checkPIN(
+                card,
+                oldPIN
+            );
 
-        alert(
-            "Current PIN is incorrect."
-        );
+        if (!oldCorrect) {
 
-        return;
+            alert(
+                "Current PIN is incorrect."
+            );
+
+            return;
+        }
     }
 
     if (newPIN !== confirmPIN) {
@@ -4067,10 +4331,18 @@ async function saveChangedPIN(id) {
         return;
     }
 
-    card.pinHash =
+    const pinHash =
         await hashPIN(newPIN);
 
-    save();
+    await update(
+        ref(
+            db,
+            "cards/" + id
+        ),
+        {
+            pinHash
+        }
+    );
 
     alert(
         "PIN changed successfully."
@@ -4079,20 +4351,20 @@ async function saveChangedPIN(id) {
     editCardScreen();
 }
 
-function deleteCard(id) {
+
+async function deleteCard(id) {
 
     if (!confirm(
         "Delete this fake card?"
     ))
         return;
 
-    cards =
-        cards.filter(
-            card =>
-                card.id !== id
-        );
-
-    save();
+    await remove(
+        ref(
+            db,
+            "cards/" + id
+        )
+    );
 
     editCardScreen();
 }
@@ -4141,7 +4413,6 @@ function addMoneyScreen() {
                                 card.balance
                             )}
                         </option>
-
                     `
                     ).join("")
                 }
@@ -4171,14 +4442,13 @@ function addMoneyScreen() {
     `;
 }
 
-function addMoney() {
+
+async function addMoney() {
 
     const id =
-        Number(
-            document.getElementById(
-                "moneyCard"
-            ).value
-        );
+        document.getElementById(
+            "moneyCard"
+        ).value;
 
     const amount =
         Number(
@@ -4187,14 +4457,9 @@ function addMoney() {
             ).value
         );
 
-    const card =
-        cards.find(
-            card =>
-                card.id === id
-        );
-
     if (
-        !card ||
+        !id ||
+        !Number.isFinite(amount) ||
         amount <= 0
     ) {
 
@@ -4205,13 +4470,24 @@ function addMoney() {
         return;
     }
 
-    card.balance += amount;
+    const balanceRef =
+        ref(
+            db,
+            "cards/" +
+            id +
+            "/balance"
+        );
 
-    save();
+    await runTransaction(
+        balanceRef,
+        currentBalance =>
+            Number(
+                currentBalance || 0
+            ) + amount
+    );
 
     alert(
-        "Money added!\n\nNew balance: " +
-        money(card.balance)
+        "Fake money added!"
     );
 
     cardMenu();
@@ -4242,7 +4518,7 @@ function qrScreen() {
             </button>
 
             <h2>
-                🔲 Select QR Codes to Print
+                🔲 Select QR Codes
             </h2>
 
             <p style="text-align:center">
@@ -4306,7 +4582,7 @@ function qrScreen() {
                                 value="${card.id}"
                                 onchange="
                                     toggleQR(
-                                        ${card.id}
+                                        '${card.id}'
                                     )
                                 ">
 
@@ -4343,7 +4619,6 @@ function qrScreen() {
                             </div>
 
                         </label>
-
                     `
                     ).join("")
                 }
@@ -4365,31 +4640,37 @@ function qrScreen() {
         </div>
     `;
 
-    cards.forEach(card => {
+    cards.forEach(
+        card => {
 
-        new QRCode(
+            new QRCode(
 
-            document.getElementById(
-                "qr-preview-" +
-                card.id
-            ),
+                document.getElementById(
+                    "qr-preview-" +
+                    card.id
+                ),
 
-            {
-                text:
-                    card.code,
+                {
 
-                width: 90,
+                    text:
+                        card.code,
 
-                height: 90,
+                    width:
+                        90,
 
-                correctLevel:
-                    QRCode.CorrectLevel.H
-            }
-        );
-    });
+                    height:
+                        90,
+
+                    correctLevel:
+                        QRCode.CorrectLevel.H
+                }
+            );
+        }
+    );
 
     updateSelectedCount();
 }
+
 
 function toggleQR(id) {
 
@@ -4397,6 +4678,9 @@ function toggleQR(id) {
         document.querySelector(
             `input[type="checkbox"][value="${id}"]`
         );
+
+    if (!checkbox)
+        return;
 
     if (checkbox.checked) {
 
@@ -4412,6 +4696,7 @@ function toggleQR(id) {
     updateSelectedCount();
 }
 
+
 function updateQRVisual(id) {
 
     const element =
@@ -4419,6 +4704,9 @@ function updateQRVisual(id) {
             "qr-select-" +
             id
         );
+
+    if (!element)
+        return;
 
     const checkbox =
         element.querySelector(
@@ -4430,6 +4718,7 @@ function updateQRVisual(id) {
         checkbox.checked
     );
 }
+
 
 function selectAllQRs() {
 
@@ -4461,6 +4750,7 @@ function selectAllQRs() {
     updateSelectedCount();
 }
 
+
 function deselectAllQRs() {
 
     selectedQRs =
@@ -4486,6 +4776,7 @@ function deselectAllQRs() {
     updateSelectedCount();
 }
 
+
 function updateSelectedCount() {
 
     const element =
@@ -4510,7 +4801,7 @@ function updateSelectedCount() {
 
 
 /* =========================================================
-   FIXED QR PRINT FUNCTION
+   QR PRINT
 ========================================================= */
 
 function printSelectedQRs() {
@@ -4539,16 +4830,7 @@ function printSelectedQRs() {
                 )
         );
 
-    /*
-        Clear previous print content.
-    */
-
     printArea.innerHTML = "";
-
-    /*
-        Create the exact Letter-size
-        print sheet.
-    */
 
     const sheet =
         document.createElement(
@@ -4562,35 +4844,26 @@ function printSelectedQRs() {
         sheet
     );
 
-    /*
-        Create one container for
-        every selected QR code.
-    */
-
     selectedCards.forEach(
         card => {
 
-            const cardElement =
+            const element =
                 document.createElement(
                     "div"
                 );
 
-            cardElement.className =
+            element.className =
                 "print-card";
 
-            cardElement.id =
+            element.id =
                 "print-qr-" +
                 card.id;
 
             sheet.appendChild(
-                cardElement
+                element
             );
         }
     );
-
-    /*
-        Generate the QR codes.
-    */
 
     selectedCards.forEach(
         card => {
@@ -4604,12 +4877,15 @@ function printSelectedQRs() {
             new QRCode(
                 container,
                 {
+
                     text:
                         card.code,
 
-                    width: 500,
+                    width:
+                        500,
 
-                    height: 500,
+                    height:
+                        500,
 
                     correctLevel:
                         QRCode.CorrectLevel.H
@@ -4617,11 +4893,6 @@ function printSelectedQRs() {
             );
         }
     );
-
-    /*
-        Wait until every QRCode.js canvas
-        actually exists before printing.
-    */
 
     let attempts = 0;
 
@@ -4638,11 +4909,6 @@ function printSelectedQRs() {
             qrElements.length ===
             selectedCards.length
         ) {
-
-            /*
-                Force the browser to perform
-                layout/paint before print.
-            */
 
             requestAnimationFrame(
                 () => {
@@ -4661,14 +4927,10 @@ function printSelectedQRs() {
             return;
         }
 
-        /*
-            Give up after 5 seconds.
-        */
-
         if (attempts >= 50) {
 
             alert(
-                "The QR codes took too long to generate. Please try again."
+                "The QR codes took too long to generate."
             );
 
             return;
@@ -4748,6 +5010,7 @@ function productMenu() {
     `;
 }
 
+
 function addProductScreen() {
 
     document.getElementById(
@@ -4799,7 +5062,8 @@ function addProductScreen() {
     `;
 }
 
-function addProduct() {
+
+async function addProduct() {
 
     const name =
         document.getElementById(
@@ -4815,7 +5079,8 @@ function addProduct() {
 
     if (
         !name ||
-        isNaN(price)
+        !Number.isFinite(price) ||
+        price < 0
     ) {
 
         alert(
@@ -4825,16 +5090,20 @@ function addProduct() {
         return;
     }
 
-    products.push({
+    const productRef =
+        push(
+            ref(db, "products")
+        );
 
-        id: Date.now(),
+    await set(
+        productRef,
+        {
 
-        name,
+            name,
 
-        price
-    });
-
-    save();
+            price
+        }
+    );
 
     alert(
         "Product added!"
@@ -4842,6 +5111,7 @@ function addProduct() {
 
     productMenu();
 }
+
 
 function editProductsScreen() {
 
@@ -4864,6 +5134,16 @@ function editProductsScreen() {
             </h2>
 
             ${
+                products.length === 0
+
+                ?
+
+                `<div class="empty">
+                    No products yet.
+                </div>`
+
+                :
+
                 products.map(
                     product => `
 
@@ -4887,7 +5167,7 @@ function editProductsScreen() {
                                 class="primary"
                                 onclick="
                                     editProduct(
-                                        ${product.id}
+                                        '${product.id}'
                                     )
                                 ">
 
@@ -4899,7 +5179,7 @@ function editProductsScreen() {
                                 class="red"
                                 onclick="
                                     deleteProduct(
-                                        ${product.id}
+                                        '${product.id}'
                                     )
                                 ">
 
@@ -4908,7 +5188,6 @@ function editProductsScreen() {
                             </button>
 
                         </div>
-
                     `
                 ).join("")
             }
@@ -4917,6 +5196,7 @@ function editProductsScreen() {
     `;
 }
 
+
 function editProduct(id) {
 
     const product =
@@ -4924,6 +5204,9 @@ function editProduct(id) {
             product =>
                 product.id === id
         );
+
+    if (!product)
+        return;
 
     document.getElementById(
         "app"
@@ -4969,7 +5252,7 @@ function editProduct(id) {
                 class="primary full"
                 onclick="
                     saveProduct(
-                        ${id}
+                        '${id}'
                     )
                 ">
 
@@ -4981,45 +5264,64 @@ function editProduct(id) {
     `;
 }
 
-function saveProduct(id) {
 
-    const product =
-        products.find(
-            product =>
-                product.id === id
-        );
+async function saveProduct(id) {
 
-    product.name =
+    const name =
         document.getElementById(
             "editProductName"
         ).value.trim();
 
-    product.price =
+    const price =
         Number(
             document.getElementById(
                 "editProductPrice"
             ).value
         );
 
-    save();
+    if (
+        !name ||
+        !Number.isFinite(price) ||
+        price < 0
+    ) {
+
+        alert(
+            "Enter a valid product."
+        );
+
+        return;
+    }
+
+    await update(
+        ref(
+            db,
+            "products/" + id
+        ),
+        {
+
+            name,
+
+            price
+        }
+    );
 
     editProductsScreen();
 }
 
-function deleteProduct(id) {
+
+async function deleteProduct(id) {
 
     if (!confirm(
         "Delete this product?"
     ))
         return;
 
-    products =
-        products.filter(
-            product =>
-                product.id !== id
-        );
-
-    save();
+    await remove(
+        ref(
+            db,
+            "products/" + id
+        )
+    );
 
     editProductsScreen();
 }
@@ -5049,6 +5351,13 @@ function historyScreen() {
                 📋 Transaction History
             </h2>
 
+            <div class="tax-notice">
+
+                🔄 This history is shared live
+                between users.
+
+            </div>
+
             ${
                 transactions.length === 0
 
@@ -5063,11 +5372,7 @@ function historyScreen() {
                 transactions.map(
                     transaction => `
 
-                        <div
-                            class="history"
-                            id="
-                                transaction-${transaction.id}
-                            ">
+                        <div class="history">
 
                             <strong>
                                 ${escapeHTML(
@@ -5083,14 +5388,6 @@ function historyScreen() {
 
                             <br><br>
 
-                            Normal amount:
-                            ${money(
-                                transaction.normalAmount ??
-                                transaction.amount
-                            )}
-
-                            <br>
-
                             Subtotal:
                             ${money(
                                 transaction.subtotal
@@ -5103,33 +5400,12 @@ function historyScreen() {
                                 transaction.tip
                             )}
 
-                            ${
-                                transaction.buyerTax > 0
-                                ?
-                                `
-                                <br>
-                                Buyer tax:
-                                ${money(
-                                    transaction.buyerTax
-                                )}
-                                `
-                                :
-                                ""
-                            }
+                            <br>
 
-                            ${
-                                transaction.recipientTax > 0
-                                ?
-                                `
-                                <br>
-                                Recipient tax:
-                                ${money(
-                                    transaction.recipientTax
-                                )}
-                                `
-                                :
-                                ""
-                            }
+                            Buyer tax (8%):
+                            ${money(
+                                transaction.buyerTax
+                            )}
 
                             <br>
 
@@ -5156,6 +5432,26 @@ function historyScreen() {
                                 }
                             </strong>
 
+                            ${
+                                transaction.recipientAmount !== null &&
+                                transaction.recipientAmount !== undefined
+
+                                ?
+
+                                `
+                                <br>
+
+                                Recipient received:
+                                ${money(
+                                    transaction.recipientAmount
+                                )}
+                                `
+
+                                :
+
+                                ""
+                            }
+
                             <br><br>
 
                             <strong>
@@ -5165,27 +5461,44 @@ function historyScreen() {
                             <br>
 
                             ${
-                                transaction.items
-                                .map(
-                                    item =>
-                                        `${escapeHTML(
-                                            item.name
-                                        )}
-                                        ×
-                                        ${item.quantity}`
+                                Array.isArray(
+                                    transaction.items
                                 )
-                                .join("<br>")
+
+                                ?
+
+                                transaction.items
+                                    .map(
+                                        item =>
+                                            `${escapeHTML(
+                                                item.name
+                                            )}
+                                            ×
+                                            ${item.quantity}`
+                                    )
+                                    .join("<br>")
+
+                                :
+
+                                ""
                             }
 
+                            <br>
+
+                            <small>
+                                Created by:
+                                ${escapeHTML(
+                                    transaction.createdBy || ""
+                                )}
+                            </small>
+
+                            <br><br>
+
                             <button
-                                class="
-                                    red
-                                    full
-                                    history-delete
-                                "
+                                class="red full"
                                 onclick="
                                     deleteTransaction(
-                                        ${transaction.id}
+                                        '${transaction.id}'
                                     )
                                 ">
 
@@ -5194,14 +5507,15 @@ function historyScreen() {
                             </button>
 
                         </div>
-
                     `
                 ).join("")
             }
 
             ${
                 transactions.length > 0
+
                 ?
+
                 `
 
                 <br>
@@ -5217,7 +5531,9 @@ function historyScreen() {
                 </button>
 
                 `
+
                 :
+
                 ""
             }
 
@@ -5225,59 +5541,203 @@ function historyScreen() {
     `;
 }
 
-function deleteTransaction(id) {
 
-    const transaction =
-        transactions.find(
-            transaction =>
-                transaction.id === id
-        );
-
-    if (!transaction)
-        return;
+async function deleteTransaction(id) {
 
     if (!confirm(
         "Delete this transaction from history?"
-    )) {
+    ))
         return;
-    }
 
-    transactions =
-        transactions.filter(
-            transaction =>
-                transaction.id !== id
-        );
-
-    save();
+    await remove(
+        ref(
+            db,
+            "transactions/" + id
+        )
+    );
 
     historyScreen();
 }
 
-function clearHistory() {
+
+async function clearHistory() {
 
     if (!confirm(
         "Delete ALL fake transaction history?"
-    )) {
+    ))
         return;
-    }
 
-    transactions = [];
-
-    save();
+    await set(
+        ref(db, "transactions"),
+        null
+    );
 
     historyScreen();
 }
 
 
 /* =========================================================
-   START
+   STARTUP
 ========================================================= */
 
-save();
+window.showMenu =
+    showMenu;
 
-showMenu();
+window.checkoutStart =
+    checkoutStart;
+
+window.productSelection =
+    productSelection;
+
+window.addItem =
+    addItem;
+
+window.changeItem =
+    changeItem;
+
+window.clearSale =
+    clearSale;
+
+window.goToTip =
+    goToTip;
+
+window.tipScreen =
+    tipScreen;
+
+window.chooseTip =
+    chooseTip;
+
+window.updateCustomTip =
+    updateCustomTip;
+
+window.showCardScanner =
+    showCardScanner;
+
+window.startQRScanner =
+    startQRScanner;
+
+window.manualScan =
+    manualScan;
+
+window.scanImageInstead =
+    scanImageInstead;
+
+window.cardPINScreen =
+    cardPINScreen;
+
+window.verifyChargePIN =
+    verifyChargePIN;
+
+window.setupExistingCardPIN =
+    setupExistingCardPIN;
+
+window.saveExistingCardPIN =
+    saveExistingCardPIN;
+
+window.paymentReview =
+    paymentReview;
+
+window.completePayment =
+    completePayment;
+
+window.transferScreen =
+    transferScreen;
+
+window.transferMoney =
+    transferMoney;
+
+window.transferToNoOne =
+    transferToNoOne;
+
+window.finishScreen =
+    finishScreen;
+
+window.balanceScreen =
+    balanceScreen;
+
+window.cardMenu =
+    cardMenu;
+
+window.createCardScreen =
+    createCardScreen;
+
+window.createCard =
+    createCard;
+
+window.editCardScreen =
+    editCardScreen;
+
+window.loadEditCard =
+    loadEditCard;
+
+window.saveEditedCard =
+    saveEditedCard;
+
+window.changeCardPIN =
+    changeCardPIN;
+
+window.saveChangedPIN =
+    saveChangedPIN;
+
+window.deleteCard =
+    deleteCard;
+
+window.addMoneyScreen =
+    addMoneyScreen;
+
+window.addMoney =
+    addMoney;
+
+window.qrScreen =
+    qrScreen;
+
+window.toggleQR =
+    toggleQR;
+
+window.selectAllQRs =
+    selectAllQRs;
+
+window.deselectAllQRs =
+    deselectAllQRs;
+
+window.updateSelectedCount =
+    updateSelectedCount;
+
+window.printSelectedQRs =
+    printSelectedQRs;
+
+window.productMenu =
+    productMenu;
+
+window.addProductScreen =
+    addProductScreen;
+
+window.addProduct =
+    addProduct;
+
+window.editProductsScreen =
+    editProductsScreen;
+
+window.editProduct =
+    editProduct;
+
+window.saveProduct =
+    saveProduct;
+
+window.deleteProduct =
+    deleteProduct;
+
+window.historyScreen =
+    historyScreen;
+
+window.deleteTransaction =
+    deleteTransaction;
+
+window.clearHistory =
+    clearHistory;
 
 </script>
 
 </body>
 </html>
+
