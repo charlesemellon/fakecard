@@ -6414,11 +6414,6 @@ function saveProduct(id) {
 
 function deleteProduct(id) {
 
-    if (
-        !requireMasterPassword()
-    ) {
-        return;
-    }
 
     if (
         !confirm(
